@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>A.n.n Beauty - Product Detail</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400..700;1,400..700&amp;family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#cfbdff",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#e9deff",
+                        "tertiary": "#5e474a",
+                        "primary-container": "#6d58a6",
+                        "on-primary-fixed-variant": "#4e3985",
+                        "surface-bright": "#f8f9fa",
+                        "surface": "#f8f9fa",
+                        "secondary-fixed-dim": "#d8bfd8",
+                        "on-secondary-fixed-variant": "#534155",
+                        "tertiary-container": "#775f62",
+                        "surface-variant": "#e1e3e4",
+                        "inverse-surface": "#2e3132",
+                        "outline-variant": "#cac4d2",
+                        "tertiary-fixed": "#fbdbde",
+                        "surface-dim": "#d9dadb",
+                        "surface-container-highest": "#e1e3e4",
+                        "on-secondary-container": "#725e73",
+                        "on-background": "#191c1d",
+                        "on-primary-fixed": "#220458",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "outline": "#7a7581",
+                        "secondary-fixed": "#f5daf4",
+                        "primary-fixed": "#e9ddff",
+                        "inverse-primary": "#cfbdff",
+                        "background": "#f8f9fa",
+                        "on-secondary-fixed": "#251628",
+                        "secondary-container": "#f5daf4",
+                        "primary": "#54408c",
+                        "on-surface": "#191c1d",
+                        "on-surface-variant": "#494550",
+                        "on-tertiary-fixed-variant": "#574144",
+                        "error-container": "#ffdad6",
+                        "surface-container-high": "#e7e8e9",
+                        "tertiary-fixed-dim": "#debfc2",
+                        "surface-container": "#edeeef",
+                        "on-tertiary-fixed": "#281719",
+                        "on-secondary": "#ffffff",
+                        "surface-container-low": "#f3f4f5",
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-tertiary-container": "#fcdbde",
+                        "on-error": "#ffffff",
+                        "error": "#ba1a1a",
+                        "surface-tint": "#66519f",
+                        "secondary": "#6c586d",
+                        "on-error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1280px",
+                        "base": "8px",
+                        "margin-mobile": "16px",
+                        "gutter": "24px",
+                        "stack-sm": "12px",
+                        "margin-desktop": "40px",
+                        "stack-lg": "48px",
+                        "stack-md": "24px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "headline-xl": ["Noto Serif"],
+                        "headline-md": ["Noto Serif"],
+                        "display-lg": ["Noto Serif"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "body-sm": ["Plus Jakarta Sans"],
+                        "label-md": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.08em", "fontWeight": "700"}],
+                        "headline-xl": ["36px", {"lineHeight": "1.3", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                        "display-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-primary-fixed-dim text-on-surface antialiased min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="bg-white/80 backdrop-blur-lg dark:bg-slate-950/80 fixed top-0 w-full z-50 border-b border-purple-100/30 dark:border-purple-900/20 shadow-[0_4px_30px_rgba(109,88,166,0.05)]">
+<div class="flex items-center justify-between px-8 py-4 max-w-7xl mx-auto w-full">
+<div class="flex items-center gap-8">
+<div class="text-2xl font-semibold tracking-tighter text-purple-900 dark:text-purple-200 font-serif antialiased">A.n.n Beauty</div>
+<nav class="hidden md:flex gap-6">
+<a class="text-slate-500 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-300 font-label-md text-label-md hover:opacity-80 transition-all duration-300 active:scale-95 transform" href="#">All</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-300 font-label-md text-label-md hover:opacity-80 transition-all duration-300 active:scale-95 transform" href="#">Adults</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-300 font-label-md text-label-md hover:opacity-80 transition-all duration-300 active:scale-95 transform" href="#">Teens</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-300 font-label-md text-label-md hover:opacity-80 transition-all duration-300 active:scale-95 transform" href="#">Kids</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-300 font-label-md text-label-md hover:opacity-80 transition-all duration-300 active:scale-95 transform" href="#">Videos</a>
+</nav>
+</div>
+<div class="flex items-center gap-4 text-purple-700 dark:text-purple-400">
+<button class="hover:opacity-80 transition-all duration-300 active:scale-95 transform">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+<button class="hover:opacity-80 transition-all duration-300 active:scale-95 transform">
+<span class="material-symbols-outlined">shopping_cart</span>
+</button>
+<button class="hover:opacity-80 transition-all duration-300 active:scale-95 transform">
+<span class="material-symbols-outlined">person</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow pt-[100px] px-margin-mobile md:px-margin-desktop pb-stack-lg max-w-container-max mx-auto w-full flex items-center justify-center">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter w-full max-w-5xl">
+<!-- Product Image Column -->
+<div class="bg-surface-container-lowest rounded-[2rem] p-8 shadow-[0_8px_30px_rgba(109,88,166,0.08)] flex flex-col items-center justify-center relative group">
+<div class="absolute top-6 right-6 z-10 flex flex-col gap-4">
+<button class="w-12 h-12 bg-surface-container-lowest/80 backdrop-blur-md rounded-full flex items-center justify-center text-primary shadow-[0_4px_12px_rgba(109,88,166,0.1)] hover:bg-primary-fixed hover:text-primary-container transition-colors duration-300">
+<span class="material-symbols-outlined" data-icon="favorite">favorite</span>
+</button>
+<button class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-on-primary shadow-[0_4px_12px_rgba(84,64,140,0.3)] hover:bg-primary-container transition-colors duration-300">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+</button>
+</div>
+<img alt="A.n.n Beauty Pó Facial Velvet Matte" class="w-full max-w-[300px] h-auto object-contain transform group-hover:scale-105 transition-transform duration-700 ease-out mb-8" data-alt="minimalist studio photography of premium matte face powder compact in soft lilac and gold packaging, ethereal bright lighting, white background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD18GXwV-Fkc6wDo7J4wrXsDQej-dEfgu5VImTb9uItwdNW88u_1yCxDVF9on8jlVNCPo-eKZEl9aNMrTISfydrBo8SR077DCvYnLcSDxEAalZqqw8TZ3jpvZRULCa0zP9BNNQ-i470VZ5EDn7JHQ2btfru-a-pTCf15BaEHzY9QZpQAus_V57bsYk-VpSr7PEucVXEHnd0d4RBqKFQaBZaW1EDR4bo-Ej6RqvwLps8AyPi3RQMWfHu9arWD8Wneoh9RG_l1BG98xQC"/>
+<div class="text-center mt-auto">
+<div class="inline-block px-4 py-1.5 bg-primary-fixed/50 text-primary-container rounded-full font-label-sm text-label-sm mb-4">Bestseller</div>
+<h1 class="font-headline-md text-headline-md text-on-surface mb-2">Pó Facial Velvet Matte</h1>
+<div class="font-display-lg text-display-lg text-primary">R$ 45,90</div>
+</div>
+</div>
+<!-- Product Details Column -->
+<div class="bg-surface-container-lowest/90 backdrop-blur-xl rounded-[2rem] p-8 md:p-12 shadow-[0_8px_30px_rgba(109,88,166,0.05)] border border-white/50 flex flex-col">
+<h2 class="font-headline-md text-headline-md text-primary-container mb-6 pb-4 border-b border-outline-variant/30">descricao do produto</h2>
+<div class="prose prose-purple max-w-none flex-grow">
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">
+                        Experience the ethereal touch of our velvet matte powder. Designed to provide a flawless, long-lasting finish while feeling weightless on your skin.
+                    </p>
+<ul class="space-y-4 mb-8">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary mt-0.5 text-[20px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-body-md text-body-md text-on-surface">Ultra-fine milled texture for a seamless blend</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary mt-0.5 text-[20px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-body-md text-body-md text-on-surface">Controls shine without drying the skin</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary mt-0.5 text-[20px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-body-md text-body-md text-on-surface">Infused with light-diffusing particles</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary mt-0.5 text-[20px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-body-md text-body-md text-on-surface">Vegan &amp; Cruelty-free formula</span>
+</li>
+</ul>
+</div>
+<div class="mt-auto pt-8 border-t border-outline-variant/30 flex gap-4">
+<div class="flex items-center justify-between border border-outline-variant rounded-lg px-4 py-2 bg-surface">
+<button class="text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined">remove</span></button>
+<span class="font-label-md text-label-md px-4">1</span>
+<button class="text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined">add</span></button>
+</div>
+<button class="flex-grow bg-primary hover:bg-primary-container text-on-primary rounded-lg py-3 px-6 font-label-md text-label-md shadow-[0_4px_12px_rgba(84,64,140,0.2)] transition-all duration-300 flex items-center justify-center gap-2">
+                        Add to Cart
+                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-slate-50 dark:bg-slate-950 w-full rounded-t-3xl mt-12 border-t border-slate-200 dark:border-slate-800">
+<div class="flex flex-col md:flex-row justify-between items-center px-12 py-10 max-w-7xl mx-auto">
+<div class="text-xl font-bold text-purple-900 dark:text-purple-100 font-serif text-sm mb-4 md:mb-0">
+                A.n.n Beauty
+            </div>
+<div class="text-purple-800 dark:text-purple-300 font-serif text-sm mb-6 md:mb-0 text-center md:text-left">
+                © 2024 A.n.n Beauty. Ethereal Skincare &amp; Luxury Rituals.
+            </div>
+<div class="flex flex-wrap justify-center gap-6">
+<a class="text-slate-500 dark:text-slate-400 font-serif text-sm hover:text-purple-600 dark:hover:text-purple-400 transition-colors cursor-pointer" href="#">Privacy Policy</a>
+<a class="text-slate-500 dark:text-slate-400 font-serif text-sm hover:text-purple-600 dark:hover:text-purple-400 transition-colors cursor-pointer" href="#">Terms of Service</a>
+<a class="text-slate-500 dark:text-slate-400 font-serif text-sm hover:text-purple-600 dark:hover:text-purple-400 transition-colors cursor-pointer" href="#">Shipping &amp; Returns</a>
+<a class="text-slate-500 dark:text-slate-400 font-serif text-sm hover:text-purple-600 dark:hover:text-purple-400 transition-colors cursor-pointer" href="#">Contact Us</a>
+</div>
+</div>
+</footer>
+</body></html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>User Profile - A.n.n Beauty</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400..700;1,400..700&amp;family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+        /* Custom scrollbar to match minimalist theme */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #e1e3e4; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #cac4d2; }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-container": "#725e73",
+                    "surface-container-high": "#e7e8e9",
+                    "secondary-container": "#f5daf4",
+                    "on-background": "#191c1d",
+                    "tertiary": "#5e474a",
+                    "on-surface-variant": "#494550",
+                    "surface-container": "#edeeef",
+                    "primary": "#54408c",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-fixed-dim": "#cfbdff",
+                    "on-secondary-fixed-variant": "#534155",
+                    "surface": "#f8f9fa",
+                    "on-tertiary-fixed": "#281719",
+                    "on-primary": "#ffffff",
+                    "inverse-primary": "#cfbdff",
+                    "inverse-on-surface": "#f0f1f2",
+                    "error-container": "#ffdad6",
+                    "primary-container": "#6d58a6",
+                    "surface-dim": "#d9dadb",
+                    "on-error-container": "#93000a",
+                    "surface-bright": "#f8f9fa",
+                    "secondary-fixed-dim": "#d8bfd8",
+                    "outline-variant": "#cac4d2",
+                    "on-secondary": "#ffffff",
+                    "secondary": "#6c586d",
+                    "tertiary-fixed-dim": "#debfc2",
+                    "on-primary-fixed-variant": "#4e3985",
+                    "error": "#ba1a1a",
+                    "surface-container-low": "#f3f4f5",
+                    "primary-fixed": "#e9ddff",
+                    "on-surface": "#191c1d",
+                    "outline": "#7a7581",
+                    "on-tertiary-container": "#fcdbde",
+                    "on-tertiary-fixed-variant": "#574144",
+                    "surface-variant": "#e1e3e4",
+                    "on-secondary-fixed": "#251628",
+                    "background": "#f8f9fa",
+                    "tertiary-fixed": "#fbdbde",
+                    "on-primary-container": "#e9deff",
+                    "surface-tint": "#66519f",
+                    "secondary-fixed": "#f5daf4",
+                    "on-tertiary": "#ffffff",
+                    "inverse-surface": "#2e3132",
+                    "on-primary-fixed": "#220458",
+                    "on-error": "#ffffff",
+                    "tertiary-container": "#775f62",
+                    "surface-container-highest": "#e1e3e4"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-max": "1280px",
+                    "base": "8px",
+                    "margin-desktop": "40px",
+                    "stack-md": "24px",
+                    "stack-lg": "48px",
+                    "gutter": "24px",
+                    "stack-sm": "12px",
+                    "margin-mobile": "16px"
+            },
+            "fontFamily": {
+                    "label-md": ["Plus Jakarta Sans"],
+                    "headline-xl": ["Noto Serif"],
+                    "body-sm": ["Plus Jakarta Sans"],
+                    "body-md": ["Plus Jakarta Sans"],
+                    "headline-md": ["Noto Serif"],
+                    "label-sm": ["Plus Jakarta Sans"],
+                    "body-lg": ["Plus Jakarta Sans"],
+                    "display-lg": ["Noto Serif"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                    "headline-xl": ["36px", { "lineHeight": "1.3", "fontWeight": "500" }],
+                    "body-sm": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                    "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                    "headline-md": ["24px", { "lineHeight": "1.4", "fontWeight": "500" }],
+                    "label-sm": ["12px", { "lineHeight": "1.2", "letterSpacing": "0.08em", "fontWeight": "700" }],
+                    "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                    "display-lg": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600" }]
+            }
+          }
+        }
+      }
+    </script>
+</head>
+<body class="bg-surface-lowest text-on-surface antialiased min-h-screen relative overflow-x-hidden">
+<!-- Ambient Ethereal Background Elements -->
+<div aria-hidden="true" class="fixed top-0 left-0 w-full h-full -z-10 pointer-events-none overflow-hidden">
+<div class="absolute -top-20 -right-20 w-96 h-96 bg-primary-fixed-dim/20 rounded-full blur-[100px]"></div>
+<div class="absolute top-1/3 -left-20 w-80 h-80 bg-secondary-fixed-dim/20 rounded-full blur-[80px]"></div>
+</div>
+<!-- TopAppBar (Web Only based on Responsive Pivot rule) -->
+<header class="hidden md:flex fixed top-0 w-full z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg shadow-sm shadow-purple-900/5">
+<div class="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto w-full">
+<div class="text-2xl font-serif font-bold text-purple-700 dark:text-purple-300">A.n.n Beauty</div>
+<nav class="flex gap-8 items-center">
+<a class="font-serif text-sm tracking-wide text-gray-500 dark:text-gray-400 hover:text-purple-600 hover:opacity-80 transition-opacity" href="#">Tutorials</a>
+<a class="font-serif text-sm tracking-wide text-gray-500 dark:text-gray-400 hover:text-purple-600 hover:opacity-80 transition-opacity" href="#">Gallery</a>
+<a class="font-serif text-sm tracking-wide text-gray-500 dark:text-gray-400 hover:text-purple-600 hover:opacity-80 transition-opacity" href="#">Shop</a>
+<a class="font-serif text-sm tracking-wide text-gray-500 dark:text-gray-400 hover:text-purple-600 hover:opacity-80 transition-opacity" href="#">Community</a>
+</nav>
+<div class="flex items-center gap-4 text-purple-700 dark:text-purple-400">
+<button aria-label="Search" class="hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button aria-label="Shopping Bag" class="hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined">shopping_bag</span>
+</button>
+<button aria-label="Notifications" class="hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-12 pb-24 md:pt-32 md:pb-16 max-w-[935px] mx-auto px-4 md:px-0">
+<!-- Profile Header Section -->
+<section class="flex flex-col md:flex-row items-start gap-6 md:gap-16 mb-12">
+<!-- Avatar -->
+<div class="flex-shrink-0 mx-auto md:mx-0">
+<div class="w-24 h-24 md:w-[150px] md:h-[150px] rounded-full p-1 bg-gradient-to-tr from-primary-container to-secondary-container">
+<img alt="User profile picture" class="w-full h-full object-cover rounded-full border-4 border-surface-lowest" data-alt="headshot of young woman with radiant minimal makeup subtle pink blush clear skin in soft natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhzEChl-GavzHfcb7sw_CInlyusQPk-MHxk8UF1kbJP483VPyNlXtSt1EIwwz12TDTricOE0SRSSbxg6VfxTdgizdJtorO7MloDU5vPUUjNOSy3ofL-WnuxpkL_6q632WQtLYMQt_JPSHY4wJA1h3XDqfQVA6WSr-xN7K6Ql0lkkHEQk2dB15IXfRLx4eEFUZMBDyRypVBEj9aMfMptCV9fLaVtA9G0L5usAPMjZyQLO-2dviKw-aOcRzRpbutqC7h3bMFRk6uBiNU"/>
+</div>
+</div>
+<!-- Profile Info & Actions -->
+<div class="flex-1 w-full">
+<!-- Username & Desktop Actions -->
+<div class="flex flex-col md:flex-row md:items-center gap-4 mb-4 md:mb-6">
+<h1 class="font-headline-md text-on-surface">elara_glows</h1>
+<div class="flex flex-wrap gap-2 md:gap-3">
+<button class="flex-1 md:flex-none bg-primary text-on-primary font-label-md py-2 px-6 rounded-lg shadow-[0_4px_12px_rgba(109,88,166,0.15)] hover:opacity-90 transition-opacity">
+                            Edit Profile
+                        </button>
+<button class="flex-1 md:flex-none bg-transparent border-[1.5px] border-secondary text-secondary font-label-md py-2 px-6 rounded-lg hover:bg-surface-container transition-colors">
+                            Promotions
+                        </button>
+<button class="md:hidden lg:flex bg-transparent border-[1.5px] border-secondary text-secondary font-label-md py-2 px-6 rounded-lg hover:bg-surface-container transition-colors">
+                            Contact
+                        </button>
+</div>
+</div>
+<!-- Metrics -->
+<div class="flex gap-8 mb-6 border-t md:border-none border-surface-variant pt-4 md:pt-0">
+<div class="text-center md:text-left flex flex-col md:flex-row md:gap-1">
+<span class="font-label-md text-on-surface text-lg md:text-base">142</span>
+<span class="font-body-sm text-on-surface-variant">Posts</span>
+</div>
+<div class="text-center md:text-left flex flex-col md:flex-row md:gap-1">
+<span class="font-label-md text-on-surface text-lg md:text-base">12.4k</span>
+<span class="font-body-sm text-on-surface-variant">Followers</span>
+</div>
+<div class="text-center md:text-left flex flex-col md:flex-row md:gap-1">
+<span class="font-label-md text-on-surface text-lg md:text-base">450</span>
+<span class="font-body-sm text-on-surface-variant">Following</span>
+</div>
+</div>
+<!-- Bio -->
+<div class="max-w-md">
+<h2 class="font-label-md text-on-surface mb-1">Elara Vance</h2>
+<p class="font-body-sm text-on-surface-variant text-sm whitespace-pre-line">Ethereal beauty enthusiast ✨
+                    Advocating for gentle, effective rituals.
+                    Dry skin girly 💧
+                    💌 elara@example.com</p>
+</div>
+</div>
+</section>
+<!-- Navigation Tabs -->
+<div class="flex border-t border-surface-variant mb-1">
+<button class="flex-1 flex justify-center items-center gap-2 py-4 border-t-[1.5px] border-primary -mt-[1px]">
+<span class="material-symbols-outlined text-[18px] text-primary" data-icon="grid_on">grid_on</span>
+<span class="font-label-sm text-primary uppercase tracking-widest hidden md:inline">Posts</span>
+</button>
+<button class="flex-1 flex justify-center items-center gap-2 py-4 text-outline hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="movie">movie</span>
+<span class="font-label-sm uppercase tracking-widest hidden md:inline">Reels</span>
+</button>
+<button class="flex-1 flex justify-center items-center gap-2 py-4 text-outline hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="bookmark_border">bookmark_border</span>
+<span class="font-label-sm uppercase tracking-widest hidden md:inline">Saved</span>
+</button>
+</div>
+<!-- Content Grid (Posts) -->
+<div class="grid grid-cols-3 gap-1 md:gap-[1.5rem]">
+<!-- Post Item 1 -->
+<div class="aspect-square relative group cursor-pointer overflow-hidden rounded-sm md:rounded-md bg-surface-container-high">
+<img alt="Product shot" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="close up of delicate glass skincare bottle resting on subtle lavender silk cloth studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9gxA2shjtmTmXyJ4Ye5_9Xkeq_E6aiX7QyJudsx17efnEiVWdR7TWqdToSlZdC2y-aB6HIi948OZM0ixcgaDwK4VQXB202SDQlk8FFg-9-QawSK-8w88l8vYy08ZarfhJOhW3msqkffvcTDRWN1DlnUPe5wfDo9O093wZV90tDp46eTQxjCo-lp4RGQCwXzVPgAVJrFGtCA7BgZQcfBNbby-EEv_MmF1Ljzhcwh87_LyjbQwwxdHwtEWgQUfMYx6adXvaEuMx7PyZ"/>
+<div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4 text-white">
+<div class="flex items-center gap-1 font-label-md"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">favorite</span> 1.2k</div>
+<div class="flex items-center gap-1 font-label-md"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">chat_bubble</span> 45</div>
+</div>
+</div>
+<!-- Post Item 2 -->
+<div class="aspect-square relative group cursor-pointer overflow-hidden rounded-sm md:rounded-md bg-surface-container-high">
+<img alt="Beauty Look" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="woman looking down exposing glossy eyelid and glowing cheekbone soft pink gradient background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYUi5_YdZeNg5fr-AXK31JP-UkZqMt98FfESCgvCQkk0N8XIeu-VFgG7KT2Ab7Lp2enD2d3bSmOrd8mvdbXmc8HAEvIPvBcxsFnQQvqhLBT1W5f5Sox4rmViVc51JTWiw0NefhLAuOJ9jwv3qrIcFydeJg4X56_1jAVM_EZ3fp6A9KvlebppbfleAClYXldVUoQj7Z9_CHS0uSSc9oa3jksbeTODyigHpLvm5jQ9JEx6cTZh-xV2diz2BuGXQv2avlVDkh8yHUi_hK"/>
+<span class="material-symbols-outlined absolute top-2 right-2 text-white/80 text-xl shadow-sm" style="font-variation-settings: 'FILL' 1;">collections</span>
+</div>
+<!-- Post Item 3 -->
+<div class="aspect-square relative group cursor-pointer overflow-hidden rounded-sm md:rounded-md bg-surface-container-high">
+<img alt="Texture Swatch" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="swatch smear of thick creamy moisturizer on pristine white background side lit" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDirNKRZ-luT9ujtW2sziFDhPeQm5-7TjhCwXMKGEmL4HIzesQBvNrSQzqOk9TPj-cYDQocKHuEppKner9byB93Lou0fKcCnOwGF7sXpNEIWFU_GnZspQcmIS1kxNyZlQNm0FKA3WUikT7_gLo9-LiaTsCS60jH5dDkBWDQfR1tOrBo5L52OzNwQjuHL1VehX08PLIu51PJ1QmYA_R2LvdIDeUqStRiWjRTtbCnPiDeW6-mJkVw6mTf2F1GygmfZqM-2QUUdUNImFht"/>
+</div>
+<!-- Post Item 4 -->
+<div class="aspect-square relative group cursor-pointer overflow-hidden rounded-sm md:rounded-md bg-surface-container-high">
+<img alt="Vanity Setup" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="aesthetic minimalist vanity setup with silver mirror and purple flowers in small vase" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLl5YOAQcx6-Q9spBVqDKVs9-2b_tnZ1I7k68aeZxTTbTklFtcjkQ-p1Uq-Vmvh3ZcMKSjdxlwMAiPpi64uebFauebIr176_AGXLXcBDN_LKbkrTerZYUQiX3YjA01QgQWumuNOq3pZHSiRp0VgC5bCnJjH4pxY6cYeUX5Px1TZdZTTaM2u7CHg0Sk1ouryuk4ahTTSWE-NXobObeRW_91EN7hSR9zcbQpK5uX0zlx7Be0D-s7sbQcDFkc4SU3aE2eeJL2K0bGy_i-"/>
+</div>
+<!-- Post Item 5 -->
+<div class="aspect-square relative group cursor-pointer overflow-hidden rounded-sm md:rounded-md bg-surface-container-high">
+<img alt="Portrait" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="profile portrait of woman with minimal makeup looking up towards soft light ethereal mood" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxg6jSahuNbs2kZ3YJXLFsuXMhBwVtxjWJy1TUB0xvXVQKTl4ZJx28hL-Tk6ywYHb2ABsWuWsAnBwAORsxJAFsI9YBIA-66dE4l_V0hIU921PXczG-0vcd1WU1HsVtpGgBllwTr7BsNR7YwxloO3r-BU2kJfMjbjfzF0Sgq0OAiWFvygrhd9wWnWLqH6mLqnWHF5NHbRT7KqssHpHR5vHkhuD26t6QJwcyFd0QB2RqbeI2vAhy6RbotSZj2VNG5eyXDNbM-ifWGqAL"/>
+<span class="material-symbols-outlined absolute top-2 right-2 text-white/80 text-xl shadow-sm" style="font-variation-settings: 'FILL' 1;">movie</span>
+</div>
+<!-- Post Item 6 -->
+<div class="aspect-square relative group cursor-pointer overflow-hidden rounded-sm md:rounded-md bg-surface-container-high">
+<img alt="Product Flatlay" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="flat lay of luxury compact powder open next to fluffy makeup brush on pale gray stone surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkCFfcwa5piQPRq2RjGGsU0q7bvq7Vv89evJNGXdF_N5BJ0UINZCSjbgoqKU2caEmCJb8ecVEW-Y5TLRsQ01LlMLHqRDaS4YSGQFHSHGoiRefDgyG2igeFaqHY4LKCQPCLAlsYOe2cJikHiDE4Y8dP6EWxq8X_tiRYfrZrJK-ijff7e1JOrgsx8ByXQ85nF_nCHyqWBMCdA9h3USv7koG4BGapOC2_5VfGtkkduUBfQcDWiVZxjGweHW0-WnqODQpUu18Px2yLAwyY"/>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only based on Responsive Pivot rule) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-white/90 dark:bg-gray-950/90 backdrop-blur-xl shadow-[0_-4px_20px_rgba(109,88,166,0.05)]">
+<button class="flex flex-col items-center justify-center text-gray-400 dark:text-gray-600 hover:text-purple-500 transition-colors">
+<span class="material-symbols-outlined mb-1" data-icon="home">home</span>
+<span class="font-serif text-[10px] uppercase tracking-tighter">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-gray-400 dark:text-gray-600 hover:text-purple-500 transition-colors">
+<span class="material-symbols-outlined mb-1" data-icon="play_circle">play_circle</span>
+<span class="font-serif text-[10px] uppercase tracking-tighter">Learn</span>
+</button>
+<button class="flex flex-col items-center justify-center text-gray-400 dark:text-gray-600 hover:text-purple-500 transition-colors">
+<span class="material-symbols-outlined mb-1" data-icon="search">search</span>
+<span class="font-serif text-[10px] uppercase tracking-tighter">Search</span>
+</button>
+<!-- Active Nav Item (Profile Dashboard Intent Match) -->
+<button class="flex flex-col items-center justify-center bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-2xl px-4 py-1 translate-y-[-2px] transition-transform">
+<span class="material-symbols-outlined mb-1" data-icon="person_2" style="font-variation-settings: 'FILL' 1;">person_2</span>
+<span class="font-serif text-[10px] uppercase tracking-tighter">Profile</span>
+</button>
+</nav>
+</body></html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>About Us - A.n.n Beauty</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400..700;1,400..700&amp;family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed-dim": "#debfc2",
+                        "on-primary-fixed-variant": "#4e3985",
+                        "error": "#ba1a1a",
+                        "surface-container-low": "#f3f4f5",
+                        "primary-fixed": "#e9ddff",
+                        "on-surface": "#191c1d",
+                        "outline": "#7a7581",
+                        "on-tertiary-container": "#fcdbde",
+                        "on-tertiary-fixed-variant": "#574144",
+                        "surface-variant": "#e1e3e4",
+                        "on-secondary-fixed": "#251628",
+                        "background": "#f8f9fa",
+                        "tertiary-fixed": "#fbdbde",
+                        "on-primary-container": "#e9deff",
+                        "surface-tint": "#66519f",
+                        "secondary-fixed": "#f5daf4",
+                        "on-tertiary": "#ffffff",
+                        "inverse-surface": "#2e3132",
+                        "on-primary-fixed": "#220458",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#775f62",
+                        "surface-container-highest": "#e1e3e4",
+                        "on-secondary-container": "#725e73",
+                        "surface-container-high": "#e7e8e9",
+                        "secondary-container": "#f5daf4",
+                        "on-background": "#191c1d",
+                        "tertiary": "#5e474a",
+                        "on-surface-variant": "#494550",
+                        "surface-container": "#edeeef",
+                        "primary": "#54408c",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed-dim": "#cfbdff",
+                        "on-secondary-fixed-variant": "#534155",
+                        "surface": "#f8f9fa",
+                        "on-tertiary-fixed": "#281719",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#cfbdff",
+                        "inverse-on-surface": "#f0f1f2",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#6d58a6",
+                        "surface-dim": "#d9dadb",
+                        "on-error-container": "#93000a",
+                        "surface-bright": "#f8f9fa",
+                        "secondary-fixed-dim": "#d8bfd8",
+                        "outline-variant": "#cac4d2",
+                        "on-secondary": "#ffffff",
+                        "secondary": "#6c586d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "container-max": "1280px",
+                        "stack-sm": "12px",
+                        "margin-mobile": "16px",
+                        "stack-lg": "48px",
+                        "gutter": "24px",
+                        "stack-md": "24px",
+                        "margin-desktop": "40px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "display-lg": ["Noto Serif"],
+                        "label-md": ["Plus Jakarta Sans"],
+                        "headline-xl": ["Noto Serif"],
+                        "body-sm": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "headline-md": ["Noto Serif"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "1.2", "letterSpacing": "0.08em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-xl": ["36px", { "lineHeight": "1.3", "fontWeight": "500" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "1.4", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-surface text-on-surface antialiased min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="bg-white/80 dark:bg-slate-950/80 backdrop-blur-md w-full top-0 sticky z-50 border-b border-purple-100/20 dark:border-purple-900/20 shadow-sm shadow-purple-500/5 transition-all duration-300">
+<div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+<!-- Brand Logo -->
+<div class="text-2xl font-serif tracking-widest text-purple-700 dark:text-purple-400">
+                A.n.n Beauty
+            </div>
+<!-- Navigation Links (Desktop) -->
+<nav class="hidden md:flex items-center gap-8 font-serif text-slate-800 dark:text-slate-100">
+<a class="text-slate-500 dark:text-slate-400 hover:text-purple-600 transition-colors hover:bg-purple-50/50 dark:hover:bg-purple-900/20 duration-300 px-2 py-1 rounded" href="#">Shop</a>
+<a class="text-purple-800 dark:text-purple-300 border-b-2 border-purple-600 pb-1 hover:bg-purple-50/50 dark:hover:bg-purple-900/20 transition-all duration-300 px-2 rounded-t opacity-80 scale-95" href="#">About Us</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-purple-600 transition-colors hover:bg-purple-50/50 dark:hover:bg-purple-900/20 duration-300 px-2 py-1 rounded" href="#">Favorites</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-purple-600 transition-colors hover:bg-purple-50/50 dark:hover:bg-purple-900/20 duration-300 px-2 py-1 rounded" href="#">Track Order</a>
+</nav>
+<!-- Trailing Actions -->
+<div class="flex items-center gap-4 text-purple-700 dark:text-purple-400">
+<button class="hover:bg-purple-50/50 dark:hover:bg-purple-900/20 transition-all duration-300 p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<button class="hover:bg-purple-50/50 dark:hover:bg-purple-900/20 transition-all duration-300 p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+</button>
+<button class="hover:bg-purple-50/50 dark:hover:bg-purple-900/20 transition-all duration-300 p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-stack-lg flex flex-col gap-[96px]">
+<!-- Hero / Brand Story -->
+<section class="grid grid-cols-1 md:grid-cols-12 gap-gutter items-center">
+<div class="md:col-span-6 relative rounded-xl overflow-hidden shadow-[0_20px_40px_-15px_rgba(109,88,166,0.15)] h-[500px]">
+<img alt="Soft close up of elegant glass skincare bottles on white marble surrounded by delicate floral shadows and soft morning light" class="w-full h-full object-cover" data-alt="Soft close up of elegant glass skincare bottles on white marble surrounded by delicate floral shadows and soft morning light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5uubQ87ze-UVPcOeqgw8V9zytPKuyAkWsvtbNQQbnIufU1fBspFtXWgOVL92KfJdQ5UQMMtTUN8CXgMbQxs7IX1ZVMXwQDTCWmkaEY_P9VTj0WOLPrsqdLb_3AkG-C4GLgj8rffxc1nL8hqI5GRLBPvvRnrc4Z-pn3e-A7PmzOIZsMa0FfFJlqxYNbN_hHY6Ex1Q5gdwW4w_PF5ZlUUYuCG2_owB8ML3_3ugLsXgu0ehPUIyaUZUVtOwRJO5lJTlHY476G9ZhdMMC"/>
+</div>
+<div class="md:col-span-5 md:col-start-8 flex flex-col gap-stack-md pt-8 md:pt-0">
+<span class="font-label-sm text-label-sm text-primary tracking-[0.2em] uppercase">The Genesis</span>
+<h1 class="font-display-lg text-display-lg text-on-surface">Where Science Meets Sensory Ritual.</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">
+                    Born from a desire to bridge the gap between rigorous clinical efficacy and the indulgent elegance of a personal spa ritual. A.n.n Beauty was founded on the principle that transformative skincare should not compromise on luxury or aesthetic pleasure.
+                </p>
+<p class="font-body-md text-body-md text-outline">
+                    We meticulously source high-grade actives and blend them with soothing, botanical bases to create formulations that respect the skin's natural barrier while delivering visible, enduring results.
+                </p>
+</div>
+</section>
+<!-- Mission & Vision Bento -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- Mission -->
+<div class="bg-surface-container-lowest rounded-xl p-10 shadow-[0_10px_30px_-10px_rgba(109,88,166,0.08)] border border-primary-fixed/30 flex flex-col justify-center relative overflow-hidden group">
+<div class="absolute -right-10 -top-10 w-40 h-40 bg-primary-fixed/20 rounded-full blur-3xl transition-transform duration-700 group-hover:scale-150"></div>
+<div class="mb-6 h-12 w-12 rounded-full bg-primary-container/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[28px]" data-icon="spa" data-weight="fill" style="font-variation-settings: 'FILL' 1;">spa</span>
+</div>
+<h2 class="font-headline-xl text-headline-xl text-on-surface mb-4 relative z-10">Our Mission</h2>
+<p class="font-body-md text-body-md text-on-surface-variant relative z-10">
+                    To formulate uncompromising skincare that honors the complexity of human skin. We strive to empower individuals through products that offer both transparent, scientific integrity and a moment of daily, tactile luxury.
+                </p>
+</div>
+<!-- Vision -->
+<div class="bg-primary-fixed/20 rounded-xl p-10 backdrop-blur-md border border-white/50 flex flex-col justify-center relative overflow-hidden group">
+<div class="absolute -left-10 -bottom-10 w-40 h-40 bg-white/40 rounded-full blur-3xl transition-transform duration-700 group-hover:scale-150"></div>
+<div class="mb-6 h-12 w-12 rounded-full bg-white/60 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[28px]" data-icon="visibility" data-weight="fill" style="font-variation-settings: 'FILL' 1;">visibility</span>
+</div>
+<h2 class="font-headline-xl text-headline-xl text-on-primary-fixed-variant mb-4 relative z-10">Our Vision</h2>
+<p class="font-body-md text-body-md text-on-surface-variant relative z-10">
+                    To redefine the luxury beauty landscape as an inclusive space where holistic wellbeing and clinical dermatological advancement coexist seamlessly, setting a new standard for mindful, effective self-care globally.
+                </p>
+</div>
+</section>
+<!-- Founders -->
+<section class="flex flex-col gap-stack-lg items-center pt-stack-md">
+<div class="text-center max-w-2xl mx-auto flex flex-col gap-4">
+<span class="font-label-md text-label-md text-secondary tracking-widest uppercase">The Collective</span>
+<h2 class="font-display-lg text-display-lg text-on-surface">Minds Behind the Ritual</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter w-full">
+<!-- Founder 1 -->
+<div class="flex flex-col items-center text-center group">
+<div class="w-48 h-48 rounded-full overflow-hidden mb-6 shadow-[0_15px_30px_-10px_rgba(109,88,166,0.2)] border-4 border-surface-container-lowest">
+<img alt="Professional portrait of a mature female scientist in a bright minimalist laboratory setting with soft natural lighting" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Professional portrait of a mature female scientist in a bright minimalist laboratory setting with soft natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD41q-VUnwu5joHMxbWJsr36dy1zx3rIn2vEK7uzvQTDUffwl0ZH_HI_dTANk1KbB9owXbG4r3zHuZ0HVyYdnrM_iCEs2T28ZeOaR08HylhHFMcLQ7HbG_Sie4x-YY2ALCH46qv813TkJWK1AuLKhbgI70JyZ3h_2uFi-BnVubhKdnicfILcz2wGII7oUz38OzHYvodmNc7KWNeyoqLmi7hoHDJdbzNFetGZrb5-7anzBucsvdu8yAwBxA_KgpzWQXgXaiSjTNilD4W"/>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Dr. Amelia Vance</h3>
+<p class="font-label-md text-label-md text-primary mb-4">Chief Formulator</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant px-4">With over 15 years in dermatological research, Amelia bridges the gap between active ingredients and gentle delivery systems.</p>
+</div>
+<!-- Founder 2 -->
+<div class="flex flex-col items-center text-center group mt-0 md:mt-12">
+<div class="w-48 h-48 rounded-full overflow-hidden mb-6 shadow-[0_15px_30px_-10px_rgba(109,88,166,0.2)] border-4 border-surface-container-lowest">
+<img alt="Elegant portrait of a woman with glowing skin standing in front of soft linen drapery with natural warm light" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Elegant portrait of a woman with glowing skin standing in front of soft linen drapery with natural warm light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAO6xTtoKDc0JC3ncQ5G6gPU5i7dh8zRhbuu-bYcmZkzkdgWEPVycowLmVELlrI_KpYIFmTapyFNEGQkUMHHJoBCnsIhg_GkMmiKrC7sCTyycWB7wdv1cRMaGo1ARPYa6pybiGQwZpIeShTMD8Cn8ESkA2uvPK6P-oBrVvKFoS5zUfvmBH0h6-JClb0d4lNUDluOYr5JI5c3PmgJl1N71o0yOWm1qMSsvU3LxAxFltJXUUSAIJLLVZ_2syzZvT4Me-Et4HkOpuIXinZ"/>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Nina Reyes</h3>
+<p class="font-label-md text-label-md text-primary mb-4">Creative Director</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant px-4">Nina translates our clinical foundation into the luminous, tactile experience that defines the A.n.n Beauty aesthetic.</p>
+</div>
+<!-- Founder 3 -->
+<div class="flex flex-col items-center text-center group">
+<div class="w-48 h-48 rounded-full overflow-hidden mb-6 shadow-[0_15px_30px_-10px_rgba(109,88,166,0.2)] border-4 border-surface-container-lowest">
+<img alt="Confident modern portrait of a female executive in a minimalist bright office space wearing a soft lavender blazer" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Confident modern portrait of a female executive in a minimalist bright office space wearing a soft lavender blazer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeZyE00MRj_3vSbZ_vGNhXJ83aTkRnJ87wHSRJB82ICvA7HPYB002uwxlbAAeCbHYC4je203gIzdRB813EsoJYOvP8sexE4q30PPKYRntlcIXwDAMoQmz5TAB6IGDDkLL3IR8TIJkg1l3Zq31Yt8-8HJPeltIGWXTw4E1XwDVDIUdHaAvMPtIf0u9ZgfhDE1uolFfq9CJZrvEwpTWwDg-PSwubOx5vNhO0yUykpIIW1Abmk9u-xqPVxdFYq7QlHpGajAkdr5xtSaRv"/>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Natalie Chen</h3>
+<p class="font-label-md text-label-md text-primary mb-4">Operations Lead</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant px-4">Ensuring ethical sourcing and sustainable packaging, Natalie is the architect of our supply chain integrity.</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-slate-50 dark:bg-slate-900 w-full mt-20 border-t border-purple-100 dark:border-purple-900 transition-all duration-200">
+<div class="max-w-7xl mx-auto px-8 py-12 flex flex-col md:flex-row justify-between items-center gap-6">
+<!-- Brand Logo -->
+<div class="text-xl font-serif italic text-purple-800 dark:text-purple-300">
+                A.n.n Beauty
+            </div>
+<!-- Links -->
+<nav class="flex flex-wrap justify-center gap-6">
+<a class="text-slate-500 hover:text-purple-600 hover:underline decoration-purple-300 underline-offset-4 transition-all duration-200 font-serif text-sm" href="#">Sustainability</a>
+<a class="text-slate-500 hover:text-purple-600 hover:underline decoration-purple-300 underline-offset-4 transition-all duration-200 font-serif text-sm" href="#">Privacy Policy</a>
+<a class="text-slate-500 hover:text-purple-600 hover:underline decoration-purple-300 underline-offset-4 transition-all duration-200 font-serif text-sm" href="#">Terms of Service</a>
+<a class="text-slate-500 hover:text-purple-600 hover:underline decoration-purple-300 underline-offset-4 transition-all duration-200 font-serif text-sm" href="#">Contact Us</a>
+</nav>
+<!-- Copyright text -->
+<div class="font-serif text-sm text-slate-600 dark:text-slate-400">
+                © 2024 A.n.n Beauty. All rights reserved.
+            </div>
+</div>
+</footer>
+</body></html>

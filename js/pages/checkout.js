@@ -1,0 +1,128 @@
+import { auth } from '../auth.js';
+
+export default function checkoutPage() {
+  window.handleOrderConfirmation = (event) => {
+    event.preventDefault();
+    const email = document.getElementById('checkout-email').value;
+    
+    // Send purchase notification
+    auth.sendNotification('Pedido Confirmado!', `Obrigada pela sua compra na A.n.n Beauty. Um e-mail de confirmação foi enviado para ${email}.`);
+    
+    // Redirect to tracking
+    window.location.hash = '#/tracking';
+  };
+
+  return `
+  <main class="flex-grow w-full max-w-[1280px] mx-auto px-4 md:px-10 py-12 flex items-start justify-center min-h-screen bg-background">
+    <div class="w-full max-w-3xl">
+      <div class="text-center mb-10">
+        <a href="#/home" class="font-display-lg text-display-lg text-primary-container mb-3 tracking-widest italic inline-block hover:opacity-80 transition-opacity">A.n.n Beauty</a>
+        <h2 class="font-headline-md text-headline-md text-on-surface-variant">Finalizar Compra</h2>
+        <p class="font-body-md text-body-md text-outline mt-2">Preencha seus dados para concluir o pedido.</p>
+      </div>
+      <div class="glass-panel ambient-shadow rounded-xl p-6 md:p-10 border border-surface-variant/50 relative overflow-hidden">
+        <div class="absolute -top-24 -right-24 w-64 h-64 bg-primary-fixed rounded-full mix-blend-multiply filter blur-3xl opacity-30 pointer-events-none"></div>
+        <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-secondary-fixed rounded-full mix-blend-multiply filter blur-3xl opacity-30 pointer-events-none"></div>
+        <form class="relative z-10 flex flex-col gap-8" onsubmit="window.handleOrderConfirmation(event)">
+
+          <!-- Dados Pessoais -->
+          <div class="space-y-4">
+            <h3 class="font-label-md text-label-md text-primary uppercase tracking-widest border-b border-surface-variant pb-2 flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">person</span>Dados Pessoais</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="flex flex-col gap-1.5"><label class="font-label-md text-label-md text-on-surface-variant">Nome Completo</label><input class="w-full bg-surface-container-low border border-surface-variant rounded-lg focus:border-primary-container focus:ring-1 focus:ring-primary-container py-3 px-4 font-body-md text-on-surface transition-colors" placeholder="Maria da Silva" type="text" required/></div>
+              <div class="flex flex-col gap-1.5"><label class="font-label-md text-label-md text-on-surface-variant">CPF</label><input class="w-full bg-surface-container-low border border-surface-variant rounded-lg focus:border-primary-container focus:ring-1 focus:ring-primary-container py-3 px-4 font-body-md text-on-surface transition-colors" placeholder="000.000.000-00" type="text" required/></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="flex flex-col gap-1.5"><label class="font-label-md text-label-md text-on-surface-variant">Email</label><input id="checkout-email" class="w-full bg-surface-container-low border border-surface-variant rounded-lg focus:border-primary-container focus:ring-1 focus:ring-primary-container py-3 px-4 font-body-md text-on-surface transition-colors" placeholder="maria@email.com" type="email" required/></div>
+              <div class="flex flex-col gap-1.5"><label class="font-label-md text-label-md text-on-surface-variant">Telefone</label><input class="w-full bg-surface-container-low border border-surface-variant rounded-lg focus:border-primary-container focus:ring-1 focus:ring-primary-container py-3 px-4 font-body-md text-on-surface transition-colors" placeholder="(11) 99999-0000" type="tel" required/></div>
+            </div>
+          </div>
+          ... (rest of the form content)
+
+          <!-- Endereço -->
+          <div class="space-y-4">
+            <h3 class="font-label-md text-label-md text-primary uppercase tracking-widest border-b border-surface-variant pb-2 flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">location_on</span>Endereço de Entrega</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="flex flex-col gap-1.5"><label class="font-label-md text-label-md text-on-surface-variant">CEP</label><input class="w-full bg-surface-container-low border border-surface-variant rounded-lg focus:border-primary-container focus:ring-1 focus:ring-primary-container py-3 px-4 font-body-md text-on-surface transition-colors" placeholder="00000-000" type="text"/></div>
+              <div class="flex flex-col gap-1.5 md:col-span-2"><label class="font-label-md text-label-md text-on-surface-variant">Rua</label><input class="w-full bg-surface-container-low border border-surface-variant rounded-lg focus:border-primary-container focus:ring-1 focus:ring-primary-container py-3 px-4 font-body-md text-on-surface transition-colors" placeholder="Rua das Flores" type="text"/></div>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div class="flex flex-col gap-1.5"><label class="font-label-md text-label-md text-on-surface-variant">Número</label><input class="w-full bg-surface-container-low border border-surface-variant rounded-lg focus:border-primary-container focus:ring-1 focus:ring-primary-container py-3 px-4 font-body-md text-on-surface transition-colors" placeholder="123" type="text"/></div>
+              <div class="flex flex-col gap-1.5"><label class="font-label-md text-label-md text-on-surface-variant">Complemento</label><input class="w-full bg-surface-container-low border border-surface-variant rounded-lg focus:border-primary-container focus:ring-1 focus:ring-primary-container py-3 px-4 font-body-md text-on-surface transition-colors" placeholder="Apt 4B" type="text"/></div>
+              <div class="flex flex-col gap-1.5"><label class="font-label-md text-label-md text-on-surface-variant">Bairro</label><input class="w-full bg-surface-container-low border border-surface-variant rounded-lg focus:border-primary-container focus:ring-1 focus:ring-primary-container py-3 px-4 font-body-md text-on-surface transition-colors" placeholder="Centro" type="text"/></div>
+              <div class="flex flex-col gap-1.5"><label class="font-label-md text-label-md text-on-surface-variant">Cidade/UF</label><input class="w-full bg-surface-container-low border border-surface-variant rounded-lg focus:border-primary-container focus:ring-1 focus:ring-primary-container py-3 px-4 font-body-md text-on-surface transition-colors" placeholder="São Paulo/SP" type="text"/></div>
+            </div>
+          </div>
+
+          <!-- Forma de Pagamento -->
+          <div class="space-y-4">
+            <h3 class="font-label-md text-label-md text-primary uppercase tracking-widest border-b border-surface-variant pb-2 flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">payments</span>Forma de Pagamento</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3" id="payment-methods">
+              <label class="relative flex flex-col items-center gap-3 p-5 rounded-xl border-2 border-primary bg-primary-fixed/20 cursor-pointer transition-all hover:shadow-md">
+                <input type="radio" name="payment" value="pix" checked class="absolute top-3 right-3 accent-primary w-4 h-4"/>
+                <span class="material-symbols-outlined text-primary text-3xl">qr_code_2</span>
+                <div class="text-center"><span class="font-label-md text-label-md text-on-surface block">PIX</span><span class="font-body-sm text-body-sm text-on-surface-variant">Aprovação instantânea</span></div>
+              </label>
+              <label class="relative flex flex-col items-center gap-3 p-5 rounded-xl border-2 border-outline-variant bg-surface-container-lowest cursor-pointer transition-all hover:border-primary hover:shadow-md">
+                <input type="radio" name="payment" value="boleto" class="absolute top-3 right-3 accent-primary w-4 h-4"/>
+                <span class="material-symbols-outlined text-on-surface-variant text-3xl">receipt_long</span>
+                <div class="text-center"><span class="font-label-md text-label-md text-on-surface block">Boleto</span><span class="font-body-sm text-body-sm text-on-surface-variant">Até 3 dias úteis</span></div>
+              </label>
+              <label class="relative flex flex-col items-center gap-3 p-5 rounded-xl border-2 border-outline-variant bg-surface-container-lowest cursor-pointer transition-all hover:border-primary hover:shadow-md">
+                <input type="radio" name="payment" value="cartao" class="absolute top-3 right-3 accent-primary w-4 h-4"/>
+                <span class="material-symbols-outlined text-on-surface-variant text-3xl">credit_card</span>
+                <div class="text-center"><span class="font-label-md text-label-md text-on-surface block">Cartão</span><span class="font-body-sm text-body-sm text-on-surface-variant">Crédito ou Débito</span></div>
+              </label>
+            </div>
+            <!-- Card fields (shown when cartão selected) -->
+            <div id="card-fields" class="hidden grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 p-4 bg-surface-container-low rounded-lg border border-outline-variant/30">
+              <div class="flex flex-col gap-1.5 md:col-span-2"><label class="font-label-md text-label-md text-on-surface-variant">Número do Cartão</label><input class="w-full bg-surface-container-lowest border border-surface-variant rounded-lg py-3 px-4 font-body-md text-on-surface" placeholder="0000 0000 0000 0000" type="text"/></div>
+              <div class="flex flex-col gap-1.5"><label class="font-label-md text-label-md text-on-surface-variant">Validade</label><input class="w-full bg-surface-container-lowest border border-surface-variant rounded-lg py-3 px-4 font-body-md text-on-surface" placeholder="MM/AA" type="text"/></div>
+              <div class="flex flex-col gap-1.5"><label class="font-label-md text-label-md text-on-surface-variant">CVV</label><input class="w-full bg-surface-container-lowest border border-surface-variant rounded-lg py-3 px-4 font-body-md text-on-surface" placeholder="000" type="text"/></div>
+            </div>
+          </div>
+
+          <!-- Resumo -->
+          <div class="bg-surface-container-low rounded-xl p-6 border border-outline-variant/30">
+            <h3 class="font-label-md text-label-md text-on-surface mb-4">Resumo do Pedido</h3>
+            <div class="flex justify-between font-body-md text-on-surface-variant mb-2"><span>Subtotal</span><span class="text-on-surface">R$ 290,00</span></div>
+            <div class="flex justify-between font-body-md text-on-surface-variant mb-2"><span>Frete</span><span class="text-secondary">Grátis</span></div>
+            <div class="flex justify-between font-body-md text-on-surface-variant mb-4"><span>Prazo de Entrega</span><span class="text-on-surface">3 a 7 dias úteis</span></div>
+            <div class="border-t border-outline-variant/30 pt-4 flex justify-between items-center"><span class="font-headline-md text-on-surface">Total</span><span class="font-headline-md text-primary">R$ 290,00</span></div>
+          </div>
+
+          <!-- Actions -->
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between pt-2">
+            <a class="font-label-md text-label-md text-outline hover:text-primary transition-colors flex items-center gap-2 group" href="#/cart"><span class="material-symbols-outlined text-[18px] group-hover:-translate-x-1 transition-transform">arrow_back</span>Voltar ao Carrinho</a>
+            <button class="w-full sm:w-auto bg-primary text-on-primary py-3.5 px-10 rounded-lg font-label-md shadow-[0_4px_16px_rgba(84,64,140,0.25)] hover:shadow-[0_8px_24px_rgba(84,64,140,0.35)] hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2" type="submit">Confirmar Pedido <span class="material-symbols-outlined text-[18px]">check_circle</span></button>
+          </div>
+        </form>
+      </div>
+      <div class="mt-4 flex justify-center items-center gap-6 text-outline">
+        <div class="flex items-center gap-2"><span class="material-symbols-outlined text-[20px]">lock</span><span class="font-body-sm text-body-sm">Pagamento Seguro</span></div>
+        <div class="flex items-center gap-2"><span class="material-symbols-outlined text-[20px]">verified</span><span class="font-body-sm text-body-sm">Dados Criptografados</span></div>
+      </div>
+    </div>
+  </main>`;
+}
+
+// Payment method toggle logic
+setTimeout(() => {
+  const radios = document.querySelectorAll('input[name="payment"]');
+  const cardFields = document.getElementById('card-fields');
+  const labels = document.querySelectorAll('#payment-methods label');
+  if (!radios.length || !cardFields) return;
+
+  radios.forEach(r => r.addEventListener('change', () => {
+    labels.forEach(l => {
+      l.classList.remove('border-primary', 'bg-primary-fixed/20');
+      l.classList.add('border-outline-variant', 'bg-surface-container-lowest');
+    });
+    const active = r.closest('label');
+    active.classList.remove('border-outline-variant', 'bg-surface-container-lowest');
+    active.classList.add('border-primary', 'bg-primary-fixed/20');
+    cardFields.classList.toggle('hidden', r.value !== 'cartao');
+    if (r.value !== 'cartao') cardFields.classList.remove('grid');
+    else { cardFields.classList.remove('hidden'); cardFields.classList.add('grid'); }
+  }));
+}, 100);

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>A.n.n Beauty - Favorites</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary-fixed-dim": "#debfc2",
+                        "on-primary-fixed-variant": "#4e3985",
+                        "error": "#ba1a1a",
+                        "surface-container-low": "#f3f4f5",
+                        "primary-fixed": "#e9ddff",
+                        "on-surface": "#191c1d",
+                        "outline": "#7a7581",
+                        "on-tertiary-container": "#fcdbde",
+                        "on-tertiary-fixed-variant": "#574144",
+                        "surface-variant": "#e1e3e4",
+                        "on-secondary-fixed": "#251628",
+                        "background": "#f8f9fa",
+                        "tertiary-fixed": "#fbdbde",
+                        "on-primary-container": "#e9deff",
+                        "surface-tint": "#66519f",
+                        "secondary-fixed": "#f5daf4",
+                        "on-tertiary": "#ffffff",
+                        "inverse-surface": "#2e3132",
+                        "on-primary-fixed": "#220458",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#775f62",
+                        "surface-container-highest": "#e1e3e4",
+                        "on-secondary-container": "#725e73",
+                        "surface-container-high": "#e7e8e9",
+                        "secondary-container": "#f5daf4",
+                        "on-background": "#191c1d",
+                        "tertiary": "#5e474a",
+                        "on-surface-variant": "#494550",
+                        "surface-container": "#edeeef",
+                        "primary": "#54408c",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed-dim": "#cfbdff",
+                        "on-secondary-fixed-variant": "#534155",
+                        "surface": "#f8f9fa",
+                        "on-tertiary-fixed": "#281719",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#cfbdff",
+                        "inverse-on-surface": "#f0f1f2",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#6d58a6",
+                        "surface-dim": "#d9dadb",
+                        "on-error-container": "#93000a",
+                        "surface-bright": "#f8f9fa",
+                        "secondary-fixed-dim": "#d8bfd8",
+                        "outline-variant": "#cac4d2",
+                        "on-secondary": "#ffffff",
+                        "secondary": "#6c586d"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "base": "8px",
+                        "container-max": "1280px",
+                        "stack-sm": "12px",
+                        "margin-mobile": "16px",
+                        "stack-lg": "48px",
+                        "gutter": "24px",
+                        "stack-md": "24px",
+                        "margin-desktop": "40px"
+                    },
+                    fontFamily: {
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "display-lg": ["Noto Serif"],
+                        "label-md": ["Plus Jakarta Sans"],
+                        "headline-xl": ["Noto Serif"],
+                        "body-sm": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "headline-md": ["Noto Serif"]
+                    },
+                    fontSize: {
+                        "label-sm": ["12px", { lineHeight: "1.2", letterSpacing: "0.08em", fontWeight: "700" }],
+                        "body-lg": ["18px", { lineHeight: "1.6", fontWeight: "400" }],
+                        "display-lg": ["48px", { lineHeight: "1.2", letterSpacing: "-0.02em", fontWeight: "600" }],
+                        "label-md": ["14px", { lineHeight: "1.2", letterSpacing: "0.05em", fontWeight: "600" }],
+                        "headline-xl": ["36px", { lineHeight: "1.3", fontWeight: "500" }],
+                        "body-sm": ["14px", { lineHeight: "1.5", fontWeight: "400" }],
+                        "body-md": ["16px", { lineHeight: "1.6", fontWeight: "400" }],
+                        "headline-md": ["24px", { lineHeight: "1.4", fontWeight: "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Ambient Ethereal Shadow Utility */
+        .shadow-ethereal {
+            box-shadow: 0 12px 40px -12px rgba(109, 88, 166, 0.12);
+        }
+        .shadow-ethereal-hover {
+            box-shadow: 0 20px 50px -10px rgba(109, 88, 166, 0.18);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+<!-- TopNavBar (Rendered from JSON) -->
+<nav class="docked full-width top-0 sticky z-50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md border-b border-purple-100/20 dark:border-purple-900/20 shadow-sm shadow-purple-500/5">
+<div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+<div class="text-2xl font-serif tracking-widest text-purple-700 dark:text-purple-400">A.n.n Beauty</div>
+<div class="hidden md:flex items-center gap-8 font-serif text-slate-800 dark:text-slate-100">
+<a class="text-slate-500 dark:text-slate-400 hover:text-purple-600 transition-colors" href="#">Shop</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-purple-600 transition-colors" href="#">About Us</a>
+<a class="text-purple-800 dark:text-purple-300 border-b-2 border-purple-600 pb-1 hover:bg-purple-50/50 dark:hover:bg-purple-900/20 transition-all duration-300 opacity-80 scale-95 transition-transform" href="#">Favorites</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-purple-600 transition-colors" href="#">Track Order</a>
+</div>
+<div class="flex items-center gap-4 text-purple-700 dark:text-purple-400">
+<span class="material-symbols-outlined cursor-pointer hover:bg-purple-50/50 dark:hover:bg-purple-900/20 p-2 rounded-full transition-all duration-300">shopping_cart</span>
+<span class="material-symbols-outlined cursor-pointer hover:bg-purple-50/50 dark:hover:bg-purple-900/20 p-2 rounded-full transition-all duration-300">account_circle</span>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-grow w-full max-w-container-max mx-auto px-gutter py-stack-lg">
+<header class="mb-stack-lg text-center md:text-left">
+<h1 class="font-display-lg text-display-lg text-on-surface mb-stack-sm">Your Collection</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">A curated selection of your most desired formulations. Review, compare, and add to your ritual when you are ready.</p>
+</header>
+<div class="flex flex-col lg:flex-row gap-gutter items-start">
+<!-- Contextual Side Panel (Benefits of Favoriting) -->
+<aside class="w-full lg:w-1/3 xl:w-1/4 sticky top-stack-lg flex-shrink-0">
+<div class="bg-surface-container-lowest/70 backdrop-blur-md rounded-xl p-stack-md shadow-ethereal border border-primary-fixed/30">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-stack-md flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary-fixed-dim" style="font-variation-settings: 'FILL' 1;">favorite</span>
+                        The Wishlist
+                    </h2>
+<ul class="space-y-stack-sm">
+<li class="flex items-start gap-4">
+<div class="bg-primary-fixed/50 p-2 rounded-full text-primary mt-1">
+<span class="material-symbols-outlined text-[20px]">notifications_active</span>
+</div>
+<div>
+<h3 class="font-label-md text-label-md text-on-surface mb-1">Priority Alerts</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Be the first to know when your favorite items go on sale or are back in stock.</p>
+</div>
+</li>
+<li class="flex items-start gap-4">
+<div class="bg-secondary-fixed/50 p-2 rounded-full text-secondary mt-1">
+<span class="material-symbols-outlined text-[20px]">trending_up</span>
+</div>
+<div>
+<h3 class="font-label-md text-label-md text-on-surface mb-1">Trending Status</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">See which of your saved items are currently trending in the community.</p>
+</div>
+</li>
+<li class="flex items-start gap-4">
+<div class="bg-tertiary-fixed/50 p-2 rounded-full text-tertiary mt-1">
+<span class="material-symbols-outlined text-[20px]">auto_awesome</span>
+</div>
+<div>
+<h3 class="font-label-md text-label-md text-on-surface mb-1">Curated Matches</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Help us refine your personalized product recommendations.</p>
+</div>
+</li>
+</ul>
+<div class="mt-stack-md pt-stack-md border-t border-surface-variant">
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md py-3 rounded-lg shadow-sm hover:shadow-md transition-shadow flex items-center justify-center gap-2">
+                            Add All to Cart
+                            <span class="material-symbols-outlined text-[18px]">shopping_bag</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- Favorites Grid -->
+<section class="w-full lg:w-2/3 xl:w-3/4">
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-gutter">
+<!-- Product Card 1 -->
+<article class="bg-surface-container-lowest rounded-xl overflow-hidden group shadow-sm hover:shadow-ethereal-hover transition-all duration-300 border border-surface-container-low flex flex-col">
+<div class="relative aspect-[4/5] bg-surface-container-low overflow-hidden flex items-center justify-center p-base">
+<img alt="Luminous Night Serum" class="w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-500" data-alt="Minimalist glass dropper bottle of luxury face serum on a clean white background with soft natural lighting and subtle reflection" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4GA_67aY1N7hA37Z_u0SZTtDvmQgZXuI0IKCpWWDwQsAXhjglwF-D42Qcs01tgkoSC6D8xlCvN6yA6-ejFb0LHExM4IcIsLX0_bZ6lkpq9KEObhgQAXww5vLvCIpjlTFlXD3OqgpVeAy6WcSXOuAV6cNn4ZJ4JPqWocLYuSTtSctBBEG7ex1kpvMBJyL1aooq9sSovS72j_rwf67cdFVy9q5RzAgu6OdprTZWdSZy0q1ZXhfcK6PpCO3fqzA9G_f4Gan5cOJUesao"/>
+<!-- Heart Icon -->
+<button aria-label="Remove from favorites" class="absolute top-4 right-4 bg-surface-container-lowest/80 backdrop-blur-sm p-2 rounded-full shadow-sm hover:scale-110 transition-transform z-10 text-tertiary-fixed-dim">
+<span class="material-symbols-outlined block" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</button>
+<!-- Badge -->
+<span class="absolute bottom-4 left-4 bg-surface-container-lowest/90 backdrop-blur-sm text-primary font-label-sm text-label-sm px-3 py-1 rounded-full shadow-sm">
+                                Almost Gone
+                            </span>
+</div>
+<div class="p-stack-sm flex flex-col flex-grow">
+<h3 class="font-headline-md text-[20px] leading-tight text-on-surface mb-1">Luminous Night Serum</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-stack-sm line-clamp-1">Restorative overnight cellular repair</p>
+<div class="mt-auto flex items-end justify-between">
+<span class="font-label-md text-label-md text-primary">$128.00</span>
+<button class="text-primary hover:text-primary-container transition-colors font-label-md text-label-md flex items-center gap-1">
+                                    Add <span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Product Card 2 -->
+<article class="bg-surface-container-lowest rounded-xl overflow-hidden group shadow-sm hover:shadow-ethereal-hover transition-all duration-300 border border-surface-container-low flex flex-col">
+<div class="relative aspect-[4/5] bg-surface-container-low overflow-hidden flex items-center justify-center p-base">
+<img alt="Ethereal Hydration Cream" class="w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-500" data-alt="Frosted glass jar of hydrating face cream sitting on soft pink silk fabric with gentle top-down lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDH73IxZc-wW9MebvJPSiKSaysCLwGfJ_uVChy9knx7JdBtqj0aMGb5CAsdcPwqPCVgVLSK-4N-V9HvC7pfy7S7p5CnpqvHBtAcVdaLPL68NzuSwyPbn62GlQvIOoooz9_LtxZu1HzBiCITyvYdd6W8PtDkIVJsbW7jXLwHh_LnkCIN5MC8xBH1a62XTH4_CKCc2tZX9KwA8sEBCmC8dvnnu87WI9zwOY3_nPTA7hzkoSxgN2EL4OBgiTONdoHbGsUYNIk4qyTpN6H-"/>
+<button aria-label="Remove from favorites" class="absolute top-4 right-4 bg-surface-container-lowest/80 backdrop-blur-sm p-2 rounded-full shadow-sm hover:scale-110 transition-transform z-10 text-tertiary-fixed-dim">
+<span class="material-symbols-outlined block" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</button>
+</div>
+<div class="p-stack-sm flex flex-col flex-grow">
+<h3 class="font-headline-md text-[20px] leading-tight text-on-surface mb-1">Ethereal Hydration Cream</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-stack-sm line-clamp-1">Deep moisture barrier lock</p>
+<div class="mt-auto flex items-end justify-between">
+<span class="font-label-md text-label-md text-primary">$85.00</span>
+<button class="text-primary hover:text-primary-container transition-colors font-label-md text-label-md flex items-center gap-1">
+                                    Add <span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Product Card 3 -->
+<article class="bg-surface-container-lowest rounded-xl overflow-hidden group shadow-sm hover:shadow-ethereal-hover transition-all duration-300 border border-surface-container-low flex flex-col">
+<div class="relative aspect-[4/5] bg-surface-container-low overflow-hidden flex items-center justify-center p-base">
+<img alt="Velvet Matte Lip Color" class="w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-500" data-alt="Sleek silver lipstick tube partially open resting on a clear acrylic block against a pale lavender backdrop" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmGynp0tWFLudcUkNPCCNyCdh-6xgbI5v1HlfT8vTijKv7-ycl_F7x-t_5ERsdDHB2cxB3rB5mnL_uriv5me7i8YaFKrsCzeGprrFAJA1chrXqw9sCjfejNeVfPcpXxtWpPTOLdgEnClOtYNBe3uxCZPhHUnVcESDS5lzlOW8DH3O2kUWYkiCScH0RlVMUXGhMOYLLu05gimWPpPVheqszRzq8jhe6RzvR7VqbO-WX5AJZeBZTFwvGr4S4-o5HuDFORM68VKHU58ff"/>
+<button aria-label="Remove from favorites" class="absolute top-4 right-4 bg-surface-container-lowest/80 backdrop-blur-sm p-2 rounded-full shadow-sm hover:scale-110 transition-transform z-10 text-tertiary-fixed-dim">
+<span class="material-symbols-outlined block" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</button>
+<span class="absolute bottom-4 left-4 bg-tertiary-fixed-dim/90 text-on-tertiary-fixed-variant backdrop-blur-sm font-label-sm text-label-sm px-3 py-1 rounded-full shadow-sm">
+                                Bestseller
+                            </span>
+</div>
+<div class="p-stack-sm flex flex-col flex-grow">
+<h3 class="font-headline-md text-[20px] leading-tight text-on-surface mb-1">Velvet Matte Lip Color</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-stack-sm line-clamp-1">Shade: Dusk Rose</p>
+<div class="mt-auto flex items-end justify-between">
+<span class="font-label-md text-label-md text-primary">$42.00</span>
+<button class="text-primary hover:text-primary-container transition-colors font-label-md text-label-md flex items-center gap-1">
+                                    Add <span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Product Card 4 -->
+<article class="bg-surface-container-lowest rounded-xl overflow-hidden group shadow-sm hover:shadow-ethereal-hover transition-all duration-300 border border-surface-container-low flex flex-col">
+<div class="relative aspect-[4/5] bg-surface-container-low overflow-hidden flex items-center justify-center p-base">
+<img alt="Gentle Exfoliating Polish" class="w-full h-full object-cover rounded-lg group-hover:scale-105 transition-transform duration-500" data-alt="Minimalist beige tube of facial scrub resting on smooth river stones with soft natural morning light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcv3vskjoP7NLH4IULKvlw2zXz2nKm3mrdBeUohZlGHeUtOXNtSMyEf9NTkuLfUtHSOdUiJm11yrIzPeR0ZstVE6WZgs-6rlDcbepAVVkI-0o5RlIHXZ2G5_x1MFGUmpIjpXXRuIaIurqPtsSWOTM01tTmF49nHMAoVraPW2d-ZkLNup1XmjpKPjMSMRIivewSG5LdKQ2SSRg6PEcclMx13bfMPp1ZTFTZAPDOMNle5FjUGZGH9D4Wwr1_f0xcK97A5gZcr8l2pXpj"/>
+<button aria-label="Remove from favorites" class="absolute top-4 right-4 bg-surface-container-lowest/80 backdrop-blur-sm p-2 rounded-full shadow-sm hover:scale-110 transition-transform z-10 text-tertiary-fixed-dim">
+<span class="material-symbols-outlined block" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</button>
+</div>
+<div class="p-stack-sm flex flex-col flex-grow">
+<h3 class="font-headline-md text-[20px] leading-tight text-on-surface mb-1">Gentle Exfoliating Polish</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-stack-sm line-clamp-1">Refines and brightens texture</p>
+<div class="mt-auto flex items-end justify-between">
+<span class="font-label-md text-label-md text-primary">$56.00</span>
+<button class="text-primary hover:text-primary-container transition-colors font-label-md text-label-md flex items-center gap-1">
+                                    Add <span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</article>
+</div>
+</section>
+</div>
+</main>
+<!-- Footer (Rendered from JSON) -->
+<footer class="w-full mt-20 border-t border-purple-100 dark:border-purple-900 bg-slate-50 dark:bg-slate-900 flex-shrink-0">
+<div class="max-w-7xl mx-auto px-8 py-12 flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="text-xl font-serif italic text-purple-800 dark:text-purple-300">
+                A.n.n Beauty
+            </div>
+<div class="flex flex-wrap justify-center gap-6 font-serif text-sm text-slate-600 dark:text-slate-400">
+<a class="text-slate-500 hover:text-purple-600 hover:underline decoration-purple-300 underline-offset-4 Standard transition-all duration-200" href="#">Sustainability</a>
+<a class="text-slate-500 hover:text-purple-600 hover:underline decoration-purple-300 underline-offset-4 Standard transition-all duration-200" href="#">Privacy Policy</a>
+<a class="text-slate-500 hover:text-purple-600 hover:underline decoration-purple-300 underline-offset-4 Standard transition-all duration-200" href="#">Terms of Service</a>
+<a class="text-slate-500 hover:text-purple-600 hover:underline decoration-purple-300 underline-offset-4 Standard transition-all duration-200" href="#">Contact Us</a>
+</div>
+<div class="font-serif text-sm text-slate-600 dark:text-slate-400">
+                © 2024 A.n.n Beauty. All rights reserved.
+            </div>
+</div>
+</footer>
+</body></html>

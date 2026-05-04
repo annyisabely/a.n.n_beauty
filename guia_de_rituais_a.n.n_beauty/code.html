@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>A.n.n Beauty - Tutorials</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&amp;family=Noto+Serif:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-container": "#725e73",
+                        "surface-container-high": "#e7e8e9",
+                        "secondary-container": "#f5daf4",
+                        "on-background": "#191c1d",
+                        "tertiary": "#5e474a",
+                        "on-surface-variant": "#494550",
+                        "surface-container": "#edeeef",
+                        "primary": "#54408c",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed-dim": "#cfbdff",
+                        "on-secondary-fixed-variant": "#534155",
+                        "surface": "#f8f9fa",
+                        "on-tertiary-fixed": "#281719",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#cfbdff",
+                        "inverse-on-surface": "#f0f1f2",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#6d58a6",
+                        "surface-dim": "#d9dadb",
+                        "on-error-container": "#93000a",
+                        "surface-bright": "#f8f9fa",
+                        "secondary-fixed-dim": "#d8bfd8",
+                        "outline-variant": "#cac4d2",
+                        "on-secondary": "#ffffff",
+                        "secondary": "#6c586d",
+                        "tertiary-fixed-dim": "#debfc2",
+                        "on-primary-fixed-variant": "#4e3985",
+                        "error": "#ba1a1a",
+                        "surface-container-low": "#f3f4f5",
+                        "primary-fixed": "#e9ddff",
+                        "on-surface": "#191c1d",
+                        "outline": "#7a7581",
+                        "on-tertiary-container": "#fcdbde",
+                        "on-tertiary-fixed-variant": "#574144",
+                        "surface-variant": "#e1e3e4",
+                        "on-secondary-fixed": "#251628",
+                        "background": "#f8f9fa",
+                        "tertiary-fixed": "#fbdbde",
+                        "on-primary-container": "#e9deff",
+                        "surface-tint": "#66519f",
+                        "secondary-fixed": "#f5daf4",
+                        "on-tertiary": "#ffffff",
+                        "inverse-surface": "#2e3132",
+                        "on-primary-fixed": "#220458",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#775f62",
+                        "surface-container-highest": "#e1e3e4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1280px",
+                        "base": "8px",
+                        "margin-desktop": "40px",
+                        "stack-md": "24px",
+                        "stack-lg": "48px",
+                        "gutter": "24px",
+                        "stack-sm": "12px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Plus Jakarta Sans"],
+                        "headline-xl": ["Noto Serif"],
+                        "body-sm": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "headline-md": ["Noto Serif"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "display-lg": ["Noto Serif"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-xl": ["36px", { "lineHeight": "1.3", "fontWeight": "500" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "1.4", "fontWeight": "500" }],
+                        "label-sm": ["12px", { "lineHeight": "1.2", "letterSpacing": "0.08em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .soft-shadow {
+            box-shadow: 0 10px 40px -10px rgba(109, 88, 166, 0.08);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-md selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TopAppBar -->
+<nav class="hidden md:flex bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg rounded-none border-b border-gray-100 dark:border-gray-800 border-b border-purple-100 dark:border-purple-900/30 shadow-sm shadow-purple-900/5 fixed top-0 w-full z-50 flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
+<div class="text-2xl font-serif font-bold text-purple-700 dark:text-purple-300">A.n.n Beauty</div>
+<div class="flex gap-8 items-center">
+<a class="text-purple-800 dark:text-purple-300 border-b-2 border-purple-700 pb-1 font-serif text-sm tracking-wide hover:opacity-80 transition-opacity transform hover:scale-95 duration-150" href="#">Tutorials</a>
+<a class="text-gray-500 dark:text-gray-400 hover:text-purple-600 font-serif text-sm tracking-wide hover:opacity-80 transition-opacity transform hover:scale-95 duration-150" href="#">Gallery</a>
+<a class="text-gray-500 dark:text-gray-400 hover:text-purple-600 font-serif text-sm tracking-wide hover:opacity-80 transition-opacity transform hover:scale-95 duration-150" href="#">Shop</a>
+<a class="text-gray-500 dark:text-gray-400 hover:text-purple-600 font-serif text-sm tracking-wide hover:opacity-80 transition-opacity transform hover:scale-95 duration-150" href="#">Community</a>
+</div>
+<div class="flex gap-4 items-center">
+<button class="text-purple-700 dark:text-purple-400 hover:opacity-80 transition-opacity transform hover:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+</button>
+<button class="text-purple-700 dark:text-purple-400 hover:opacity-80 transition-opacity transform hover:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="pt-[80px] pb-[100px] md:pb-0 min-h-screen flex flex-col items-center">
+<!-- Hero Section -->
+<section class="w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-stack-lg flex flex-col items-center text-center mt-stack-md">
+<div class="inline-flex items-center gap-2 bg-secondary-fixed/50 text-on-secondary-fixed px-4 py-2 rounded-full mb-stack-md glass-panel">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-primary">Intelligent Selection</span>
+</div>
+<h1 class="font-display-lg text-display-lg text-on-surface mb-stack-sm max-w-2xl">
+                Ethereal Rituals, <br/> Curated for You.
+            </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl mb-stack-lg">
+                Our algorithm blends scientific efficacy with your unique aesthetic goals to guide your daily practice.
+            </p>
+</section>
+<!-- Bento Grid Layout -->
+<section class="w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop mb-stack-lg">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Main Featured Tutorial -->
+<article class="md:col-span-8 bg-surface-container-lowest rounded-xl soft-shadow overflow-hidden group relative min-h-[400px] flex flex-col justify-end p-stack-md">
+<img alt="close-up of woman applying liquid eyeliner with precision, soft warm studio lighting, flawless skin, ethereal mood" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 z-0" data-alt="close-up of woman applying liquid eyeliner with precision, soft warm studio lighting, flawless skin, ethereal mood" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJ_xTYrJATpZojIBROSRuNTxUnWG4SGSxYMqxgJaxEm5s9DDI7g32bhnkaNwGDaMR5Ne_h_MYXh8q3t3eke3u2YB3q3WbVAwNQ2HHdASQIgewxRuO4rFN7vaf5RmvlzKTSk4vqsJnNCsKPQrpwzwrpXlA7TxhuNYSHZNlH06ZLj_4lJuJj02F_LvEacpJm-VJOZTS1Ir0hhvdzah_HlyGeMJCips9S8fobKhkDVs68g4MqINsjJcY1TfS55qZlDmJnrsPl9WA3RsPO"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background/90 via-background/40 to-transparent z-10"></div>
+<div class="relative z-20 max-w-md">
+<div class="flex gap-2 mb-3">
+<span class="px-3 py-1 bg-tertiary-container/20 text-tertiary font-label-sm text-label-sm rounded-full backdrop-blur-sm">Beginner</span>
+<span class="px-3 py-1 bg-secondary-container/20 text-secondary font-label-sm text-label-sm rounded-full backdrop-blur-sm">5 Min</span>
+</div>
+<h2 class="font-headline-xl text-headline-xl text-on-surface mb-2">Delineado para Iniciantes</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">Master the perfect wing with our step-by-step guide designed for absolute clarity and precision.</p>
+<button class="inline-flex items-center justify-center gap-2 bg-primary text-on-primary px-8 py-3 rounded-full font-label-md text-label-md hover:bg-primary-container transition-colors shadow-sm shadow-primary/20">
+<span class="material-symbols-outlined" data-icon="play_arrow">play_arrow</span>
+                            Start Ritual
+                        </button>
+</div>
+</article>
+<!-- Secondary Tutorial 1 -->
+<article class="md:col-span-4 bg-surface-container-lowest rounded-xl soft-shadow overflow-hidden group relative min-h-[250px] md:min-h-[400px] flex flex-col justify-end p-stack-md">
+<img alt="soft focus macro shot of glowing hydrated skin texture, dewy finish, pale lilac lighting, luxurious skincare aesthetic" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 z-0" data-alt="soft focus macro shot of glowing hydrated skin texture, dewy finish, pale lilac lighting, luxurious skincare aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9b_mZ9hJu25J7mXoz5PvCqagmQFTuvlL3TjCbE-rEuEQrCDhz8P9UiH9QhsxqxPBGFdZyHZnIXv9v1AwL8tf5XFOFBIUGgIKpfMuErJLoJf9CAhHBsAxVn9pDJKkmyYLq0ReG-_fV_b0UZLjPM95FnTWFR1Vtt9p4RMHHGM9c2NxO7DTNDeBTgSAcD6jN6vdWTNMu7WgCBrvHHYC_kXZ48R21NqlpyvLZE_YoV7uy3kVvGelY6CjxrQHqod_CaaJSHEzEA6nhvBo-"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background/90 via-background/30 to-transparent z-10"></div>
+<div class="relative z-20">
+<span class="inline-block px-3 py-1 bg-secondary-container/20 text-secondary font-label-sm text-label-sm rounded-full backdrop-blur-sm mb-3">Intermediate</span>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Glass Skin Prep</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4">The ultimate hydration layering technique.</p>
+<button class="text-primary font-label-md text-label-md inline-flex items-center gap-1 hover:text-primary-container transition-colors">
+                            View Guide <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</article>
+<!-- Small Info Card -->
+<article class="md:col-span-4 bg-primary-fixed/30 rounded-xl soft-shadow p-stack-md flex flex-col justify-center border border-primary-fixed-dim/50 glass-panel">
+<span class="material-symbols-outlined text-primary text-3xl mb-4" data-icon="tune">tune</span>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Refine Your Feed</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-6">Adjust your beauty profile to see tutorials perfectly matched to your skin type and skill level.</p>
+<button class="w-full border-2 border-primary-fixed-dim text-primary px-6 py-2 rounded-full font-label-md text-label-md hover:bg-primary-fixed transition-colors">
+                        Update Preferences
+                    </button>
+</article>
+<!-- Secondary Tutorial 2 -->
+<article class="md:col-span-8 bg-surface-container-lowest rounded-xl soft-shadow overflow-hidden group relative min-h-[250px] flex flex-col justify-end p-stack-md">
+<img alt="minimalist vanity table setup with luxury cosmetics, soft morning light filtering through sheer curtains, elegant composition" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 z-0" data-alt="minimalist vanity table setup with luxury cosmetics, soft morning light filtering through sheer curtains, elegant composition" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdsTmkpeAtGLLGk5AYbrH2gA7KNanIf2SUfG7pFkir5OaUBbUbEBOWx1iqBlxPuUvMKM8VABwKbGZrkWId5KNFRoNFL3YuoRu86yb4p7lmvn6SGa1eZEu3vVKy9bq11QQ9wYMG4OfpkEXbSRdVzyPdefHjHhsIi_b95pJCL_h7KzbQHDtCdDO2Dp6QDiirntKVHo3HdeF1eNWeGxQjlfkLke-80ax7yCICKyksaWFr0lfXLe0Q5vXTVAltblDDty7t2w7CsIsAFV5Y"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background/90 via-background/40 to-transparent z-10"></div>
+<div class="relative z-20">
+<span class="inline-block px-3 py-1 bg-tertiary-container/20 text-tertiary font-label-sm text-label-sm rounded-full backdrop-blur-sm mb-3">Advanced</span>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Soft Sculpting Ritual</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4">Define features with light and shadow seamlessly.</p>
+<button class="text-primary font-label-md text-label-md inline-flex items-center gap-1 hover:text-primary-container transition-colors">
+                            View Guide <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</article>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="md:hidden bg-white/90 dark:bg-gray-950/90 backdrop-blur-xl docked full-width bottom-0 border-t border-purple-50 dark:border-purple-900/20 shadow-[0_-4px_20px_rgba(109,88,166,0.05)] fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3">
+<a class="flex flex-col items-center justify-center text-gray-400 dark:text-gray-600 hover:text-purple-500 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-serif text-[10px] uppercase tracking-tighter mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-2xl px-4 py-1 hover:text-purple-500 transition-colors Active: translate-y-[-2px] transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="play_circle" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+<span class="font-serif text-[10px] uppercase tracking-tighter mt-1 text-purple-700 dark:text-purple-300">Learn</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-400 dark:text-gray-600 hover:text-purple-500 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="font-serif text-[10px] uppercase tracking-tighter mt-1">Search</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-400 dark:text-gray-600 hover:text-purple-500 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="person_2">person_2</span>
+<span class="font-serif text-[10px] uppercase tracking-tighter mt-1">Profile</span>
+</a>
+</nav>
+<!-- Footer -->
+<footer class="bg-gray-50 dark:bg-gray-950 full-width mt-12 py-12 border-t border-gray-200 dark:border-gray-800 flat w-full flex flex-col md:flex-row justify-between items-center px-12 space-y-4 md:space-y-0">
+<div class="text-lg font-serif font-semibold text-purple-800 dark:text-purple-200">A.n.n Beauty</div>
+<div class="flex gap-6 items-center flex-wrap justify-center">
+<a class="text-gray-500 hover:text-purple-600 hover:underline decoration-purple-200 font-serif italic text-sm" href="#">Scientific Efficacy</a>
+<a class="text-gray-500 hover:text-purple-600 hover:underline decoration-purple-200 font-serif italic text-sm" href="#">Ritual Guide</a>
+<a class="text-gray-500 hover:text-purple-600 hover:underline decoration-purple-200 font-serif italic text-sm" href="#">Privacy Policy</a>
+<a class="text-gray-500 hover:text-purple-600 hover:underline decoration-purple-200 font-serif italic text-sm" href="#">Consultation</a>
+</div>
+<div class="font-serif italic text-sm text-gray-500 text-purple-700 dark:text-purple-400">
+            © 2024 A.n.n Beauty. Ethereal Rituals for the Modern Woman.
+        </div>
+</footer>
+</body></html>

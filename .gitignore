@@ -1,0 +1,12 @@
+# Dependencies
+node_modules/
+.DS_Store
+*.log
+
+# Local storage and cache
+.cache/
+.gemini/
+
+# OS files
+Thumbs.db
+Desktop.ini

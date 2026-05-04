@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>A.n.n Beauty - Tutorial</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400..700;1,400..700&amp;family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-container": "#725e73",
+                        "surface-container-high": "#e7e8e9",
+                        "secondary-container": "#f5daf4",
+                        "on-background": "#191c1d",
+                        "tertiary": "#5e474a",
+                        "on-surface-variant": "#494550",
+                        "surface-container": "#edeeef",
+                        "primary": "#54408c",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed-dim": "#cfbdff",
+                        "on-secondary-fixed-variant": "#534155",
+                        "surface": "#f8f9fa",
+                        "on-tertiary-fixed": "#281719",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#cfbdff",
+                        "inverse-on-surface": "#f0f1f2",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#6d58a6",
+                        "surface-dim": "#d9dadb",
+                        "on-error-container": "#93000a",
+                        "surface-bright": "#f8f9fa",
+                        "secondary-fixed-dim": "#d8bfd8",
+                        "outline-variant": "#cac4d2",
+                        "on-secondary": "#ffffff",
+                        "secondary": "#6c586d",
+                        "tertiary-fixed-dim": "#debfc2",
+                        "on-primary-fixed-variant": "#4e3985",
+                        "error": "#ba1a1a",
+                        "surface-container-low": "#f3f4f5",
+                        "primary-fixed": "#e9ddff",
+                        "on-surface": "#191c1d",
+                        "outline": "#7a7581",
+                        "on-tertiary-container": "#fcdbde",
+                        "on-tertiary-fixed-variant": "#574144",
+                        "surface-variant": "#e1e3e4",
+                        "on-secondary-fixed": "#251628",
+                        "background": "#f8f9fa",
+                        "tertiary-fixed": "#fbdbde",
+                        "on-primary-container": "#e9deff",
+                        "surface-tint": "#66519f",
+                        "secondary-fixed": "#f5daf4",
+                        "on-tertiary": "#ffffff",
+                        "inverse-surface": "#2e3132",
+                        "on-primary-fixed": "#220458",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#775f62",
+                        "surface-container-highest": "#e1e3e4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1280px",
+                        "base": "8px",
+                        "margin-desktop": "40px",
+                        "stack-md": "24px",
+                        "stack-lg": "48px",
+                        "gutter": "24px",
+                        "stack-sm": "12px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Plus Jakarta Sans"],
+                        "headline-xl": ["Noto Serif"],
+                        "body-sm": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "headline-md": ["Noto Serif"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "display-lg": ["Noto Serif"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-xl": ["36px", { "lineHeight": "1.3", "fontWeight": "500" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "1.4", "fontWeight": "500" }],
+                        "label-sm": ["12px", { "lineHeight": "1.2", "letterSpacing": "0.08em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        h1, h2, h3, h4, h5, h6, .font-serif { font-family: 'Noto Serif', serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="hidden md:flex fixed top-0 w-full z-50 flex justify-between items-center px-6 py-4 max-w-7xl mx-auto rounded-none border-b border-gray-100 dark:border-gray-800 border-b border-purple-100 dark:border-purple-900/30 shadow-sm shadow-purple-900/5 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg transition-transform duration-300">
+<div class="text-2xl font-serif font-bold text-purple-700 dark:text-purple-300">
+            A.n.n Beauty
+        </div>
+<nav class="flex items-center gap-8 font-serif text-sm tracking-wide">
+<a class="text-purple-800 dark:text-purple-300 border-b-2 border-purple-700 pb-1 active:scale-95 duration-150" href="#">Tutorials</a>
+<a class="text-gray-500 dark:text-gray-400 hover:text-purple-600 hover:opacity-80 transition-opacity active:scale-95 duration-150" href="#">Gallery</a>
+<a class="text-gray-500 dark:text-gray-400 hover:text-purple-600 hover:opacity-80 transition-opacity active:scale-95 duration-150" href="#">Shop</a>
+<a class="text-gray-500 dark:text-gray-400 hover:text-purple-600 hover:opacity-80 transition-opacity active:scale-95 duration-150" href="#">Community</a>
+</nav>
+<div class="flex items-center gap-4 text-purple-700 dark:text-purple-400">
+<button class="hover:opacity-80 transition-opacity active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+</button>
+<button class="hover:opacity-80 transition-opacity active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="max-w-[1280px] mx-auto px-gutter pt-[100px] md:pt-[140px] pb-[100px] flex flex-col gap-stack-lg">
+<!-- Video & Summary Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Video Section (Left) -->
+<div class="lg:col-span-8 flex flex-col gap-stack-md">
+<div class="relative w-full aspect-video rounded-xl overflow-hidden shadow-lg bg-surface-container-high group cursor-pointer">
+<img alt="Video thumbnail" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Close up of a woman applying luminous serum to her face in soft natural light, conveying an ethereal morning ritual." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJvWHcVtwfwVsd2d8xMLYDGJSdfs_xQjDQK4v3BAh2cLubVbi5UR-SbhZqM6QPy28aPz1posNZ02tSe00oVWoxUBQPGK5WEX7G8g6Egmrbe_0n2pcLUU5JguQkxvoKKXcP0Gwh00cHZPafDqP36MgQ0rkhrJmwTUMROJ_HP0NH5JEO-WjhWE9RUt5dLyms9bXZ6FOxRluIDKBvHoE9T8luSGPJKr8Bhs8NXx1Tq9tJyfmVBZliJ6fWiVvBu6Kshv9fTSiNGb0Gcpgk"/>
+<!-- Play Button Overlay -->
+<div class="absolute inset-0 bg-primary/10 flex items-center justify-center transition-colors group-hover:bg-primary/20">
+<div class="w-16 h-16 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center shadow-lg transform transition-transform group-hover:scale-110">
+<span class="material-symbols-outlined text-primary text-3xl ml-1" data-icon="play_arrow" data-weight="fill" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-base">
+<h1 class="font-headline-xl text-headline-xl text-on-surface">The Ethereal Glow Routine</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-3xl">
+                        Discover the secret to our signature luminous finish. In this detailed tutorial, our lead artist walks you through the exact steps to achieve a flawless, breathable base that lasts all day.
+                    </p>
+</div>
+</div>
+<!-- Resumo do Vídeo (Right) -->
+<div class="lg:col-span-4 flex flex-col">
+<div class="bg-surface-container-lowest rounded-xl p-stack-md shadow-sm border border-outline-variant/30 flex flex-col h-full">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-stack-md border-b border-surface-variant pb-base">Resumo do Vídeo</h2>
+<div class="flex flex-col gap-stack-sm relative">
+<!-- Timeline Line -->
+<div class="absolute left-3 top-2 bottom-2 w-px bg-surface-variant"></div>
+<!-- Step 1 -->
+<div class="flex gap-4 relative z-10">
+<div class="w-6 h-6 rounded-full bg-primary-container flex-shrink-0 flex items-center justify-center border-2 border-surface-container-lowest">
+<span class="font-label-sm text-label-sm text-on-primary-container">1</span>
+</div>
+<div class="flex flex-col pb-4">
+<span class="font-label-md text-label-md text-on-surface">Skin Prep</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-1">Begin with a clean canvas. Apply the Hydrating Essence pressing gently into the skin.</span>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="flex gap-4 relative z-10">
+<div class="w-6 h-6 rounded-full bg-primary-container flex-shrink-0 flex items-center justify-center border-2 border-surface-container-lowest">
+<span class="font-label-sm text-label-sm text-on-primary-container">2</span>
+</div>
+<div class="flex flex-col pb-4">
+<span class="font-label-md text-label-md text-on-surface">Luminous Base</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-1">Mix 2 drops of Illuminating Serum with your foundation for an ethereal glow.</span>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="flex gap-4 relative z-10">
+<div class="w-6 h-6 rounded-full bg-primary-container flex-shrink-0 flex items-center justify-center border-2 border-surface-container-lowest">
+<span class="font-label-sm text-label-sm text-on-primary-container">3</span>
+</div>
+<div class="flex flex-col pb-4">
+<span class="font-label-md text-label-md text-on-surface">Conceal &amp; Brighten</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-1">Apply radiant concealer only where needed to maintain the skin's natural texture.</span>
+</div>
+</div>
+<!-- Step 4 -->
+<div class="flex gap-4 relative z-10">
+<div class="w-6 h-6 rounded-full bg-surface-variant flex-shrink-0 flex items-center justify-center border-2 border-surface-container-lowest">
+<span class="font-label-sm text-label-sm text-on-surface-variant">4</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface">Soft Setting</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-1">Use a fluffy brush to lightly dust finishing powder on the T-zone.</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Produtos Utilizados -->
+<section class="flex flex-col gap-stack-md mt-stack-lg">
+<div class="flex items-center justify-between border-b border-surface-variant pb-base">
+<h2 class="font-headline-md text-headline-md text-on-surface">Produtos Utilizados</h2>
+<a class="font-label-md text-label-md text-primary hover:text-primary-fixed-dim transition-colors" href="#">Shop All</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-gutter">
+<!-- Product 1 -->
+<div class="group flex flex-col bg-surface-container-lowest rounded-xl overflow-hidden border border-outline-variant/30 hover:shadow-[0_8px_30px_rgb(109,88,166,0.12)] transition-all duration-300">
+<div class="relative aspect-square p-6 bg-surface-bright flex items-center justify-center">
+<img alt="Product" class="w-3/4 h-3/4 object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-105" data-alt="Minimalist frosted glass bottle of facial serum on a clean white background with soft shadows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCePlXk1gZ0QwUza-t16Gu_5O8N43BKTeLClvx_7uJUEW4a88N6cuwgeNxUI3uyQXMO_yGKxXncdr8RXtxjtnpGhWVfUBogQWTzTWunHDT4XLzCtLv546hgkXS5pliimtIA06GHOvFif0kMXGbJzQJt4xFZJ9YGweNp_JgsGJFliXQGvNIjHOwGTJRXceWF3BNG4dHPPg71tioeyJNnKQ6aK_bQgGViLBBcWoha4SqTMORQdxbxlFD9KPidKq0pEZ1jwPVauy192RsJ"/>
+</div>
+<div class="p-4 flex flex-col gap-2 flex-grow">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Prep</span>
+<h3 class="font-label-md text-label-md text-on-surface line-clamp-2">Botanical Hydrating Essence</h3>
+<div class="mt-auto pt-4 flex items-center justify-between">
+<span class="font-body-lg text-body-lg text-on-surface">$48.00</span>
+<button class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-sm">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product 2 -->
+<div class="group flex flex-col bg-surface-container-lowest rounded-xl overflow-hidden border border-outline-variant/30 hover:shadow-[0_8px_30px_rgb(109,88,166,0.12)] transition-all duration-300">
+<div class="relative aspect-square p-6 bg-surface-bright flex items-center justify-center">
+<img alt="Product" class="w-3/4 h-3/4 object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-105" data-alt="Elegant cosmetic foundation bottle with a gold pump, minimalist studio lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFr3x_rZ0tMI6uZyDAz9yZDqcRfIhKpQiaUFZizzIBIe3l1OklsOMvBbVLtPcrzw-fcWIteouwkaVKp2aJRzyiboEGSy-PA7B41fdoELH2hvglNNhUH0LC5vN-u3yBaCuYkco9Q5WdwvpPc66Xpoa4J2BQ8C3eTvFq04pxZGc05rammvye3Z1_Nprf0LP610PfVniaFFkR2R3fUJTO3UIu23j5UD_cbmHDHMDCjBnAb7FGTeiuJvSYw6WNL5Jrp4ggMtsapCXguYsd"/>
+</div>
+<div class="p-4 flex flex-col gap-2 flex-grow">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Base</span>
+<h3 class="font-label-md text-label-md text-on-surface line-clamp-2">Luminous Silk Foundation</h3>
+<div class="mt-auto pt-4 flex items-center justify-between">
+<span class="font-body-lg text-body-lg text-on-surface">$65.00</span>
+<button class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-sm">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product 3 -->
+<div class="group flex flex-col bg-surface-container-lowest rounded-xl overflow-hidden border border-outline-variant/30 hover:shadow-[0_8px_30px_rgb(109,88,166,0.12)] transition-all duration-300">
+<div class="relative aspect-square p-6 bg-surface-bright flex items-center justify-center">
+<img alt="Product" class="w-3/4 h-3/4 object-contain mix-blend-multiply transition-transform duration-500 group-hover:scale-105" data-alt="Sleek silver tube of concealer isolated on a soft gray background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzviFFkhsUrEfnV5LYqjqFErW_km4ET7PjbmD2Tah73DEcmL8001D0ZG9V50HwkxSXHq43VekTGZMZRFXKcdQGRPGYDpMcNUg4ZsmA476goXLMRHDp0lnCMKDi9iMwCNaDw-l8su_E0tDbcHUnzvc9oRt8cPHLGj42nF94K5TyTz-8NTRZlWoFEyMwzdR5HQyNM530Zkkq999TSndjqV-SYdHflenZIKVK2LuvNvqbo6CKrL0Hss-EXozBEvEPp9dLLjiJHG9tYOMT"/>
+</div>
+<div class="p-4 flex flex-col gap-2 flex-grow">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Conceal</span>
+<h3 class="font-label-md text-label-md text-on-surface line-clamp-2">Radiant Awakening Concealer</h3>
+<div class="mt-auto pt-4 flex items-center justify-between">
+<span class="font-body-lg text-body-lg text-on-surface">$32.00</span>
+<button class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-sm">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Comments / Social Proof -->
+<section class="flex flex-col gap-stack-md mt-stack-lg max-w-4xl">
+<h2 class="font-headline-md text-headline-md text-on-surface">Community Notes</h2>
+<div class="flex flex-col gap-base">
+<!-- Comment 1 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-surface-variant flex gap-4">
+<div class="w-10 h-10 rounded-full bg-tertiary-fixed-dim flex-shrink-0 overflow-hidden">
+<img alt="User" class="w-full h-full object-cover" data-alt="Portrait of a young woman with natural glowing skin." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC77ZoIlcWkWMv6PoHvkxSm9AoIAod0TJnJZWF2MeQxi2AruIoztM2Esx1b7bu7WxXGBGql9gTS2qlzljZWZAgMwk3SP1E-X-LjEVwToyizyz0TQShvF0SJnfPxI85iPPDiyG4Hcj8ZowqeUsmVL7FgblL1dmjET0-akwNh34c4Wg5a6Miix5O7Dh_wwJUW2CLFx_SwKVGVqV0yXrLrcEmYdC9FimpquKe5z8CwL80QMWe0xc3-uZYa93ToeCwEUhDkvbtB7Ccw8obU"/>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="font-label-md text-label-md text-on-surface">Elena R.</span>
+<div class="flex text-tertiary">
+<span class="material-symbols-outlined text-sm" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">The tip about mixing the serum with the foundation completely changed my routine. It looks so natural and luminous!</p>
+</div>
+</div>
+<!-- Comment 2 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-surface-variant flex gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed-dim flex-shrink-0 flex items-center justify-center font-label-md text-on-secondary-fixed">
+                        M
+                    </div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="font-label-md text-label-md text-on-surface">Maria S.</span>
+<div class="flex text-tertiary">
+<span class="material-symbols-outlined text-sm" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-sm text-outline-variant" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Beautiful tutorial. I wish there was a list of brush types used for each step.</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-white/90 dark:bg-gray-950/90 backdrop-blur-xl font-serif text-[10px] uppercase tracking-tighter docked full-width border-t border-purple-50 dark:border-purple-900/20 tonal-shift shadow-[0_-4px_20px_rgba(109,88,166,0.05)] text-purple-700 dark:text-purple-400">
+<a class="flex flex-col items-center justify-center text-gray-400 dark:text-gray-600 hover:text-purple-500 transition-colors" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="home">home</span>
+<span>Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-2xl px-4 py-1 hover:text-purple-500 transition-colors active:translate-y-[-2px] transition-transform" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="play_circle">play_circle</span>
+<span>Learn</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-400 dark:text-gray-600 hover:text-purple-500 transition-colors" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="search">search</span>
+<span>Search</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-400 dark:text-gray-600 hover:text-purple-500 transition-colors" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="person_2">person_2</span>
+<span>Profile</span>
+</a>
+</nav>
+<!-- Footer -->
+<footer class="w-full flex flex-col md:flex-row justify-between items-center px-12 space-y-4 md:space-y-0 bg-gray-50 dark:bg-gray-950 text-purple-700 dark:text-purple-400 font-serif italic text-sm full-width mt-12 py-12 border-t border-gray-200 dark:border-gray-800 flat mb-20 md:mb-0">
+<div class="text-lg font-serif font-semibold text-purple-800 dark:text-purple-200">
+            A.n.n Beauty
+        </div>
+<nav class="flex flex-wrap justify-center gap-6">
+<a class="text-gray-500 hover:text-purple-600 hover:underline decoration-purple-200" href="#">Scientific Efficacy</a>
+<a class="font-bold text-purple-700 hover:underline decoration-purple-200" href="#">Ritual Guide</a>
+<a class="text-gray-500 hover:text-purple-600 hover:underline decoration-purple-200" href="#">Privacy Policy</a>
+<a class="text-gray-500 hover:text-purple-600 hover:underline decoration-purple-200" href="#">Consultation</a>
+</nav>
+<div class="text-gray-500 text-xs">
+            © 2024 A.n.n Beauty. Ethereal Rituals for the Modern Woman.
+        </div>
+</footer>
+</body></html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>A.n.n Beauty - Password Recovery</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#cfbdff",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#e9deff",
+                        "tertiary": "#5e474a",
+                        "primary-container": "#6d58a6",
+                        "on-primary-fixed-variant": "#4e3985",
+                        "surface-bright": "#f8f9fa",
+                        "surface": "#f8f9fa",
+                        "secondary-fixed-dim": "#d8bfd8",
+                        "on-secondary-fixed-variant": "#534155",
+                        "tertiary-container": "#775f62",
+                        "surface-variant": "#e1e3e4",
+                        "inverse-surface": "#2e3132",
+                        "outline-variant": "#cac4d2",
+                        "tertiary-fixed": "#fbdbde",
+                        "surface-dim": "#d9dadb",
+                        "surface-container-highest": "#e1e3e4",
+                        "on-secondary-container": "#725e73",
+                        "on-background": "#191c1d",
+                        "on-primary-fixed": "#220458",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "outline": "#7a7581",
+                        "secondary-fixed": "#f5daf4",
+                        "primary-fixed": "#e9ddff",
+                        "inverse-primary": "#cfbdff",
+                        "background": "#f8f9fa",
+                        "on-secondary-fixed": "#251628",
+                        "secondary-container": "#f5daf4",
+                        "primary": "#54408c",
+                        "on-surface": "#191c1d",
+                        "on-surface-variant": "#494550",
+                        "on-tertiary-fixed-variant": "#574144",
+                        "error-container": "#ffdad6",
+                        "surface-container-high": "#e7e8e9",
+                        "tertiary-fixed-dim": "#debfc2",
+                        "surface-container": "#edeeef",
+                        "on-tertiary-fixed": "#281719",
+                        "on-secondary": "#ffffff",
+                        "surface-container-low": "#f3f4f5",
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-tertiary-container": "#fcdbde",
+                        "on-error": "#ffffff",
+                        "error": "#ba1a1a",
+                        "surface-tint": "#66519f",
+                        "secondary": "#6c586d",
+                        "on-error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1280px",
+                        "base": "8px",
+                        "margin-mobile": "16px",
+                        "gutter": "24px",
+                        "stack-sm": "12px",
+                        "margin-desktop": "40px",
+                        "stack-lg": "48px",
+                        "stack-md": "24px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "headline-xl": ["Noto Serif"],
+                        "headline-md": ["Noto Serif"],
+                        "display-lg": ["Noto Serif"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "body-sm": ["Plus Jakarta Sans"],
+                        "label-md": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "1.2", "letterSpacing": "0.08em", "fontWeight": "700" }],
+                        "headline-xl": ["36px", { "lineHeight": "1.3", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "1.4", "fontWeight": "500" }],
+                        "display-lg": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-surface text-on-surface antialiased min-h-screen flex selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- Split Screen Layout -->
+<main class="flex flex-col md:flex-row w-full min-h-screen">
+<!-- Left Side: Visual Ethereal Imagery -->
+<div class="hidden md:flex md:w-1/2 lg:w-[55%] relative overflow-hidden bg-primary-fixed-dim items-center justify-center">
+<img alt="Soft ethereal macro photography of translucent luxury skincare serum drops on a frosted glass surface, bathed in gentle diffused morning light with pale lavender and pearl undertones." class="absolute inset-0 w-full h-full object-cover opacity-90 mix-blend-multiply" data-alt="Soft ethereal macro photography of translucent luxury skincare serum drops on a frosted glass surface, bathed in gentle diffused morning light with pale lavender and pearl undertones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2cChqBTVCbwZ6gGYgCU-5Tb42DxiWZuZAa_p7gur5STpTOW6lp0zaTi9SFpS6hYc29tzEwmXDt4kn_fS56mq2OPQNUsFyzQMPf8YteKi2KOfeWXRalTBtkvwjoN38wqYBpkLuX6f8LptOYzTbX3EJ8bFil0Y9NGElEUyhiwVSioiHaFH7EXIq_HRO7gGBeqHN9EdYH2fQ48GQeP43m1_MHomxBq_1VlflTZJOy3bEJe-JgktNlsxuAilr_T6uhOYMEThI__kJl-uG"/>
+<!-- Glassmorphic Overlay for Depth -->
+<div class="absolute inset-0 bg-gradient-to-br from-white/20 to-primary-container/10 backdrop-blur-[2px]"></div>
+<!-- Brand Mark Floating on Image -->
+<div class="absolute top-12 left-12 z-10">
+<span class="font-display-lg text-display-lg text-primary-fixed drop-shadow-md tracking-tighter">A.n.n Beauty</span>
+</div>
+</div>
+<!-- Right Side: Form Container -->
+<div class="w-full md:w-1/2 lg:w-[45%] flex items-center justify-center p-8 lg:p-16 bg-surface-container-lowest relative shadow-[-10px_0_30px_rgba(109,88,166,0.03)] z-10">
+<!-- Mobile Brand Mark -->
+<div class="absolute top-8 left-8 md:hidden">
+<span class="font-headline-md text-headline-md text-primary tracking-tighter">A.n.n Beauty</span>
+</div>
+<div class="w-full max-w-md flex flex-col pt-12 md:pt-0">
+<!-- Header Texts -->
+<div class="flex flex-col gap-2 mb-10">
+<h1 class="font-headline-xl text-headline-xl text-primary tracking-tight">
+                        esqueceu da senha?
+                    </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">
+                        recuperar senha
+                    </p>
+</div>
+<!-- Form -->
+<form class="flex flex-col gap-6" onsubmit="event.preventDefault();">
+<!-- Email Field -->
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant ml-4" for="emailInput">
+                            email:
+                        </label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border border-outline-variant/50 rounded-full px-6 py-4 font-body-md text-body-md text-on-surface placeholder:text-outline focus:border-primary focus:bg-surface-container-lowest focus:ring-1 focus:ring-primary focus:outline-none transition-all shadow-[0_2px_10px_rgba(109,88,166,0.02)]" id="emailInput" placeholder="seu endereço de email" required="" type="email"/>
+</div>
+</div>
+<!-- Code Field -->
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant ml-4" for="codeInput">
+                            código:
+                        </label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border border-outline-variant/50 rounded-full px-6 py-4 font-body-md text-body-md text-on-surface placeholder:text-outline focus:border-primary focus:bg-surface-container-lowest focus:ring-1 focus:ring-primary focus:outline-none transition-all shadow-[0_2px_10px_rgba(109,88,166,0.02)]" id="codeInput" placeholder="código de 6 dígitos" required="" type="text"/>
+</div>
+</div>
+<!-- New Password Field -->
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant ml-4" for="passwordInput">
+                            nova senha:
+                        </label>
+<div class="relative group">
+<input class="w-full bg-surface-container-low border border-outline-variant/50 rounded-full pl-6 pr-14 py-4 font-body-md text-body-md text-on-surface placeholder:text-outline focus:border-primary focus:bg-surface-container-lowest focus:ring-1 focus:ring-primary focus:outline-none transition-all shadow-[0_2px_10px_rgba(109,88,166,0.02)]" id="passwordInput" placeholder="digite a nova senha" required="" type="password"/>
+<button class="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-primary transition-colors flex items-center justify-center p-2 rounded-full" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility_off</span>
+</button>
+</div>
+</div>
+<!-- Submit Button -->
+<button class="w-full mt-4 bg-primary text-on-primary rounded-full px-8 py-4 font-label-md text-label-md shadow-[0_4px_16px_rgba(109,88,166,0.15)] hover:bg-on-primary-fixed-variant hover:shadow-[0_6px_20px_rgba(109,88,166,0.25)] active:scale-[0.98] transition-all flex items-center justify-center gap-2" type="submit">
+<span>Confirmar</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</form>
+<!-- Back to Login -->
+<div class="mt-10 text-center">
+<a class="inline-flex items-center gap-2 font-label-md text-label-md text-secondary hover:text-primary transition-colors border-b border-transparent hover:border-primary pb-0.5" href="#">
+<span class="material-symbols-outlined text-[16px]">arrow_back</span>
+                        voltar para o login
+                    </a>
+</div>
+</div>
+</div>
+</main>
+</body></html>

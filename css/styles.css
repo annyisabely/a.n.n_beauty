@@ -1,0 +1,77 @@
+/* ============================================
+   A.n.n Beauty — Shared Styles
+   ============================================ */
+
+/* Material Symbols base */
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #e1e3e4; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #cac4d2; }
+
+/* Ambient ethereal shadow */
+.ambient-shadow {
+    box-shadow: 0 10px 40px -10px rgba(109, 88, 166, 0.08);
+}
+
+/* Ethereal shadow variants */
+.shadow-ethereal {
+    box-shadow: 0 12px 40px -12px rgba(109, 88, 166, 0.12);
+}
+.shadow-ethereal-hover {
+    box-shadow: 0 20px 50px -10px rgba(109, 88, 166, 0.18);
+}
+
+/* Glassmorphism panel */
+.glass-panel {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Soft shadow */
+.soft-shadow {
+    box-shadow: 0 10px 40px -10px rgba(109, 88, 166, 0.08);
+}
+
+/* Page transition */
+#page-content {
+    transition: opacity 0.25s ease-in-out;
+}
+#page-content.fade-out {
+    opacity: 0;
+}
+#page-content.fade-in {
+    opacity: 1;
+}
+
+/* Smooth selection */
+::selection {
+    background: #e9ddff;
+    color: #220458;
+}
+
+/* Body defaults */
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+h1, h2, h3, h4, h5, h6, .font-serif {
+    font-family: 'Noto Serif', serif;
+}
+
+/* Product Image Zoom Effect */
+.product-image-zoom {
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+}
+.group:hover .product-image-zoom {
+    transform: scale(1.15);
+}
+.group:active .product-image-zoom {
+    transform: scale(1.05);
+}

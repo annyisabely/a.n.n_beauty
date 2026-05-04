@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>A.n.n Beauty - Search</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&amp;family=Noto+Serif:ital,wght@0,500;0,600;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-container": "#725e73",
+                      "surface-container-high": "#e7e8e9",
+                      "secondary-container": "#f5daf4",
+                      "on-background": "#191c1d",
+                      "tertiary": "#5e474a",
+                      "on-surface-variant": "#494550",
+                      "surface-container": "#edeeef",
+                      "primary": "#54408c",
+                      "surface-container-lowest": "#ffffff",
+                      "primary-fixed-dim": "#cfbdff",
+                      "on-secondary-fixed-variant": "#534155",
+                      "surface": "#f8f9fa",
+                      "on-tertiary-fixed": "#281719",
+                      "on-primary": "#ffffff",
+                      "inverse-primary": "#cfbdff",
+                      "inverse-on-surface": "#f0f1f2",
+                      "error-container": "#ffdad6",
+                      "primary-container": "#6d58a6",
+                      "surface-dim": "#d9dadb",
+                      "on-error-container": "#93000a",
+                      "surface-bright": "#f8f9fa",
+                      "secondary-fixed-dim": "#d8bfd8",
+                      "outline-variant": "#cac4d2",
+                      "on-secondary": "#ffffff",
+                      "secondary": "#6c586d",
+                      "tertiary-fixed-dim": "#debfc2",
+                      "on-primary-fixed-variant": "#4e3985",
+                      "error": "#ba1a1a",
+                      "surface-container-low": "#f3f4f5",
+                      "primary-fixed": "#e9ddff",
+                      "on-surface": "#191c1d",
+                      "outline": "#7a7581",
+                      "on-tertiary-container": "#fcdbde",
+                      "on-tertiary-fixed-variant": "#574144",
+                      "surface-variant": "#e1e3e4",
+                      "on-secondary-fixed": "#251628",
+                      "background": "#f8f9fa",
+                      "tertiary-fixed": "#fbdbde",
+                      "on-primary-container": "#e9deff",
+                      "surface-tint": "#66519f",
+                      "secondary-fixed": "#f5daf4",
+                      "on-tertiary": "#ffffff",
+                      "inverse-surface": "#2e3132",
+                      "on-primary-fixed": "#220458",
+                      "on-error": "#ffffff",
+                      "tertiary-container": "#775f62",
+                      "surface-container-highest": "#e1e3e4"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "container-max": "1280px",
+                      "base": "8px",
+                      "margin-desktop": "40px",
+                      "stack-md": "24px",
+                      "stack-lg": "48px",
+                      "gutter": "24px",
+                      "stack-sm": "12px",
+                      "margin-mobile": "16px"
+              },
+              "fontFamily": {
+                      "label-md": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "headline-xl": [
+                              "Noto Serif"
+                      ],
+                      "body-sm": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "body-md": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "headline-md": [
+                              "Noto Serif"
+                      ],
+                      "label-sm": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "body-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "display-lg": [
+                              "Noto Serif"
+                      ]
+              },
+              "fontSize": {
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-xl": [
+                              "36px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "0.08em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-md text-body-md pt-24 pb-24 md:pb-0">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 py-4 max-w-7xl mx-auto hidden md:flex bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg rounded-none shadow-sm shadow-purple-900/5 transition-transform duration-300">
+<div class="flex items-center gap-8">
+<h1 class="text-2xl font-headline-md text-primary-container">A.n.n Beauty</h1>
+<nav class="hidden md:flex gap-6">
+<a class="font-label-md text-label-md text-outline hover:text-primary-container transition-colors py-1" href="#">Tutorials</a>
+<a class="font-label-md text-label-md text-outline hover:text-primary-container transition-colors py-1" href="#">Gallery</a>
+<a class="font-label-md text-label-md text-outline hover:text-primary-container transition-colors py-1" href="#">Shop</a>
+<a class="font-label-md text-label-md text-outline hover:text-primary-container transition-colors py-1" href="#">Community</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button aria-label="shopping_bag" class="text-outline hover:text-primary-container transition-colors">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+</button>
+<button aria-label="notifications" class="text-outline hover:text-primary-container transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop py-stack-md flex flex-col gap-stack-lg">
+<!-- Search Header & Input Area -->
+<section class="flex flex-col gap-stack-sm items-center text-center max-w-2xl mx-auto w-full pt-8">
+<h2 class="font-headline-xl text-headline-xl text-primary-container">Discover Your Ritual</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">Explore our clinical skincare and luminous cosmetics.</p>
+<div class="relative w-full shadow-[0_8px_32px_rgba(109,88,166,0.08)] rounded-xl bg-surface-container-lowest border border-outline-variant focus-within:border-primary-container transition-colors">
+<div class="flex items-center px-4 py-3">
+<span class="material-symbols-outlined text-outline mr-3" data-icon="search">search</span>
+<input class="w-full bg-transparent border-none focus:ring-0 font-body-lg text-body-lg text-on-surface placeholder-outline-variant" placeholder="Search serums, tutorials, ingredients..." type="text" value="hydration serum"/>
+<button class="text-outline hover:text-primary-container ml-2">
+<span class="material-symbols-outlined" data-icon="mic">mic</span>
+</button>
+</div>
+</div>
+<!-- Smart Suggestions / Filters -->
+<div class="flex flex-wrap gap-2 justify-center mt-4">
+<button class="px-4 py-1.5 rounded-full bg-secondary-container/30 text-secondary border border-secondary-container font-label-sm text-label-sm hover:bg-secondary-container/50 transition-colors">Hyaluronic Acid</button>
+<button class="px-4 py-1.5 rounded-full bg-secondary-container/30 text-secondary border border-secondary-container font-label-sm text-label-sm hover:bg-secondary-container/50 transition-colors">Glow Serums</button>
+<button class="px-4 py-1.5 rounded-full bg-secondary-container/30 text-secondary border border-secondary-container font-label-sm text-label-sm hover:bg-secondary-container/50 transition-colors">Dry Skin Routine</button>
+<button class="px-4 py-1.5 rounded-full bg-surface-variant text-on-surface-variant border border-outline-variant font-label-sm text-label-sm hover:bg-surface-container-highest transition-colors">Clear History</button>
+</div>
+</section>
+<!-- Search Results Grid -->
+<section class="flex flex-col gap-stack-md">
+<div class="flex justify-between items-end border-b border-surface-variant pb-2">
+<h3 class="font-headline-md text-headline-md text-on-surface">Products</h3>
+<span class="font-label-sm text-label-sm text-outline">12 Results</span>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-gutter">
+<!-- Product Card 1 -->
+<article class="flex flex-col gap-3 bg-surface-container-lowest rounded-lg p-4 shadow-[0_4px_20px_rgba(109,88,166,0.05)] hover:shadow-[0_8px_30px_rgba(109,88,166,0.1)] transition-shadow cursor-pointer border border-transparent hover:border-primary-container/20">
+<div class="aspect-square bg-surface-container-low rounded-md overflow-hidden relative flex items-center justify-center">
+<img alt="Minimalist glass dropper bottle with clear serum on soft beige background with gentle shadows" class="w-full h-full object-cover" data-alt="Minimalist glass dropper bottle with clear serum on soft beige background with gentle shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2hgcce4O4kspOlwrAyGVp1tZHMK7994wnWpmyaFo0vhwHc_Z52AT1CxU84ee0LiolAcBNli5gigKQXF0Dqgev6FvdgM7ZqMF-rzpv3LcA360cpBbxhZ5W_noP_He0k6JMIrNeiGfuuh8pyTo32Q1i7i6yglAzNsQ8-C1o7SsmCL27GTuLOBgpG3lsla1CoLb6xeJkA_KjZdVrQspe5_YoRDjy-NpYJe0scznMd4KOnQj70J15rPgOJEmPSZolP1mFXPvFoW29P0VZ"/>
+<span class="absolute top-2 left-2 bg-secondary-container text-primary-container font-label-sm text-label-sm px-2 py-0.5 rounded-full shadow-sm">Bestseller</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface line-clamp-1">Luminous Hydration Drops</h4>
+<p class="font-body-sm text-body-sm text-outline line-clamp-1">Multi-weight Hyaluronic Acid</p>
+</div>
+<div class="flex justify-between items-center mt-auto pt-2">
+<span class="font-label-md text-label-md text-primary-container">$68.00</span>
+<button class="text-primary-container hover:bg-primary-container/10 p-1.5 rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="add_shopping_cart">add_shopping_cart</span>
+</button>
+</div>
+</article>
+<!-- Product Card 2 -->
+<article class="flex flex-col gap-3 bg-surface-container-lowest rounded-lg p-4 shadow-[0_4px_20px_rgba(109,88,166,0.05)] hover:shadow-[0_8px_30px_rgba(109,88,166,0.1)] transition-shadow cursor-pointer border border-transparent hover:border-primary-container/20">
+<div class="aspect-square bg-surface-container-low rounded-md overflow-hidden relative flex items-center justify-center">
+<img alt="Frosted glass jar of thick white cream sitting on a smooth marble surface with soft natural lighting" class="w-full h-full object-cover" data-alt="Frosted glass jar of thick white cream sitting on a smooth marble surface with soft natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCe1GWq4h3fP1-1ukYU9GBOpvNc883t2rkTuwOkHZLcScMdqSOIgz_m8Gm2nFE5btCRETL2pylFCkqS6mw3Jl19U958tiTy_FMlDerxqULaphgQvnv00MtYLcYqmelwvEoF2VkjqcWaK3cP_21UeRU6DwTMRT35v_R38AozN3xL9i5q1BthB9_BIWw8djLGgDCBk6cvuj-25rf99iKDGaY2kb2LY8GVAHRmZDTzAp_xzCg-YdXXfrxwHimmSJatHwic4EaxjN5hqLvg"/>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface line-clamp-1">Ethereal Moisture Cloud</h4>
+<p class="font-body-sm text-body-sm text-outline line-clamp-1">Ceramide Restorative Cream</p>
+</div>
+<div class="flex justify-between items-center mt-auto pt-2">
+<span class="font-label-md text-label-md text-primary-container">$85.00</span>
+<button class="text-primary-container hover:bg-primary-container/10 p-1.5 rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="add_shopping_cart">add_shopping_cart</span>
+</button>
+</div>
+</article>
+<!-- Product Card 3 -->
+<article class="flex flex-col gap-3 bg-surface-container-lowest rounded-lg p-4 shadow-[0_4px_20px_rgba(109,88,166,0.05)] hover:shadow-[0_8px_30px_rgba(109,88,166,0.1)] transition-shadow cursor-pointer border border-transparent hover:border-primary-container/20">
+<div class="aspect-square bg-surface-container-low rounded-md overflow-hidden relative flex items-center justify-center">
+<img alt="Sleek silver pump bottle of facial mist surrounded by fresh water droplets on a light gray background" class="w-full h-full object-cover" data-alt="Sleek silver pump bottle of facial mist surrounded by fresh water droplets on a light gray background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhtmmZrmfUziggMjm0HSLpYj_FADxx8sbwlUGsU3e9L32ZhYvyJMuM9MF0lz7wWf6UHWgz1LILKc25LfvpYGdaJ71B3f0-Yp4oICoe2rnea6MOqEKdSjvIB_gjV7BZyxSfj43kWYlJSalNz-_s_8-xA4G9hcAV2wyHPjMqJ-ebcSmft5Vb2SRnpo2ltlabXxyh_n-Zk3hm4ONHlHMQCXiPYCS7gh0eXLu8AyxM41tWttnDK17wuXqcq69957MoPQfj4vu1UAK9QfBn"/>
+<span class="absolute top-2 left-2 bg-tertiary-container/20 text-tertiary font-label-sm text-label-sm px-2 py-0.5 rounded-full shadow-sm">New</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface line-clamp-1">Botanical Quench Mist</h4>
+<p class="font-body-sm text-body-sm text-outline line-clamp-1">Rosewater &amp; Glycerin Base</p>
+</div>
+<div class="flex justify-between items-center mt-auto pt-2">
+<span class="font-label-md text-label-md text-primary-container">$42.00</span>
+<button class="text-primary-container hover:bg-primary-container/10 p-1.5 rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="add_shopping_cart">add_shopping_cart</span>
+</button>
+</div>
+</article>
+<!-- Product Card 4 -->
+<article class="flex flex-col gap-3 bg-surface-container-lowest rounded-lg p-4 shadow-[0_4px_20px_rgba(109,88,166,0.05)] hover:shadow-[0_8px_30px_rgba(109,88,166,0.1)] transition-shadow cursor-pointer border border-transparent hover:border-primary-container/20 hidden md:flex">
+<div class="aspect-square bg-surface-container-low rounded-md overflow-hidden relative flex items-center justify-center">
+<img alt="Pastel pink tube of intensive lip treatment resting on a silk cloth with soft diffused studio lighting" class="w-full h-full object-cover" data-alt="Pastel pink tube of intensive lip treatment resting on a silk cloth with soft diffused studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTXHEqLFQPw5zX70ucVslqE5v58aFYT-h2QhAF23WbKG9zCIRlnWUAoHnHSHQWpLE8wAZUvpJrK-tlWh33Uyc67P_oBpaqtqF0rypcAi-40cNEKBGN0Au5x3YkCDyFH6BesNlQEkQG0a5l8TF_-4T194V_PfCxm5e3UMi86_K_kNuwF7ENg1g9U2hHHBYbnKK5qCgYXbnaeeoBWuX1lqW3XyxYMbbyzmS8kgkMPOcJ_QDW6GUTZurpKEUiWof2_7X85evGcoUb5PsF"/>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface line-clamp-1">Plumping Peptide Balm</h4>
+<p class="font-body-sm text-body-sm text-outline line-clamp-1">Intensive Overnight Mask</p>
+</div>
+<div class="flex justify-between items-center mt-auto pt-2">
+<span class="font-label-md text-label-md text-primary-container">$34.00</span>
+<button class="text-primary-container hover:bg-primary-container/10 p-1.5 rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="add_shopping_cart">add_shopping_cart</span>
+</button>
+</div>
+</article>
+</div>
+<div class="flex justify-center mt-4">
+<button class="px-6 py-2 border border-primary-container text-primary-container font-label-md text-label-md rounded-md hover:bg-primary-container/5 transition-colors">View All Products</button>
+</div>
+</section>
+<!-- Tutorials & Content Grid -->
+<section class="flex flex-col gap-stack-md mt-8">
+<div class="flex justify-between items-end border-b border-surface-variant pb-2">
+<h3 class="font-headline-md text-headline-md text-on-surface">Tutorials &amp; Guides</h3>
+<span class="font-label-sm text-label-sm text-outline">5 Results</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- Video Card 1 -->
+<article class="group relative rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(109,88,166,0.05)] cursor-pointer">
+<div class="aspect-video relative">
+<img alt="Woman applying facial serum looking into camera with glowing skin against a clean studio background" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Woman applying facial serum looking into camera with glowing skin against a clean studio background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtWOSKckDEZJK6xwvM2u7sMOI1jH_kXM43iFoaUVPTaWE4kbKtQgX1R5fIR_9AM3XVvp4U5ZgDj191cOFk0Im8b50TgS1MkN5hzInG4PTb0YTreGJGbtebmF6fgKznrsgnw5Kg8A13MV9nlIrazeDAesZqHGZEtEYEJVDXNhZ1VWWe_dZufxLv0mdRuZnhjWnbn_FShSjXvUa9wLB_bF2QpwKnHXrCuZ2BqwNj7Mr4qnR36L_DlfFVQRlnPCm8KFOOOXCto3Wle3Up"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+<div class="flex flex-col gap-2">
+<span class="bg-primary-container text-white font-label-sm text-label-sm px-2 py-0.5 rounded w-fit">Ritual Guide</span>
+<h4 class="font-headline-md text-headline-md text-white">The Ultimate Hydration Layering Technique</h4>
+<p class="font-body-sm text-body-sm text-white/80 line-clamp-1">Maximize your serum efficacy in 3 steps.</p>
+</div>
+</div>
+<div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
+<span class="material-symbols-outlined text-white text-5xl drop-shadow-md" data-icon="play_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+</div>
+</div>
+</article>
+<!-- Video Card 2 -->
+<article class="group relative rounded-xl overflow-hidden shadow-[0_4px_20px_rgba(109,88,166,0.05)] cursor-pointer">
+<div class="aspect-video relative">
+<img alt="Close up of a makeup brush dipping into a soft pink blush compact with ethereal lighting" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Close up of a makeup brush dipping into a soft pink blush compact with ethereal lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMIsmJ-AadvSze3EqTlRffxMHD3ZJS-gEOhGK5XRbq88_AZPwFH7aZBh9P2bECMeId6B8RAUxJz7Hv76FYG6QbzhZyrL65ipUryA_JiojsbOqb65DiTeb8orIUvmLWBNsUcdSNXfJErVceduA8jAic_SL3wk-alEmNleweWxoJLayiDGEEoPt-XwnSX2hIH682CGK8yUtHi3wxhQPwPPVyS17r1Tp0zUmjpQJgGSOpfr1Z6hU1lZeUk2hBDGs-m7JVZR5TIfmLVtfT"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+<div class="flex flex-col gap-2">
+<span class="bg-secondary text-white font-label-sm text-label-sm px-2 py-0.5 rounded w-fit">Ingredient Deep Dive</span>
+<h4 class="font-headline-md text-headline-md text-white">Why Multi-Weight HA Matters</h4>
+<p class="font-body-sm text-body-sm text-white/80 line-clamp-1">Understanding deep cellular hydration.</p>
+</div>
+</div>
+<div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
+<span class="material-symbols-outlined text-white text-5xl drop-shadow-md" data-icon="play_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+</div>
+</div>
+</article>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-white/90 dark:bg-gray-950/90 backdrop-blur-xl docked full-width border-t border-purple-50 dark:border-purple-900/20 shadow-[0_-4px_20px_rgba(109,88,166,0.05)] md:hidden">
+<a class="flex flex-col items-center justify-center text-gray-400 dark:text-gray-600 hover:text-purple-500 transition-colors" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="home">home</span>
+<span class="font-serif text-[10px] uppercase tracking-tighter">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-400 dark:text-gray-600 hover:text-purple-500 transition-colors" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="play_circle">play_circle</span>
+<span class="font-serif text-[10px] uppercase tracking-tighter">Learn</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-2xl px-4 py-1 translate-y-[-2px] transition-transform" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="search" data-weight="fill" style="font-variation-settings: 'FILL' 1;">search</span>
+<span class="font-serif text-[10px] uppercase tracking-tighter font-bold">Search</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-400 dark:text-gray-600 hover:text-purple-500 transition-colors" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="person_2">person_2</span>
+<span class="font-serif text-[10px] uppercase tracking-tighter">Profile</span>
+</a>
+</nav>
+<!-- Footer -->
+<footer class="w-full flex flex-col md:flex-row justify-between items-center px-12 space-y-4 md:space-y-0 bg-gray-50 dark:bg-gray-950 full-width mt-12 py-12 border-t border-gray-200 dark:border-gray-800">
+<div class="text-lg font-serif font-semibold text-purple-800 dark:text-purple-200">A.n.n Beauty</div>
+<p class="font-serif italic text-sm text-purple-700 dark:text-purple-400 text-center md:text-left">© 2024 A.n.n Beauty. Ethereal Rituals for the Modern Woman.</p>
+<div class="flex gap-4 flex-wrap justify-center md:justify-end">
+<a class="font-serif italic text-sm text-gray-500 hover:text-purple-600 hover:underline decoration-purple-200 transition-colors" href="#">Scientific Efficacy</a>
+<a class="font-serif italic text-sm text-gray-500 hover:text-purple-600 hover:underline decoration-purple-200 transition-colors" href="#">Ritual Guide</a>
+<a class="font-serif italic text-sm text-gray-500 hover:text-purple-600 hover:underline decoration-purple-200 transition-colors" href="#">Privacy Policy</a>
+<a class="font-serif italic text-sm text-gray-500 hover:text-purple-600 hover:underline decoration-purple-200 transition-colors" href="#">Consultation</a>
+</div>
+</footer>
+</body></html>

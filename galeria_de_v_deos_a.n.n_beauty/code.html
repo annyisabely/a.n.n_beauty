@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>A.n.n Beauty - Tutorials</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-container": "#725e73",
+                      "surface-container-high": "#e7e8e9",
+                      "secondary-container": "#f5daf4",
+                      "on-background": "#191c1d",
+                      "tertiary": "#5e474a",
+                      "on-surface-variant": "#494550",
+                      "surface-container": "#edeeef",
+                      "primary": "#54408c",
+                      "surface-container-lowest": "#ffffff",
+                      "primary-fixed-dim": "#cfbdff",
+                      "on-secondary-fixed-variant": "#534155",
+                      "surface": "#f8f9fa",
+                      "on-tertiary-fixed": "#281719",
+                      "on-primary": "#ffffff",
+                      "inverse-primary": "#cfbdff",
+                      "inverse-on-surface": "#f0f1f2",
+                      "error-container": "#ffdad6",
+                      "primary-container": "#6d58a6",
+                      "surface-dim": "#d9dadb",
+                      "on-error-container": "#93000a",
+                      "surface-bright": "#f8f9fa",
+                      "secondary-fixed-dim": "#d8bfd8",
+                      "outline-variant": "#cac4d2",
+                      "on-secondary": "#ffffff",
+                      "secondary": "#6c586d",
+                      "tertiary-fixed-dim": "#debfc2",
+                      "on-primary-fixed-variant": "#4e3985",
+                      "error": "#ba1a1a",
+                      "surface-container-low": "#f3f4f5",
+                      "primary-fixed": "#e9ddff",
+                      "on-surface": "#191c1d",
+                      "outline": "#7a7581",
+                      "on-tertiary-container": "#fcdbde",
+                      "on-tertiary-fixed-variant": "#574144",
+                      "surface-variant": "#e1e3e4",
+                      "on-secondary-fixed": "#251628",
+                      "background": "#f8f9fa",
+                      "tertiary-fixed": "#fbdbde",
+                      "on-primary-container": "#e9deff",
+                      "surface-tint": "#66519f",
+                      "secondary-fixed": "#f5daf4",
+                      "on-tertiary": "#ffffff",
+                      "inverse-surface": "#2e3132",
+                      "on-primary-fixed": "#220458",
+                      "on-error": "#ffffff",
+                      "tertiary-container": "#775f62",
+                      "surface-container-highest": "#e1e3e4"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "container-max": "1280px",
+                      "base": "8px",
+                      "margin-desktop": "40px",
+                      "stack-md": "24px",
+                      "stack-lg": "48px",
+                      "gutter": "24px",
+                      "stack-sm": "12px",
+                      "margin-mobile": "16px"
+              },
+              "fontFamily": {
+                      "label-md": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "headline-xl": [
+                              "Noto Serif"
+                      ],
+                      "body-sm": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "body-md": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "headline-md": [
+                              "Noto Serif"
+                      ],
+                      "label-sm": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "body-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "display-lg": [
+                              "Noto Serif"
+                      ]
+              },
+              "fontSize": {
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-xl": [
+                              "36px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "0.08em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background text-on-background min-h-screen pt-24 pb-20 md:pb-0">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 py-4 max-w-7xl mx-auto bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg rounded-none border-b border-gray-100 dark:border-gray-800 border-b border-purple-100 dark:border-purple-900/30 shadow-sm shadow-purple-900/5 hidden md:flex">
+<div class="text-2xl font-serif font-bold text-purple-700 dark:text-purple-300">A.n.n Beauty</div>
+<nav class="flex items-center space-x-8 font-serif text-sm tracking-wide">
+<a class="text-purple-800 dark:text-purple-300 border-b-2 border-purple-700 pb-1 hover:opacity-80 transition-opacity" href="#">Tutorials</a>
+<a class="text-gray-500 dark:text-gray-400 hover:text-purple-600 hover:opacity-80 transition-opacity" href="#">Gallery</a>
+<a class="text-gray-500 dark:text-gray-400 hover:text-purple-600 hover:opacity-80 transition-opacity" href="#">Shop</a>
+<a class="text-gray-500 dark:text-gray-400 hover:text-purple-600 hover:opacity-80 transition-opacity" href="#">Community</a>
+</nav>
+<div class="flex items-center space-x-4 text-purple-700 dark:text-purple-400">
+<button class="hover:opacity-80 transition-opacity"><span class="material-symbols-outlined">shopping_bag</span></button>
+<button class="hover:opacity-80 transition-opacity"><span class="material-symbols-outlined">notifications</span></button>
+</div>
+</header>
+<!-- Mobile Top Header -->
+<header class="md:hidden fixed top-0 w-full z-40 flex justify-between items-center px-4 py-3 bg-white/90 backdrop-blur-md shadow-sm border-b border-purple-50">
+<button class="text-primary-container"><span class="material-symbols-outlined">menu</span></button>
+<div class="text-xl font-serif font-bold text-primary-container">A.n.n Beauty</div>
+<button class="text-primary-container"><span class="material-symbols-outlined">search</span></button>
+</header>
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-stack-lg">
+<!-- Header Section -->
+<div class="mb-stack-lg text-center md:text-left">
+<h1 class="font-display-lg text-display-lg text-primary-container mb-2">Ethereal Rituals</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Discover guided tutorials to elevate your daily routine into a luxurious ritual of self-care.</p>
+</div>
+<!-- Filter Chips -->
+<div class="flex flex-wrap gap-3 mb-stack-md justify-center md:justify-start">
+<button class="px-4 py-2 rounded-full bg-primary-container text-white font-label-md text-label-md shadow-sm">All</button>
+<button class="px-4 py-2 rounded-full bg-secondary-container/50 text-on-secondary-container font-label-md text-label-md hover:bg-secondary-container transition-colors">Skincare</button>
+<button class="px-4 py-2 rounded-full bg-secondary-container/50 text-on-secondary-container font-label-md text-label-md hover:bg-secondary-container transition-colors">Makeup</button>
+<button class="px-4 py-2 rounded-full bg-secondary-container/50 text-on-secondary-container font-label-md text-label-md hover:bg-secondary-container transition-colors">Evening</button>
+<button class="px-4 py-2 rounded-full bg-secondary-container/50 text-on-secondary-container font-label-md text-label-md hover:bg-secondary-container transition-colors">Morning</button>
+</div>
+<!-- Video Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Video Card 1 -->
+<div class="group relative flex flex-col bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_8px_30px_rgb(109,88,166,0.05)] hover:shadow-[0_8px_30px_rgb(109,88,166,0.1)] transition-all duration-300">
+<div class="relative aspect-[4/3] overflow-hidden bg-surface-container-low">
+<img alt="Woman applying foundation with a makeup sponge in soft studio lighting" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500" data-alt="close-up of young woman applying foundation with a beauty sponge, soft natural light, minimalist background, ethereal beauty aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0aB4buqqgmFalZY_yrYrGGIj8X-ArLG976VPWI84b9rGp_r4t4xkjx9ll4vut7hPFKJul2z2brx3W_kVp5TinaWdjJ9gSqRCzY3vMRfTzmRTTxfIyCBHm91eRCDHaSMWFvNTEmEd0rqN5u_XUYefL8fi8LYzd_o5DgMs6lZpn4K31z1zDT_0auNNoOmR2Dl-0WZaslZbjjGW0O7t-QEbC4v0H_TqVmUy7ALooScm9uyOSfnmspx8M3Vr2eA4IIdmJdC3OrmK3fGEI"/>
+<div class="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors"></div>
+<button class="absolute inset-0 m-auto w-12 h-12 flex items-center justify-center bg-white/30 backdrop-blur-md rounded-full text-white shadow-lg border border-white/20 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+<div class="absolute bottom-3 right-3 px-2 py-1 bg-black/50 backdrop-blur-sm rounded text-white font-label-sm text-label-sm">4:32</div>
+</div>
+<div class="p-4 flex flex-col flex-grow">
+<div class="flex items-center space-x-2 mb-2">
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">Makeup</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Tutorial de Base Perfeita</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">Aprenda a preparar a pele e aplicar a base para um acabamento natural e luminoso.</p>
+</div>
+</div>
+<!-- Video Card 2 -->
+<div class="group relative flex flex-col bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_8px_30px_rgb(109,88,166,0.05)] hover:shadow-[0_8px_30px_rgb(109,88,166,0.1)] transition-all duration-300">
+<div class="relative aspect-[4/3] overflow-hidden bg-surface-container-low">
+<img alt="Minimalist skincare bottles on a white marble surface" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500" data-alt="minimalist composition of luxury skincare bottles on white marble surface, soft morning light, fresh elegant aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsb0X9za5E14wyiYdZ7-b-qjww8m01AdekvJ1iHfEl4iD6UPWK20u9sShLmVu_U-ZY3ocqbytdMZZa5R-ScTHvXbWHtpwsu-gUkuxExrc8jwOGiHgMbWJzET4fhk5nHXCutGh0txsY-mYiCcjStm-nFXSFyb7jpW7gkFDXUgBf7tV7f_axlA680zf_MmvJjpzprCwU-00uruyInoEDmt5vQN_eb08epGxxtc8sLbNYUHS9rzikWJejX0i_DZDHGZMKJHiSRL_fIOrS"/>
+<div class="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors"></div>
+<button class="absolute inset-0 m-auto w-12 h-12 flex items-center justify-center bg-white/30 backdrop-blur-md rounded-full text-white shadow-lg border border-white/20 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+<div class="absolute bottom-3 right-3 px-2 py-1 bg-black/50 backdrop-blur-sm rounded text-white font-label-sm text-label-sm">6:15</div>
+</div>
+<div class="p-4 flex flex-col flex-grow">
+<div class="flex items-center space-x-2 mb-2">
+<span class="px-2 py-0.5 rounded-full bg-primary-container/20 text-primary-container font-label-sm text-label-sm">Skincare</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Rotina Matinal Essencial</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">Os 3 passos fundamentais para acordar a pele com hidratação e proteção.</p>
+</div>
+</div>
+<!-- Video Card 3 -->
+<div class="group relative flex flex-col bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_8px_30px_rgb(109,88,166,0.05)] hover:shadow-[0_8px_30px_rgb(109,88,166,0.1)] transition-all duration-300">
+<div class="relative aspect-[4/3] overflow-hidden bg-surface-container-low">
+<img alt="Woman looking softly at camera with glowing makeup" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500" data-alt="portrait of beautiful young woman with glowing dewy makeup, soft pink background, gentle studio lighting, ethereal aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAJMMiPjMspADE4iF7Uv_VIRtOUTN4oSwDH5l6rW4aeqncBkCQ6SaL5RebUh16pdoZOm9YJHQa8JZHA8APOj4obt4VSdrdqvj0u_IQs1kuD11ZA76xd3wsDJjSEGsrLbtVMIyAY2b9y8kJYna2q8Ti3o75sqVejGW2-qovCQOGPBYDvBbG3Sr9CRCDZ_cbpxdx-Qpw70FYHo0BOuLIk-TSGO-rvZBqeWO2UQknJO1QSIDEU5b7T9E7gCzBK42Eidcc9Nn7yfQV509t"/>
+<div class="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors"></div>
+<button class="absolute inset-0 m-auto w-12 h-12 flex items-center justify-center bg-white/30 backdrop-blur-md rounded-full text-white shadow-lg border border-white/20 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+<div class="absolute bottom-3 right-3 px-2 py-1 bg-black/50 backdrop-blur-sm rounded text-white font-label-sm text-label-sm">8:40</div>
+</div>
+<div class="p-4 flex flex-col flex-grow">
+<div class="flex items-center space-x-2 mb-2">
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">Makeup</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Tutorial de Maquiagem Simples</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">Um visual clean e iluminado perfeito para o dia a dia, feito em poucos minutos.</p>
+</div>
+</div>
+<!-- Video Card 4 -->
+<div class="group relative flex flex-col bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_8px_30px_rgb(109,88,166,0.05)] hover:shadow-[0_8px_30px_rgb(109,88,166,0.1)] transition-all duration-300">
+<div class="relative aspect-[4/3] overflow-hidden bg-surface-container-low">
+<img alt="Close up of facial massage with jade roller" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500" data-alt="close up of woman using jade roller on face, soft focus bathroom setting, calming spa aesthetic, soft pastel colors" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjWFyqt5zaNFwp6iOYp_0oIX5_mpsa3XrhctLUOtGKI8HGWPdTdjdcXEQziYxxgLaT1OR1Yg33AG8MWK4lQyCxRRVw97NgtWtMLbRYkCl7-s5TTTnWDxCStPe8KpqUubDFJr0WmgbURidcdbQanMgL8zRqPhNtUTgbFq2t2cHj_B57Px-HsTZQrBEnrIMxaUgGRoR0XdqM8b340kqth2nM7B8YVqUjGxEr-E3I70mE0PjsVFryortH-VW9rKvEXJTOsfeSpfNRmkak"/>
+<div class="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors"></div>
+<button class="absolute inset-0 m-auto w-12 h-12 flex items-center justify-center bg-white/30 backdrop-blur-md rounded-full text-white shadow-lg border border-white/20 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+<div class="absolute bottom-3 right-3 px-2 py-1 bg-black/50 backdrop-blur-sm rounded text-white font-label-sm text-label-sm">12:05</div>
+</div>
+<div class="p-4 flex flex-col flex-grow">
+<div class="flex items-center space-x-2 mb-2">
+<span class="px-2 py-0.5 rounded-full bg-primary-container/20 text-primary-container font-label-sm text-label-sm">Evening</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Ritual Noturno de Relaxamento</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">Técnicas de massagem facial para relaxar os músculos e promover a drenagem.</p>
+</div>
+</div>
+<!-- Load More Card (Bento Style) -->
+<div class="group flex flex-col items-center justify-center bg-secondary-container/30 border-2 border-dashed border-outline-variant rounded-xl overflow-hidden hover:bg-secondary-container/50 transition-colors cursor-pointer min-h-[300px]">
+<div class="w-16 h-16 rounded-full bg-white flex items-center justify-center mb-4 shadow-sm text-primary-container group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">add</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-1">Explore More</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">View all 42 rituals</p>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-white/90 dark:bg-gray-950/90 backdrop-blur-xl docked full-width bottom-0 border-t border-purple-50 dark:border-purple-900/20 shadow-[0_-4px_20px_rgba(109,88,166,0.05)]">
+<a class="flex flex-col items-center justify-center text-gray-400 dark:text-gray-600 hover:text-purple-500 transition-colors" href="#">
+<span class="material-symbols-outlined mb-1">home</span>
+<span class="font-serif text-[10px] uppercase tracking-tighter">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-2xl px-4 py-1 translate-y-[-2px] transition-transform" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+<span class="font-serif text-[10px] uppercase tracking-tighter font-bold">Learn</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-400 dark:text-gray-600 hover:text-purple-500 transition-colors" href="#">
+<span class="material-symbols-outlined mb-1">search</span>
+<span class="font-serif text-[10px] uppercase tracking-tighter">Search</span>
+</a>
+<a class="flex flex-col items-center justify-center text-gray-400 dark:text-gray-600 hover:text-purple-500 transition-colors" href="#">
+<span class="material-symbols-outlined mb-1">person_2</span>
+<span class="font-serif text-[10px] uppercase tracking-tighter">Profile</span>
+</a>
+</nav>
+<!-- Footer -->
+<footer class="w-full flex flex-col md:flex-row justify-between items-center px-12 space-y-4 md:space-y-0 bg-gray-50 dark:bg-gray-950 full-width mt-12 py-12 border-t border-gray-200 dark:border-gray-800 pb-28 md:pb-12">
+<div class="text-lg font-serif font-semibold text-purple-800 dark:text-purple-200">A.n.n Beauty</div>
+<div class="flex flex-wrap justify-center gap-6 font-serif italic text-sm text-gray-500 hover:text-purple-600">
+<a class="hover:underline decoration-purple-200" href="#">Scientific Efficacy</a>
+<a class="hover:underline decoration-purple-200" href="#">Ritual Guide</a>
+<a class="hover:underline decoration-purple-200" href="#">Privacy Policy</a>
+<a class="hover:underline decoration-purple-200" href="#">Consultation</a>
+</div>
+<div class="font-serif italic text-sm text-gray-500">
+            © 2024 A.n.n Beauty. Ethereal Rituals for the Modern Woman.
+        </div>
+</footer>
+</body></html>

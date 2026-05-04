@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>A.n.n Beauty - Checkout</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@500;600&amp;family=Plus+Jakarta+Sans:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed-dim": "#debfc2",
+                        "on-primary-fixed-variant": "#4e3985",
+                        "error": "#ba1a1a",
+                        "surface-container-low": "#f3f4f5",
+                        "primary-fixed": "#e9ddff",
+                        "on-surface": "#191c1d",
+                        "outline": "#7a7581",
+                        "on-tertiary-container": "#fcdbde",
+                        "on-tertiary-fixed-variant": "#574144",
+                        "surface-variant": "#e1e3e4",
+                        "on-secondary-fixed": "#251628",
+                        "background": "#f8f9fa",
+                        "tertiary-fixed": "#fbdbde",
+                        "on-primary-container": "#e9deff",
+                        "surface-tint": "#66519f",
+                        "secondary-fixed": "#f5daf4",
+                        "on-tertiary": "#ffffff",
+                        "inverse-surface": "#2e3132",
+                        "on-primary-fixed": "#220458",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#775f62",
+                        "surface-container-highest": "#e1e3e4",
+                        "on-secondary-container": "#725e73",
+                        "surface-container-high": "#e7e8e9",
+                        "secondary-container": "#f5daf4",
+                        "on-background": "#191c1d",
+                        "tertiary": "#5e474a",
+                        "on-surface-variant": "#494550",
+                        "surface-container": "#edeeef",
+                        "primary": "#54408c",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed-dim": "#cfbdff",
+                        "on-secondary-fixed-variant": "#534155",
+                        "surface": "#f8f9fa",
+                        "on-tertiary-fixed": "#281719",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#cfbdff",
+                        "inverse-on-surface": "#f0f1f2",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#6d58a6",
+                        "surface-dim": "#d9dadb",
+                        "on-error-container": "#93000a",
+                        "surface-bright": "#f8f9fa",
+                        "secondary-fixed-dim": "#d8bfd8",
+                        "outline-variant": "#cac4d2",
+                        "on-secondary": "#ffffff",
+                        "secondary": "#6c586d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "container-max": "1280px",
+                        "stack-sm": "12px",
+                        "margin-mobile": "16px",
+                        "stack-lg": "48px",
+                        "gutter": "24px",
+                        "stack-md": "24px",
+                        "margin-desktop": "40px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "display-lg": ["Noto Serif"],
+                        "label-md": ["Plus Jakarta Sans"],
+                        "headline-xl": ["Noto Serif"],
+                        "body-sm": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "headline-md": ["Noto Serif"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "1.2", "letterSpacing": "0.08em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-xl": ["36px", { "lineHeight": "1.3", "fontWeight": "500" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "1.4", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .ambient-shadow {
+            box-shadow: 0 10px 40px -10px rgba(109, 88, 166, 0.08);
+        }
+    </style>
+</head>
+<body class="bg-background min-h-screen flex flex-col font-body-md text-on-surface">
+<!-- TopNavBar Omitted: Transactional Screen -->
+<main class="flex-grow w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-stack-lg flex items-center justify-center">
+<div class="w-full max-w-2xl">
+<!-- Brand & Header -->
+<div class="text-center mb-stack-lg">
+<h1 class="font-display-lg text-display-lg text-primary-container mb-stack-sm tracking-widest italic">A.n.n Beauty</h1>
+<h2 class="font-headline-md text-headline-md text-on-surface-variant">Secure Checkout</h2>
+<p class="font-body-md text-body-md text-outline mt-base">Please enter your details to complete your order.</p>
+</div>
+<!-- Form Card -->
+<div class="glass-panel ambient-shadow rounded-xl p-stack-md md:p-stack-lg border border-surface-variant/50 relative overflow-hidden">
+<!-- Decorative blurred background blob -->
+<div class="absolute -top-24 -right-24 w-64 h-64 bg-primary-fixed rounded-full mix-blend-multiply filter blur-3xl opacity-30 pointer-events-none"></div>
+<div class="absolute -bottom-24 -left-24 w-64 h-64 bg-secondary-fixed rounded-full mix-blend-multiply filter blur-3xl opacity-30 pointer-events-none"></div>
+<form class="relative z-10 flex flex-col gap-stack-md">
+<!-- Personal Info Section -->
+<div class="space-y-stack-sm">
+<h3 class="font-label-md text-label-md text-primary uppercase tracking-widest border-b border-surface-variant pb-base">Personal Information</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack-sm">
+<div class="flex flex-col gap-base">
+<label class="font-label-md text-label-md text-on-surface-variant" for="fullName">Full Name</label>
+<input class="w-full bg-surface-container-low border border-surface-variant rounded focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-colors py-3 px-4 font-body-md text-on-surface" id="fullName" placeholder="Jane Doe" type="text"/>
+</div>
+<div class="flex flex-col gap-base">
+<label class="font-label-md text-label-md text-on-surface-variant" for="cpf">CPF</label>
+<input class="w-full bg-surface-container-low border border-surface-variant rounded focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-colors py-3 px-4 font-body-md text-on-surface" id="cpf" placeholder="000.000.000-00" type="text"/>
+</div>
+</div>
+<div class="flex flex-col gap-base">
+<label class="font-label-md text-label-md text-on-surface-variant" for="email">Email Address</label>
+<input class="w-full bg-surface-container-low border border-surface-variant rounded focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-colors py-3 px-4 font-body-md text-on-surface" id="email" placeholder="jane@example.com" type="email"/>
+</div>
+</div>
+<!-- Shipping Info Section -->
+<div class="space-y-stack-sm mt-stack-sm">
+<h3 class="font-label-md text-label-md text-primary uppercase tracking-widest border-b border-surface-variant pb-base">Shipping Address</h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-stack-sm">
+<div class="flex flex-col gap-base md:col-span-1">
+<label class="font-label-md text-label-md text-on-surface-variant" for="cep">CEP</label>
+<input class="w-full bg-surface-container-low border border-surface-variant rounded focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-colors py-3 px-4 font-body-md text-on-surface" id="cep" placeholder="00000-000" type="text"/>
+</div>
+<div class="flex flex-col gap-base md:col-span-2">
+<label class="font-label-md text-label-md text-on-surface-variant" for="street">Street</label>
+<input class="w-full bg-surface-container-low border border-surface-variant rounded focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-colors py-3 px-4 font-body-md text-on-surface" id="street" placeholder="Avenue des Champs-Élysées" type="text"/>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack-sm">
+<div class="flex flex-col gap-base">
+<label class="font-label-md text-label-md text-on-surface-variant" for="houseNumber">House Number</label>
+<input class="w-full bg-surface-container-low border border-surface-variant rounded focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-colors py-3 px-4 font-body-md text-on-surface" id="houseNumber" placeholder="123" type="text"/>
+</div>
+<div class="flex flex-col gap-base">
+<label class="font-label-md text-label-md text-on-surface-variant" for="complement">Complement (Optional)</label>
+<input class="w-full bg-surface-container-low border border-surface-variant rounded focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-colors py-3 px-4 font-body-md text-on-surface" id="complement" placeholder="Apt 4B" type="text"/>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="mt-stack-md flex flex-col gap-stack-sm sm:flex-row sm:items-center sm:justify-between border-t border-surface-variant pt-stack-md">
+<a class="font-label-md text-label-md text-outline hover:text-primary transition-colors flex items-center gap-2 group" href="#">
+<span class="material-symbols-outlined text-[18px] group-hover:-translate-x-1 transition-transform">arrow_back</span>
+                            Return to Cart
+                        </a>
+<button class="w-full sm:w-auto bg-primary-container text-on-primary py-3 px-8 rounded font-label-md text-label-md shadow-sm shadow-primary-container/30 hover:bg-primary transition-colors flex items-center justify-center gap-2" type="button">
+                            Continue to Payment
+                            <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</form>
+</div>
+<!-- Trust Badges -->
+<div class="mt-stack-sm flex justify-center items-center gap-6 text-outline">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px]">lock</span>
+<span class="font-body-sm text-body-sm">Secure Payment</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px]">verified</span>
+<span class="font-body-sm text-body-sm">Data Encrypted</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer Omitted: Transactional Screen -->
+</body></html>
