@@ -22,6 +22,8 @@ const pageModules = {
     rituals:  () => import('./pages/rituals.js'),
     about:    () => import('./pages/about.js'),
     notifications: () => import('./pages/notifications.js'),
+    settings: () => import('./pages/settings.js'),
+    chat:     () => import('./pages/chat.js'),
     admin:    () => import('./pages/admin.js'),
 };
 
@@ -109,6 +111,66 @@ window.addEventListener('hashchange', renderPage);
 // Listen for auth changes to update header/footer
 window.addEventListener('auth-change', renderPage);
 
+// Global Voice Search Logic
+window.startVoiceSearch = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+        import('./components.js').then(m => m.showToast('Seu navegador não suporta busca por voz.', 'error'));
+        return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'pt-BR';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+        import('./components.js').then(m => m.showToast('Ouvindo...', 'info'));
+    };
+
+    recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript.toLowerCase();
+        import('./components.js').then(m => m.showToast(`Você disse: "${transcript}"`, 'success'));
+
+        // Se pediu tutorial/vídeo de maquiagem/delineador
+        if (transcript.includes('vídeo') || transcript.includes('video') || transcript.includes('tutorial')) {
+            if (transcript.includes('maquiagem') || transcript.includes('delineador')) {
+                window.location.hash = '#/tutorial';
+                return;
+            }
+        }
+        
+        // Se for só produto/maquiagem
+        if (transcript.includes('maquiagem') || transcript.includes('delineador')) {
+            window.location.hash = '#/search';
+            setTimeout(() => {
+                const searchInput = document.getElementById('search-input');
+                const headerSearchInput = document.getElementById('header-search-input');
+                if (searchInput) searchInput.value = transcript;
+                if (headerSearchInput) headerSearchInput.value = transcript;
+                if (window.handleSearch) window.handleSearch({ target: { value: transcript } });
+            }, 300);
+            return;
+        }
+
+        // Para qualquer outra coisa, também ir para a busca
+        window.location.hash = '#/search';
+        setTimeout(() => {
+            const searchInput = document.getElementById('search-input');
+            const headerSearchInput = document.getElementById('header-search-input');
+            if (searchInput) searchInput.value = transcript;
+            if (headerSearchInput) headerSearchInput.value = transcript;
+            if (window.handleSearch) window.handleSearch({ target: { value: transcript } });
+        }, 300);
+    };
+
+    recognition.onerror = () => {
+        import('./components.js').then(m => m.showToast('Erro ao capturar voz. Tente novamente.', 'error'));
+    };
+
+    recognition.start();
+};
+
 // Initial render
 window.addEventListener('DOMContentLoaded', () => {
     if (!window.location.hash) {
@@ -116,4 +178,14 @@ window.addEventListener('DOMContentLoaded', () => {
     } else {
         renderPage();
     }
+    
+    // Notification interval every 1 minute
+    setInterval(() => {
+        if (localStorage.getItem('ann_notifications_enabled') === 'true' && ("Notification" in window) && Notification.permission === "granted") {
+            new Notification("A.n.n Beauty - Novidade", {
+                body: "Temos uma nova oferta exclusiva esperando por você na loja!",
+                icon: "https://lh3.googleusercontent.com/aida-public/AB6AXuD41q-VUnwu5joHMxbWJsr36dy1zx3rIn2vEK7uzvQTDUffwl0ZH_HI_dTANk1KbB9owXbG4r3zHuZ0HVyYdnrM_iCEs2T28ZeOaR08HylhHFMcLQ7HbG_Sie4x-YY2ALCH46qv813TkJWK1AuLKhbgI70JyZ3h_2uFi-BnVubhKdnicfILcz2wGII7oUz38OzHYvodmNc7KWNeyoqLmi7hoHDJdbzNFetGZrb5-7anzBucsvdu8yAwBxA_KgpzWQXgXaiSjTNilD4W"
+            });
+        }
+    }, 60000);
 });

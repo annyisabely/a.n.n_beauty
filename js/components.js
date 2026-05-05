@@ -4,7 +4,7 @@ import { cartManager } from './cart_manager.js';
 /**
  * Pages that should NOT render the standard header/footer/bottomnav.
  */
-export const FULLSCREEN_PAGES = ['login', 'signup', 'recover', 'checkout', 'admin'];
+export const FULLSCREEN_PAGES = ['login', 'signup', 'recover', 'checkout', 'admin', 'cart'];
 
 /**
  * Desktop Header (TopAppBar)
@@ -80,6 +80,10 @@ export function renderHeader(activePage) {
                                 <button onclick="window.auth.logout()" class="w-full text-left flex items-center gap-3 px-4 py-3 text-sm text-red-500 hover:bg-red-50 transition-colors">
                                     <span class="material-symbols-outlined text-[20px]">logout</span>Sair da Conta
                                 </button>
+                                <div class="border-t border-purple-100/30 my-1"></div>
+                                <a href="#/settings" class="flex items-center gap-3 px-4 py-3 text-sm text-slate-600 hover:bg-purple-50 hover:text-purple-700 transition-colors">
+                                    <span class="material-symbols-outlined text-[20px]">settings</span>Configurações
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -256,7 +260,7 @@ export function renderFooter() {
                 </div>
             </div>
             <div class="border-t border-slate-200 dark:border-slate-800 pt-6 text-center">
-                <p class="font-serif text-sm text-slate-500">© 2024 A.n.n Beauty. Todos os direitos reservados.</p>
+                <p class="font-serif text-sm text-slate-500">© 2026 A.n.n Beauty. Todos os direitos reservados.</p>
             </div>
         </div>
     </footer>

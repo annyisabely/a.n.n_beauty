@@ -39,6 +39,32 @@ export default function notificationsPage() {
     </div>
   `).join('');
 
+  window.activateNotifications = () => {
+    if (!("Notification" in window)) {
+      window.showToast('Seu navegador não suporta notificações.', 'error');
+      return;
+    }
+    Notification.requestPermission().then(permission => {
+      if (permission === "granted") {
+        new Notification("A.n.n Beauty", {
+          body: "Notificações ativadas! Você receberá alertas de ofertas, promoções e atualizações.",
+          icon: "https://lh3.googleusercontent.com/aida-public/AB6AXuD41q-VUnwu5joHMxbWJsr36dy1zx3rIn2vEK7uzvQTDUffwl0ZH_HI_dTANk1KbB9owXbG4r3zHuZ0HVyYdnrM_iCEs2T28ZeOaR08HylhHFMcLQ7HbG_Sie4x-YY2ALCH46qv813TkJWK1AuLKhbgI70JyZ3h_2uFi-BnVubhKdnicfILcz2wGII7oUz38OzHYvodmNc7KWNeyoqLmi7hoHDJdbzNFetGZrb5-7anzBucsvdu8yAwBxA_KgpzWQXgXaiSjTNilD4W"
+        });
+        window.showToast('Notificações ativadas com sucesso!', 'success');
+        localStorage.setItem('ann_notifications_enabled', 'true');
+        const btn = document.getElementById('btn-activate-notif');
+        if (btn) {
+          btn.innerText = 'Notificações Ativadas';
+          btn.classList.add('opacity-50', 'pointer-events-none');
+        }
+      } else {
+        window.showToast('Permissão de notificação negada.', 'error');
+      }
+    });
+  };
+
+  const isNotifEnabled = localStorage.getItem('ann_notifications_enabled') === 'true';
+
   return `
   <main class="flex-grow w-full max-w-[800px] mx-auto px-4 md:px-10 py-12">
     <header class="mb-10 text-center relative">
@@ -53,7 +79,7 @@ export default function notificationsPage() {
     <div class="mt-12 p-8 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-3xl text-center border border-purple-100">
       <h3 class="font-display text-xl text-primary mb-2">Fique por dentro!</h3>
       <p class="text-sm text-on-surface-variant mb-6">Ative as notificações no navegador para não perder nenhuma oferta relâmpago.</p>
-      <button onclick="showToast('Notificações ativadas!', 'success')" class="bg-primary text-white px-8 py-3 rounded-full font-bold shadow-lg hover:opacity-90 transition-opacity">Ativar Agora</button>
+      <button id="btn-activate-notif" onclick="window.activateNotifications()" class="bg-primary text-white px-8 py-3 rounded-full font-bold shadow-lg hover:opacity-90 transition-opacity ${isNotifEnabled ? 'opacity-50 pointer-events-none' : ''}">${isNotifEnabled ? 'Notificações Ativadas' : 'Ativar Agora'}</button>
     </div>
   </main>`;
 }

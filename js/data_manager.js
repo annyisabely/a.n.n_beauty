@@ -41,18 +41,37 @@ const videoTitles = [
 export const dataManager = {
     generateProducts: (count = 100) => {
         const products = [];
+        const overrides = JSON.parse(localStorage.getItem('ann_price_overrides') || '{}');
         for (let i = 0; i < count; i++) {
             const type = productTypes[i % productTypes.length];
             const img = productImages[i % productImages.length];
-            const price = (Math.random() * (250 - 45) + 45).toFixed(2);
+            const id = `p-${i}`;
+            const code = `ANN-${(i + 1).toString().padStart(3, '0')}`;
+            // Use a deterministic "base price" instead of random
+            const basePriceVal = 120 + (i % 10) * 15 + (i % 3) * 7.5; 
+            const basePriceStr = `R$ ${basePriceVal.toFixed(2).replace('.', ',')}`;
+            
+            const price = overrides[id] || basePriceStr;
+            
+            // Check if it's a discount (new price < base price)
+            let oldPrice = null;
+            if (overrides[id]) {
+                const newPriceVal = parseFloat(overrides[id].replace('R$ ', '').replace('.', '').replace(',', '.'));
+                if (newPriceVal < basePriceVal) {
+                    oldPrice = basePriceStr;
+                }
+            }
+            
             products.push({
-                id: `p-${i}`,
+                id: id,
+                code: code,
                 name: `${type.name} ${['Luxury', 'Pro', 'Velvet', 'Pure', 'Gold', 'Elite'][i % 6]}`,
                 desc: type.desc,
-                price: `R$ ${price.replace('.', ',')}`,
+                price: price,
+                oldPrice: oldPrice,
                 cat: type.cat,
                 img: img,
-                badge: i < 10 ? 'Novo' : (i % 15 === 0 ? 'Bestseller' : '')
+                badge: i < 10 ? 'Novo' : (i % 15 === 0 ? 'Bestseller' : (oldPrice ? 'Oferta' : ''))
             });
         }
         return products;

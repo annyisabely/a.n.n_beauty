@@ -41,27 +41,27 @@ export default function aboutPage() {
       <div class="grid grid-cols-1 md:grid-cols-3 gap-12 w-full">
         <div class="flex flex-col items-center text-center group">
           <div class="w-56 h-56 rounded-full overflow-hidden mb-8 shadow-2xl border-4 border-white transition-all group-hover:scale-105">
-            <img alt="Fundadora" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD41q-VUnwu5joHMxbWJsr36dy1zx3rIn2vEK7uzvQTDUffwl0ZH_HI_dTANk1KbB9owXbG4r3zHuZ0HVyYdnrM_iCEs2T28ZeOaR08HylhHFMcLQ7HbG_Sie4x-YY2ALCH46qv813TkJWK1AuLKhbgI70JyZ3h_2uFi-BnVubhKdnicfILcz2wGII7oUz38OzHYvodmNc7KWNeyoqLmi7hoHDJdbzNFetGZrb5-7anzBucsvdu8yAwBxA_KgpzWQXgXaiSjTNilD4W"/>
+            <img alt="Anny" class="w-full h-full object-cover" src="img/anny.png"/>
           </div>
-          <h3 class="font-display text-2xl text-on-surface mb-1">Dra. Amelia Vance</h3>
-          <p class="font-label-md text-primary mb-4 font-bold uppercase tracking-widest text-[10px]">Formuladora Chefe</p>
-          <p class="font-body-sm text-on-surface-variant px-6 italic">Mais de 15 anos em pesquisa dermatológica avançada.</p>
+          <h3 class="font-display text-2xl text-on-surface mb-1">Anny Isabely Coradassi</h3>
+          <p class="font-label-md text-primary mb-4 font-bold uppercase tracking-widest text-[10px]">Estudante</p>
+          <p class="font-body-sm text-on-surface-variant px-6 italic">16 anos.</p>
         </div>
         <div class="flex flex-col items-center text-center group mt-0 md:mt-16">
           <div class="w-56 h-56 rounded-full overflow-hidden mb-8 shadow-2xl border-4 border-white transition-all group-hover:scale-105">
-            <img alt="Fundadora" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAO6xTtoKDc0JC3ncQ5G6gPU5i7dh8zRhbuu-bYcmZkzkdgWEPVycowLmVELlrI_KpYIFmTapyFNEGQkUMHHJoBCnsIhg_GkMmiKrC7sCTyycWB7wdv1cRMaGo1ARPYa6pybiGQwZpIeShTMD8Cn8ESkA2uvPK6P-oBrVvKFoS5zUfvmBH0h6-JClb0d4lNUDluOYr5JI5c3PmgJl1N71o0yOWm1qMSsvU3LxAxFltJXUUSAIJLLVZ_2syzZvT4Me-Et4HkOpuIXinZ"/>
+            <img alt="Nívea" class="w-full h-full object-cover" src="img/nivea.png"/>
           </div>
-          <h3 class="font-display text-2xl text-on-surface mb-1">Nina Reyes</h3>
-          <p class="font-label-md text-primary mb-4 font-bold uppercase tracking-widest text-[10px]">Diretora Criativa</p>
-          <p class="font-body-sm text-on-surface-variant px-6 italic">Traduz fundamentos clínicos em experiências luminosas.</p>
+          <h3 class="font-display text-2xl text-on-surface mb-1">Nívea Caroline Matos</h3>
+          <p class="font-label-md text-primary mb-4 font-bold uppercase tracking-widest text-[10px]">Estudante</p>
+          <p class="font-body-sm text-on-surface-variant px-6 italic">17 anos.</p>
         </div>
         <div class="flex flex-col items-center text-center group">
           <div class="w-56 h-56 rounded-full overflow-hidden mb-8 shadow-2xl border-4 border-white transition-all group-hover:scale-105">
-            <img alt="Fundadora" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeZyE00MRj_3vSbZ_vGNhXJ83aTkRnJ87wHSRJB82ICvA7HPYB002uwxlbAAeCbHYC4je203gIzdRB813EsoJYOvP8sexE4q30PPKYRntlcIXwDAMoQmz5TAB6IGDDkLL3IR8TIJkg1l3Zq31Yt8-8HJPeltIGWXTw4E1XwDVDIUdHaAvMPtIf0u9ZgfhDE1uolFfq9CJZrvEwpTWwDg-PSwubOx5vNhO0yUykpIIW1Abmk9u-xqPVxdFYq7QlHpGajAkdr5xtSaRv"/>
+            <img alt="Nicoly" class="w-full h-full object-cover" src="img/nicoly.png"/>
           </div>
-          <h3 class="font-display text-2xl text-on-surface mb-1">Natalie Chen</h3>
-          <p class="font-label-md text-primary mb-4 font-bold uppercase tracking-widest text-[10px]">Líder de Operações</p>
-          <p class="font-body-sm text-on-surface-variant px-6 italic">Foco em fornecimento ético e embalagens sustentáveis.</p>
+          <h3 class="font-display text-2xl text-on-surface mb-1">Nicoly Holtz</h3>
+          <p class="font-label-md text-primary mb-4 font-bold uppercase tracking-widest text-[10px]">Estudante</p>
+          <p class="font-body-sm text-on-surface-variant px-6 italic">16 anos.</p>
         </div>
       </div>
     </section>

@@ -17,7 +17,6 @@ export default function profilePage() {
     if (tab === 'posts') {
         postBtn.classList.add('text-primary', 'border-primary');
         postBtn.classList.remove('text-on-surface-variant');
-        savedBtn.classList.remove('text-primary', 'border-primary');
         savedBtn.classList.add('text-on-surface-variant');
         renderPostsGrid(posts, 'posts');
     } else {
@@ -396,8 +395,8 @@ export default function profilePage() {
       </div>
       
       <div class="flex gap-4">
-        <a href="#/favorites" class="px-8 py-3 bg-primary text-white font-label-md rounded-full shadow-lg hover:bg-primary-container transition-all flex items-center gap-2">
-          Meus Favoritos <span class="material-symbols-outlined text-sm">favorite</span>
+        <a href="#/chat" class="px-8 py-3 bg-primary text-white font-label-md rounded-full shadow-lg hover:bg-primary-container transition-all flex items-center gap-2">
+          Suporte Chat <span class="material-symbols-outlined text-sm">chat</span>
         </a>
         <a href="#/tracking" class="px-8 py-3 border-2 border-primary text-primary font-label-md rounded-full hover:bg-purple-50 transition-all flex items-center gap-2">
           Rastrear Pedidos <span class="material-symbols-outlined text-sm">local_shipping</span>

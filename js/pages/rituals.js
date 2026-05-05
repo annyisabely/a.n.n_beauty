@@ -44,7 +44,7 @@ export default function ritualsPage() {
           </div>
           <h3 class="font-display text-2xl text-on-surface mb-3">Refine seu Feed</h3>
           <p class="font-body-sm text-on-surface-variant mb-8 leading-relaxed">Ajuste seu perfil de beleza para ver tutoriais que combinam com seu tipo de pele.</p>
-          <button onclick="showToast('Preferências abertas', 'info')" class="w-full border-2 border-primary text-primary px-8 py-3 rounded-full font-bold hover:bg-primary hover:text-white transition-all">Atualizar Perfil</button>
+          <button onclick="window.location.hash='#/profile'" class="w-full border-2 border-primary text-primary px-8 py-3 rounded-full font-bold hover:bg-primary hover:text-white transition-all">Atualizar Perfil</button>
         </div>
 
         <a href="#/tutorial" class="md:col-span-8 bg-white rounded-3xl shadow-xl overflow-hidden group relative min-h-[300px] flex flex-col justify-end p-10 border border-purple-50">

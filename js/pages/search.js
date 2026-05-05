@@ -3,9 +3,9 @@ import { showToast } from '../components.js';
 import { dataManager } from '../data_manager.js';
 import { auth } from '../auth.js';
 
-const searchProducts = dataManager.generateProducts(100);
-
 export default function searchPage() {
+  const searchProducts = dataManager.generateProducts(100);
+  
   window.handleSearch = (event) => {
     const query = event.target.value.toLowerCase();
     const filtered = searchProducts.filter(p => 
@@ -15,49 +15,7 @@ export default function searchPage() {
     renderSearchResults(filtered);
   };
 
-  window.startVoiceSearch = () => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-      showToast('Seu navegador não suporta busca por voz.', 'error');
-      return;
-    }
-
-    const recognition = new SpeechRecognition();
-    recognition.lang = 'pt-BR';
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
-
-    const micBtn = document.getElementById('mic-btn');
-    const searchInput = document.getElementById('search-input');
-
-    recognition.onstart = () => {
-      micBtn.classList.add('text-red-500', 'animate-pulse');
-      showToast('Ouvindo...', 'info');
-    };
-
-    recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
-      const searchInput = document.getElementById('search-input');
-      const headerSearchInput = document.getElementById('header-search-input');
-      
-      if (searchInput) searchInput.value = transcript;
-      if (headerSearchInput) headerSearchInput.value = transcript;
-      
-      window.handleSearch({ target: { value: transcript } });
-      showToast(`Buscando por: "${transcript}"`, 'success');
-    };
-
-    recognition.onerror = () => {
-      showToast('Erro ao capturar voz. Tente novamente.', 'error');
-      micBtn.classList.remove('text-red-500', 'animate-pulse');
-    };
-
-    recognition.onend = () => {
-      micBtn.classList.remove('text-red-500', 'animate-pulse');
-    };
-
-    recognition.start();
-  };
+// startVoiceSearch moved to app.js for global access
 
   window.addToCartSearch = (index) => {
     const product = searchProducts[index];
@@ -101,10 +59,16 @@ export default function searchPage() {
           </div>
         </div>
         <div class="p-4 bg-white/5">
-          <h3 class="font-label-md text-white line-clamp-1 mb-1">${p.name}</h3>
-          <div class="flex justify-between items-center">
-            <span class="font-label-md text-primary-fixed-dim font-bold">${p.price}</span>
-            <span class="material-symbols-outlined text-white/30 text-lg">favorite</span>
+          <div class="flex justify-between items-start mb-1">
+            <h3 class="font-body-md text-sm font-bold text-white line-clamp-1">${p.name}</h3>
+            <span class="text-[8px] bg-primary/10 text-primary px-1.5 py-0.5 rounded uppercase tracking-widest font-bold">${p.code}</span>
+          </div>
+          <div class="flex flex-col">
+            <div class="flex items-center gap-2">
+              <span class="font-label-md text-primary-fixed-dim font-bold">${p.price}</span>
+              ${p.oldPrice ? `<span class="text-[10px] text-white/30 line-through">${p.oldPrice}</span>` : ''}
+            </div>
+            <span class="material-symbols-outlined text-white/30 text-lg self-end">favorite</span>
           </div>
         </div>
       </div>`}).join('');

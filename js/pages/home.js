@@ -3,14 +3,14 @@ import { cartManager } from '../cart_manager.js';
 import { showToast } from '../components.js';
 import { dataManager } from '../data_manager.js';
 
-// Get data from manager (global scope for page logic)
-const allProducts = dataManager.generateProducts(100);
-const homeVideos = dataManager.generateVideos(100).slice(0, 5); // Just 5 for preview
-const featuredProducts = allProducts.slice(0, 8); // Just 8 for preview
-
 export default function homePage() {
   const user = auth.getUser();
   const welcomeText = user ? `Olá, ${user.name.split(' ')[0]}!` : 'A.n.n Beauty';
+
+  // Get data from manager (moved inside to refresh on every navigation)
+  const allProducts = dataManager.generateProducts(100);
+  const homeVideos = dataManager.generateVideos(100).slice(0, 5);
+  const featuredProducts = allProducts.slice(0, 8);
 
   window.addToCartHome = (index) => {
     const product = featuredProducts[index];
@@ -201,9 +201,15 @@ setTimeout(() => {
       </div>
       
       <div class="p-4 flex flex-col flex-grow bg-white">
-        <h3 class="font-body-md text-sm font-bold text-on-surface line-clamp-1 mb-1">${p.name}</h3>
+        <div class="flex justify-between items-start mb-1">
+            <h3 class="font-body-md text-sm font-bold text-on-surface line-clamp-1">${p.name}</h3>
+            <span class="text-[8px] bg-primary/5 text-primary/40 px-1.5 py-0.5 rounded uppercase tracking-widest font-bold">${p.code}</span>
+        </div>
         <div class="flex items-center justify-between mt-auto">
-          <span class="font-display text-lg text-primary font-bold">${p.price}</span>
+          <div class="flex flex-col">
+            <span class="font-display text-lg text-primary font-bold">${p.price}</span>
+            ${p.oldPrice ? `<span class="text-[10px] text-on-surface-variant/50 line-through">${p.oldPrice}</span>` : ''}
+          </div>
         </div>
       </div>
     </div>`}).join('');

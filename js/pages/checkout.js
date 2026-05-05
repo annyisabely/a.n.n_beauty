@@ -1,4 +1,6 @@
 import { auth } from '../auth.js';
+import { cartManager } from '../cart_manager.js';
+import { showToast } from '../components.js';
 
 export default function checkoutPage() {
   window.handleOrderConfirmation = (event) => {
@@ -10,9 +12,44 @@ export default function checkoutPage() {
     
     // Redirect to tracking
     window.location.hash = '#/tracking';
+    cartManager.clearCart();
+    cartManager.clearCoupon();
   };
 
-  return `
+  window.applyDiscount = () => {
+    const code = document.getElementById('coupon-input').value;
+    const coupon = cartManager.applyCoupon(code);
+    if (coupon) {
+        showToast(`Cupom ${code} aplicado: ${coupon.value}% de desconto!`, 'success');
+        renderCheckoutTotals();
+    } else {
+        showToast('Cupom inválido ou expirado.', 'error');
+    }
+  };
+
+  const renderCheckoutTotals = () => {
+    const subtotal = cartManager.getCart().reduce((sum, item) => {
+        const price = parseFloat(item.price.replace('R$ ', '').replace('.', '').replace(',', '.'));
+        return sum + (price * item.quantity);
+    }, 0);
+    const discount = cartManager.getDiscount(subtotal);
+    const total = subtotal - discount;
+    const coupon = JSON.parse(sessionStorage.getItem('ann_active_coupon') || 'null');
+
+    const container = document.getElementById('checkout-summary');
+    if (!container) return;
+
+    container.innerHTML = `
+        <h3 class="font-label-md text-label-md text-on-surface mb-4">Resumo do Pedido</h3>
+        <div class="flex justify-between font-body-md text-on-surface-variant mb-2"><span>Subtotal</span><span class="text-on-surface">R$ ${subtotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span></div>
+        ${discount > 0 ? `<div class="flex justify-between font-body-md text-green-500 mb-2"><span>Desconto (${coupon.value}%)</span><span>- R$ ${discount.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span></div>` : ''}
+        <div class="flex justify-between font-body-md text-on-surface-variant mb-2"><span>Frete</span><span class="text-secondary">Grátis</span></div>
+        <div class="flex justify-between font-body-md text-on-surface-variant mb-4"><span>Prazo de Entrega</span><span class="text-on-surface">3 a 7 dias úteis</span></div>
+        <div class="border-t border-outline-variant/30 pt-4 flex justify-between items-center"><span class="font-headline-md text-on-surface">Total</span><span class="font-headline-md text-primary">R$ ${total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span></div>
+    `;
+  };
+
+  setTimeout(renderCheckoutTotals, 50);
   <main class="flex-grow w-full max-w-[1280px] mx-auto px-4 md:px-10 py-12 flex items-start justify-center min-h-screen bg-background">
     <div class="w-full max-w-3xl">
       <div class="text-center mb-10">
@@ -82,13 +119,18 @@ export default function checkoutPage() {
             </div>
           </div>
 
+          <!-- Cupom -->
+          <div class="bg-primary/5 rounded-xl p-6 border border-primary/20">
+            <h3 class="font-label-md text-label-md text-primary mb-3">Possui um cupom?</h3>
+            <div class="flex gap-2">
+                <input id="coupon-input" type="text" placeholder="Código do cupom" class="flex-grow bg-white border border-primary/20 rounded-lg px-4 py-2 text-sm focus:border-primary outline-none uppercase font-bold tracking-widest">
+                <button type="button" onclick="window.applyDiscount()" class="bg-primary text-white px-6 py-2 rounded-lg text-xs font-bold hover:bg-primary-container transition-all">Aplicar</button>
+            </div>
+          </div>
+
           <!-- Resumo -->
-          <div class="bg-surface-container-low rounded-xl p-6 border border-outline-variant/30">
-            <h3 class="font-label-md text-label-md text-on-surface mb-4">Resumo do Pedido</h3>
-            <div class="flex justify-between font-body-md text-on-surface-variant mb-2"><span>Subtotal</span><span class="text-on-surface">R$ 290,00</span></div>
-            <div class="flex justify-between font-body-md text-on-surface-variant mb-2"><span>Frete</span><span class="text-secondary">Grátis</span></div>
-            <div class="flex justify-between font-body-md text-on-surface-variant mb-4"><span>Prazo de Entrega</span><span class="text-on-surface">3 a 7 dias úteis</span></div>
-            <div class="border-t border-outline-variant/30 pt-4 flex justify-between items-center"><span class="font-headline-md text-on-surface">Total</span><span class="font-headline-md text-primary">R$ 290,00</span></div>
+          <div id="checkout-summary" class="bg-surface-container-low rounded-xl p-6 border border-outline-variant/30">
+            <!-- Rendered by renderCheckoutTotals -->
           </div>
 
           <!-- Actions -->

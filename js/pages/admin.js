@@ -23,9 +23,13 @@ export default function adminPage() {
     };
 
     window.switchAdminTab = (tab) => {
-        const sections = ['dashboard-section', 'users-section', 'content-section'];
-        sections.forEach(s => document.getElementById(s).classList.add('hidden'));
-        document.getElementById(`${tab}-section`).classList.remove('hidden');
+        const sections = ['dashboard-section', 'users-section', 'content-section', 'prices-section', 'discounts-section'];
+        sections.forEach(s => {
+            const el = document.getElementById(s);
+            if (el) el.classList.add('hidden');
+        });
+        const target = document.getElementById(`${tab}-section`);
+        if (target) target.classList.remove('hidden');
     };
 
     window.saveUserProfile = (id) => {
@@ -125,6 +129,8 @@ export default function adminPage() {
                 <nav class="hidden md:flex gap-6 text-xs uppercase tracking-widest font-bold">
                     <button onclick="window.switchAdminTab('dashboard')" class="hover:text-primary transition-colors">Dashboard</button>
                     <button onclick="window.switchAdminTab('users')" class="hover:text-primary transition-colors">Usuários</button>
+                    <button onclick="window.switchAdminTab('prices')" class="hover:text-primary transition-colors">Preços</button>
+                    <button onclick="window.switchAdminTab('discounts')" class="hover:text-primary transition-colors">Descontos</button>
                     <button onclick="window.switchAdminTab('content')" class="hover:text-primary transition-colors">Postagens</button>
                 </nav>
             </div>
@@ -209,6 +215,55 @@ export default function adminPage() {
                 </div>
             </div>
 
+            <!-- PRICES SECTION -->
+            <div id="prices-section" class="hidden">
+                <div class="bg-white/5 rounded-3xl border border-white/10 p-8">
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
+                        <h4 class="font-display text-2xl">Gestão de Preços</h4>
+                        <div class="flex flex-wrap gap-2">
+                            <div class="relative">
+                                <span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-primary text-xs">qr_code</span>
+                                <input type="text" id="quick-code-edit" placeholder="ANN-001" class="bg-primary/10 border border-primary/20 rounded-full pl-10 pr-4 py-2 text-xs outline-none focus:border-primary text-primary font-bold placeholder:text-primary/30 uppercase">
+                                <button onclick="window.quickEditByCode()" class="ml-2 bg-primary text-white px-4 py-2 rounded-full text-[10px] font-bold hover:bg-primary-container transition-all">Editar por Código</button>
+                            </div>
+                            <div class="relative">
+                                <span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-white/30 text-sm">search</span>
+                                <input type="text" oninput="window.filterAdminProducts(this.value)" placeholder="Buscar produto..." class="bg-white/5 border border-white/10 rounded-full pl-10 pr-4 py-2 text-xs outline-none focus:border-primary">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="admin-product-list" class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+                        <!-- Populated by script -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- DISCOUNTS SECTION -->
+            <div id="discounts-section" class="hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-1 bg-white/5 rounded-3xl border border-white/10 p-8 h-fit">
+                        <h4 class="font-display text-xl mb-6">Novo Cupom</h4>
+                        <form id="coupon-form" onsubmit="window.createCoupon(event)" class="space-y-4">
+                            <div class="space-y-1">
+                                <label class="text-[10px] text-white/40 uppercase tracking-widest ml-2">Código</label>
+                                <input id="coupon-code" type="text" class="w-full bg-white/5 border border-white/10 rounded-full px-6 py-3 text-sm outline-none focus:border-primary" placeholder="EX: TRINTAOFF" required>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-[10px] text-white/40 uppercase tracking-widest ml-2">Desconto (%)</label>
+                                <input id="coupon-value" type="number" class="w-full bg-white/5 border border-white/10 rounded-full px-6 py-3 text-sm outline-none focus:border-primary" placeholder="30" required>
+                            </div>
+                            <button type="submit" class="w-full bg-primary py-3 rounded-full font-bold text-sm shadow-lg shadow-primary/20 hover:bg-primary-container transition-all">Criar Cupom</button>
+                        </form>
+                    </div>
+                    <div class="lg:col-span-2 bg-white/5 rounded-3xl border border-white/10 p-8">
+                        <h4 class="font-display text-xl mb-6">Cupons Ativos</h4>
+                        <div id="active-coupons-list" class="space-y-3">
+                            <!-- Populated by script -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- CONTENT SECTION -->
             <div id="content-section" class="hidden">
                 <div class="max-w-2xl bg-white/5 rounded-3xl border border-white/10 p-8 mx-auto">
@@ -239,3 +294,125 @@ export default function adminPage() {
         </main>
     </div>`;
 }
+
+// Admin Dynamic Logic
+setTimeout(() => {
+    const isAdmin = sessionStorage.getItem('ann_admin_logged') === 'true';
+    if (!isAdmin) return;
+
+    // Prices management
+    const loadAdminProducts = () => {
+        const list = document.getElementById('admin-product-list');
+        if (!list) return;
+        
+        import('../data_manager.js').then(({ dataManager }) => {
+            const products = dataManager.generateProducts(100);
+            const overrides = JSON.parse(localStorage.getItem('ann_price_overrides') || '{}');
+            
+            list.innerHTML = products.map(p => {
+                const currentPrice = overrides[p.id] || p.price;
+                return `
+                <div class="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/5 hover:border-white/10 transition-all">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-white/10 rounded-lg overflow-hidden"><img src="https://lh3.googleusercontent.com/aida-public/${p.img}" class="w-full h-full object-cover"></div>
+                        <div><p class="text-xs font-medium line-clamp-1">${p.name}</p><p class="text-[10px] text-white/30">${p.cat}</p></div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] text-white/40">R$</span>
+                        <input type="text" value="${currentPrice.replace('R$ ', '')}" onchange="window.updateProductPrice('${p.id}', this.value)" class="w-20 bg-white/5 border border-white/10 rounded-lg px-2 py-1 text-xs text-right focus:border-primary outline-none">
+                    </div>
+                </div>`;
+            }).join('');
+        });
+    };
+
+    window.updateProductPrice = (id, newVal) => {
+        const overrides = JSON.parse(localStorage.getItem('ann_price_overrides') || '{}');
+        overrides[id] = `R$ ${newVal.trim()}`;
+        localStorage.setItem('ann_price_overrides', JSON.stringify(overrides));
+        showToast('Preço atualizado!', 'success');
+        loadAdminProducts(); // Refresh list to show changes
+    };
+
+    window.quickEditByCode = () => {
+        const codeInput = document.getElementById('quick-code-edit');
+        const code = codeInput.value.trim().toUpperCase();
+        if (!code) return;
+
+        import('../data_manager.js').then(({ dataManager }) => {
+            const products = dataManager.generateProducts(100);
+            const product = products.find(p => p.code === code);
+            
+            if (product) {
+                const searchInput = document.querySelector('input[oninput="window.filterAdminProducts(this.value)"]');
+                searchInput.value = product.name;
+                window.filterAdminProducts(product.name);
+                showToast(`Produto ${code} encontrado!`, 'info');
+                
+                // Highlight the input field
+                setTimeout(() => {
+                    const rowInput = document.querySelector(`input[onchange*="${product.id}"]`);
+                    if (rowInput) {
+                        rowInput.focus();
+                        rowInput.select();
+                        rowInput.classList.add('ring-2', 'ring-primary');
+                    }
+                }, 300);
+            } else {
+                showToast('Produto não encontrado com este código.', 'error');
+            }
+        });
+    };
+
+    window.filterAdminProducts = (query) => {
+        const items = document.querySelectorAll('#admin-product-list > div');
+        items.forEach(item => {
+            const name = item.querySelector('p').innerText.toLowerCase();
+            item.classList.toggle('hidden', !name.includes(query.toLowerCase()));
+        });
+    };
+
+    // Coupons management
+    const loadCoupons = () => {
+        const list = document.getElementById('active-coupons-list');
+        if (!list) return;
+        const coupons = JSON.parse(localStorage.getItem('ann_coupons') || '[]');
+        
+        if (coupons.length === 0) {
+            list.innerHTML = '<p class="text-center text-white/20 py-8 text-xs italic">Nenhum cupom criado ainda.</p>';
+            return;
+        }
+
+        list.innerHTML = coupons.map((c, i) => `
+            <div class="flex items-center justify-between p-4 bg-primary/5 rounded-2xl border border-primary/10">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 flex items-center justify-center bg-primary/20 rounded-full text-primary font-bold text-xs">${c.value}%</div>
+                    <div><p class="text-sm font-bold tracking-widest text-primary">${c.code}</p><p class="text-[10px] text-white/40">Desconto em toda a loja</p></div>
+                </div>
+                <button onclick="window.deleteCoupon(${i})" class="material-symbols-outlined text-white/20 hover:text-red-400 transition-colors">delete</button>
+            </div>
+        `).join('');
+    };
+
+    window.createCoupon = (e) => {
+        e.preventDefault();
+        const code = document.getElementById('coupon-code').value.toUpperCase();
+        const value = document.getElementById('coupon-value').value;
+        const coupons = JSON.parse(localStorage.getItem('ann_coupons') || '[]');
+        coupons.push({ code, value });
+        localStorage.setItem('ann_coupons', JSON.stringify(coupons));
+        showToast(`Cupom ${code} criado!`, 'success');
+        document.getElementById('coupon-form').reset();
+        loadCoupons();
+    };
+
+    window.deleteCoupon = (index) => {
+        const coupons = JSON.parse(localStorage.getItem('ann_coupons') || '[]');
+        coupons.splice(index, 1);
+        localStorage.setItem('ann_coupons', JSON.stringify(coupons));
+        loadCoupons();
+    };
+
+    loadAdminProducts();
+    loadCoupons();
+}, 200);

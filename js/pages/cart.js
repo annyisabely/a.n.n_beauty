@@ -1,13 +1,16 @@
 import { cartManager } from '../cart_manager.js';
-import { showToast } from '../components.js';
 
 export default function cartPage() {
   const cart = cartManager.getCart();
-  const total = cartManager.getTotal();
+  const selectedTotal = cartManager.getSelectedTotal();
+  const selectedCount = cartManager.getSelectedItemCount();
+  const allSelected = cart.length > 0 && cart.every(item => item.selected);
+  
+  // Get bonus toggle state from session storage
+  const bonusActive = sessionStorage.getItem('ann_bonus_active') === 'true';
 
   window.removeFromCart = (name) => {
     cartManager.removeItem(name);
-    // Re-render the page by triggering a hash change or a custom event
     window.dispatchEvent(new CustomEvent('auth-change')); 
   };
 
@@ -16,70 +19,152 @@ export default function cartPage() {
     window.dispatchEvent(new CustomEvent('auth-change'));
   };
 
+  window.toggleSelect = (name) => {
+    cartManager.toggleSelect(name);
+    window.dispatchEvent(new CustomEvent('auth-change'));
+  };
+
+  window.toggleSelectAll = () => {
+    cartManager.toggleSelectAll(!allSelected);
+    window.dispatchEvent(new CustomEvent('auth-change'));
+  };
+
+  window.toggleBonus = () => {
+    sessionStorage.setItem('ann_bonus_active', (!bonusActive).toString());
+    window.dispatchEvent(new CustomEvent('auth-change'));
+  };
+
   const cartItemsHTML = cart.length > 0 ? cart.map(item => `
-    <div class="flex flex-col sm:flex-row bg-surface-container-lowest rounded-xl ambient-shadow p-6 gap-6 relative group overflow-hidden border border-purple-50">
-      <div class="absolute inset-0 bg-gradient-to-r from-primary-fixed/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
-      <div class="w-full sm:w-32 h-32 flex-shrink-0 bg-surface-container-low rounded-lg overflow-hidden flex items-center justify-center">
-        <img alt="${item.name}" class="w-full h-full object-cover mix-blend-multiply" src="https://lh3.googleusercontent.com/aida-public/${item.img}"/>
-      </div>
-      <div class="flex-grow flex flex-col justify-between">
-        <div class="flex justify-between items-start">
-            <div>
-                <h3 class="font-headline-md text-headline-md text-on-surface">${item.name}</h3>
-                <p class="font-body-sm text-body-sm text-on-surface-variant mt-1">${item.desc}</p>
-            </div>
-            <button onclick="window.removeFromCart('${item.name}')" class="text-outline hover:text-red-500 transition-colors p-2 rounded-full hover:bg-red-50"><span class="material-symbols-outlined">close</span></button>
+    <div class="flex items-center gap-3 bg-surface-container-lowest p-3 rounded-xl relative shadow-sm border border-purple-50">
+      <!-- Checkbox -->
+      <div class="flex-shrink-0 cursor-pointer p-2 -m-2" onclick="window.toggleSelect('${item.name}')">
+        <div class="w-5 h-5 rounded-full border-2 ${item.selected ? 'border-primary bg-primary' : 'border-outline-variant bg-transparent'} flex items-center justify-center transition-colors">
+            ${item.selected ? `<span class="material-symbols-outlined text-white text-[14px] font-bold">check</span>` : ''}
         </div>
-        <div class="flex justify-between items-end mt-6">
-            <div class="flex items-center bg-surface-container-low rounded-full border border-outline-variant p-1">
-                <button onclick="window.updateQty('${item.name}', -1)" class="w-8 h-8 flex items-center justify-center text-on-surface hover:bg-surface-variant rounded-full"><span class="material-symbols-outlined text-[18px]">remove</span></button>
-                <span class="w-10 text-center font-label-md text-label-md text-on-surface">${item.quantity}</span>
-                <button onclick="window.updateQty('${item.name}', 1)" class="w-8 h-8 flex items-center justify-center text-on-surface hover:bg-surface-variant rounded-full"><span class="material-symbols-outlined text-[18px]">add</span></button>
+      </div>
+
+      <!-- Image -->
+      <div class="w-24 h-24 flex-shrink-0 bg-surface-container-low rounded-lg overflow-hidden flex items-center justify-center p-1">
+        <img alt="${item.name}" class="w-full h-full object-contain mix-blend-multiply" src="https://lh3.googleusercontent.com/aida-public/${item.img}"/>
+      </div>
+
+      <!-- Info -->
+      <div class="flex-grow min-w-0">
+        <div class="flex items-center gap-1 mb-1">
+            <span class="bg-primary-container text-on-primary-container text-[10px] font-bold px-1.5 py-0.5 rounded border border-primary/20">5.5</span>
+            <h3 class="text-sm font-medium text-on-surface truncate">${item.name}</h3>
+        </div>
+        
+        <div class="flex items-center gap-1 text-xs text-on-surface-variant mb-1">
+            <span>BR16</span>
+            <span class="material-symbols-outlined text-[14px]">expand_more</span>
+        </div>
+
+        <p class="text-[10px] text-outline mb-2">34 comprado(s) ontem</p>
+
+        <div class="flex items-end justify-between">
+            <div>
+                <div class="flex items-center gap-1">
+                    <span class="text-primary font-bold">R$ ${item.price.replace('R$ ', '')}</span>
+                    <span class="material-symbols-outlined text-primary text-[14px]">confirmation_number</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-[10px] text-outline line-through">R$ 89,90</span>
+                    <span class="text-[10px] text-primary bg-primary/10 px-1 rounded">-60%</span>
+                </div>
             </div>
-            <span class="font-label-md text-[20px] font-semibold text-primary">${item.price}</span>
+
+            <!-- Qty -->
+            <div class="flex items-center bg-surface-container-low rounded-md border border-outline-variant">
+                <button onclick="window.updateQty('${item.name}', -1)" class="w-7 h-7 flex items-center justify-center text-on-surface-variant hover:bg-surface-variant rounded-l-md transition-colors">
+                    <span class="material-symbols-outlined text-[16px]">remove</span>
+                </button>
+                <span class="w-6 text-center text-xs text-on-surface font-medium">${item.quantity}</span>
+                <button onclick="window.updateQty('${item.name}', 1)" class="w-7 h-7 flex items-center justify-center text-on-surface-variant hover:bg-surface-variant rounded-r-md transition-colors">
+                    <span class="material-symbols-outlined text-[16px]">add</span>
+                </button>
+            </div>
         </div>
       </div>
     </div>
   `).join('') : `
-    <div class="text-center py-20 bg-surface-container-lowest rounded-xl border border-dashed border-outline-variant">
-      <span class="material-symbols-outlined text-6xl text-outline-variant mb-4">shopping_cart_off</span>
-      <h3 class="font-headline-md text-on-surface mb-2">Seu carrinho está vazio</h3>
-      <p class="text-on-surface-variant mb-8">Que tal explorar nossos produtos e encontrar algo especial?</p>
-      <a href="#/search" class="bg-primary text-white px-8 py-3 rounded-full font-label-md inline-block">Começar a Comprar</a>
+    <div class="text-center py-20 bg-surface-container-lowest rounded-xl border border-dashed border-outline-variant shadow-sm">
+      <span class="material-symbols-outlined text-6xl text-outline mb-4">shopping_cart_off</span>
+      <h3 class="text-xl text-on-surface mb-2 font-serif">Seu carrinho está vazio</h3>
+      <a href="#/home" class="text-primary font-bold hover:underline">Começar a comprar</a>
     </div>
   `;
 
   return `
-  <main class="flex-grow w-full max-w-[1280px] mx-auto px-4 md:px-10 py-12">
-    <header class="mb-12">
-        <h1 class="font-headline-xl text-headline-xl text-primary mb-2">Seu Carrinho</h1>
-        <p class="font-body-lg text-body-lg text-on-surface-variant">Revise suas seleções antes de finalizar a compra.</p>
-    </header>
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      <div class="lg:col-span-8 flex flex-col gap-6">
-        ${cartItemsHTML}
-      </div>
-      
-      <div class="lg:col-span-4 mt-8 lg:mt-0">
-        <div class="bg-surface-container-lowest rounded-xl ambient-shadow p-8 sticky top-[100px] border border-purple-50">
-          <h2 class="font-headline-md text-headline-md text-on-surface mb-6 border-b border-surface-variant pb-4">Resumo do Pedido</h2>
-          <div class="flex flex-col gap-4 mb-6">
-            <div class="flex justify-between font-body-md text-on-surface-variant"><span>Subtotal</span><span class="text-on-surface font-semibold">R$ ${total.toFixed(2).replace('.', ',')}</span></div>
-            <div class="flex justify-between font-body-md text-on-surface-variant"><span>Frete</span><span class="text-green-600 font-semibold">${total > 150 ? 'Grátis' : 'R$ 15,00'}</span></div>
-          </div>
-          <div class="border-t border-surface-variant pt-6 mb-8">
-              <div class="flex justify-between items-center"><span class="font-headline-md text-on-surface">Total</span><span class="font-headline-md text-primary">R$ ${(total + (total > 150 ? 0 : 15)).toFixed(2).replace('.', ',')}</span></div>
-          </div>
-          <a href="#/checkout" class="w-full bg-primary hover:bg-primary-container text-white font-label-md text-label-md py-4 rounded-full shadow-lg shadow-primary/20 transition-all duration-300 flex items-center justify-center gap-2 group ${cart.length === 0 ? 'pointer-events-none opacity-50' : ''}">
-              Finalizar Compra <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
-          </a>
-          <div class="mt-6 flex items-start gap-3 bg-purple-50 p-4 rounded-lg">
-              <span class="material-symbols-outlined text-primary text-[20px] mt-0.5">local_shipping</span>
-              <p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">Ganhe frete grátis em todas as compras acima de R$ 150.</p>
-          </div>
+  <div class="min-h-screen bg-background text-on-background font-sans flex flex-col">
+    <!-- Header -->
+    <header class="p-4 flex items-center justify-between sticky top-0 bg-white/90 backdrop-blur-md z-20 border-b border-purple-100">
+        <div class="flex items-center gap-3">
+            <a href="#/home" class="material-symbols-outlined text-primary hover:text-purple-800 transition-colors">arrow_back_ios</a>
+            <div>
+                <h1 class="text-lg font-bold text-primary font-serif">Carrinho (${cartManager.getItemCount()})</h1>
+                <div class="flex items-center gap-1 text-[10px] text-on-surface-variant">
+                    <span class="material-symbols-outlined text-[12px]">location_on</span>
+                    <span>Salvador, Bahia, Brasil ></span>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </main>`;
+        <button class="text-sm font-medium text-primary hover:text-purple-800 transition-colors">Editar</button>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow p-4 flex flex-col gap-4 pb-40 max-w-2xl mx-auto w-full">
+        <!-- Oferta Relâmpago Banner -->
+        ${cart.length > 0 ? `
+        <div class="flex items-center justify-between bg-gradient-to-r from-primary to-purple-400 p-2 rounded-lg shadow-sm">
+            <div class="flex items-center gap-2">
+                <span class="bg-white text-primary text-[10px] font-bold px-1.5 py-0.5 rounded">Oferta Relâmpago</span>
+                <span class="material-symbols-outlined text-white text-[16px]">bolt</span>
+                <span class="text-[10px] text-white font-bold">12:54:51</span>
+            </div>
+        </div>
+        ` : ''}
+
+        <div class="flex flex-col gap-4">
+            ${cartItemsHTML}
+        </div>
+
+        <!-- Bonus Toggle -->
+        <div class="flex items-center justify-between bg-surface-container-lowest p-4 rounded-xl mt-4 shadow-sm border border-purple-50 cursor-pointer" onclick="window.toggleBonus()">
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-yellow-500 text-[18px]">card_giftcard</span>
+                <span class="text-xs text-on-surface-variant font-medium">Resgate bônus em itens elegíveis</span>
+                <span class="material-symbols-outlined text-outline text-[14px]">info</span>
+            </div>
+            <div class="w-10 h-5 ${bonusActive ? 'bg-primary' : 'bg-surface-variant'} rounded-full relative p-0.5 transition-colors">
+                <div class="w-4 h-4 bg-white rounded-full shadow-sm absolute ${bonusActive ? 'right-0.5' : 'left-0.5'} transition-all"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Bar -->
+    <footer class="fixed bottom-0 left-0 w-full bg-surface-container-lowest border-t border-purple-100 p-4 pb-8 z-30 shadow-[0_-4px_20px_rgba(109,88,166,0.05)]">
+        <div class="max-w-2xl mx-auto w-full flex items-center justify-between mb-4">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="window.toggleSelectAll()">
+                <div class="w-5 h-5 rounded-full border-2 ${allSelected ? 'border-primary bg-primary' : 'border-outline-variant bg-transparent'} flex items-center justify-center transition-colors">
+                    ${allSelected ? `<span class="material-symbols-outlined text-white text-[14px] font-bold">check</span>` : ''}
+                </div>
+                <span class="text-xs text-on-surface-variant font-medium">Tudo</span>
+            </div>
+            <div class="text-right flex flex-col items-end">
+                <div class="flex items-center gap-1">
+                    <span class="text-lg font-bold text-primary">R$ ${selectedTotal.toFixed(2).replace('.', ',')}</span>
+                    <span class="material-symbols-outlined text-outline text-[14px]">expand_less</span>
+                </div>
+                <p class="text-[10px] text-on-surface-variant">Taxa de envio: R$ 0,80</p>
+                ${bonusActive ? `<p class="text-[10px] text-primary bg-primary/10 px-1 rounded inline-block mt-0.5">Bônus Ativado!</p>` : `<p class="text-[10px] text-primary bg-primary/10 px-1 rounded inline-block mt-0.5">R$ 76,76 OFF</p>`}
+            </div>
+            <a href="#/checkout" class="bg-primary hover:bg-purple-800 transition-colors text-white px-8 py-3 rounded-full font-bold text-sm shadow-lg shadow-primary/20 ${selectedCount === 0 ? 'opacity-50 pointer-events-none' : ''}">
+                Finalizar compra (${selectedCount})
+            </a>
+        </div>
+    </footer>
+  </div>`;
 }
+
 
