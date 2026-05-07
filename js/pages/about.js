@@ -8,9 +8,9 @@ export default function aboutPage() {
       </div>
       <div class="md:col-span-5 md:col-start-8 flex flex-col gap-8 pt-8 md:pt-0">
         <span class="font-label-sm text-primary tracking-[0.3em] uppercase font-bold text-[10px]">A Gênese</span>
-        <h1 class="font-display text-5xl text-on-surface leading-tight">Onde a Ciência Encontra o <span class="text-primary italic">Ritual Sensorial.</span></h1>
-        <p class="font-body-lg text-on-surface-variant leading-relaxed">Nascida do desejo de unir a eficácia clínica com a elegância indulgente de um ritual de spa pessoal.</p>
-        <p class="font-body-md text-outline leading-relaxed italic">"Selecionamos meticulosamente ativos de alta qualidade e os misturamos com bases botânicas calmantes para criar formulações que respeitam a barreira natural da pele."</p>
+        <h1 class="font-display text-5xl text-on-surface leading-tight">Onde a Ciência se Harmoniza com o <span class="text-primary italic">Cuidado Sensorial.</span></h1>
+        <p class="font-body-lg text-on-surface-variant leading-relaxed">Nascida do desejo de aliar a precisão da eficácia clínica à sofisticação de uma experiência de bem-estar exclusiva e personalizada.</p>
+        <p class="font-body-md text-outline leading-relaxed italic">"Selecionamos criteriosamente ativos de alta performance, fundindo-os a bases botânicas suavizantes para conceber fórmulas que preservam a integridade e o equilíbrio da barreira cutânea."</p>
       </div>
     </section>
 
@@ -36,7 +36,7 @@ export default function aboutPage() {
     <section class="flex flex-col gap-16 items-center py-12">
       <div class="text-center max-w-2xl">
         <span class="font-label-md text-secondary tracking-[0.2em] uppercase font-bold text-[11px]">O Coletivo</span>
-        <h2 class="font-display text-5xl text-on-surface mt-4">Mentes por trás do Ritual</h2>
+        <h2 class="font-display text-5xl text-on-surface mt-4">Mentes por trás</h2>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-12 w-full">
         <div class="flex flex-col items-center text-center group">
