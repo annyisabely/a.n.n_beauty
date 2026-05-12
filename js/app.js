@@ -3,6 +3,7 @@
 // ============================================
 
 import { renderHeader, renderBottomNav, renderFooter, FULLSCREEN_PAGES } from './components.js';
+import { initGlowAI } from './glowai.js';
 
 // Lazy-load page modules
 const pageModules = {
@@ -23,7 +24,6 @@ const pageModules = {
     about:    () => import('./pages/about.js'),
     notifications: () => import('./pages/notifications.js'),
     settings: () => import('./pages/settings.js'),
-    chat:     () => import('./pages/chat.js'),
     admin:    () => import('./pages/admin.js'),
 };
 
@@ -82,6 +82,9 @@ async function renderPage() {
             newContent.classList.add('fade-in');
         }
     });
+
+    // Mount GlowAI widget (re-mount on every navigation)
+    initGlowAI();
 
     // Update page title
     const titles = {

@@ -1,5 +1,6 @@
 @echo off
 cd /d "C:\Users\aluno\Documents\beleza_web\busca_inteligente_a.n.n_beauty"
-start cmd /c npx http-server -p 8080
-timeout /t 3
-start http://localhost:8080
+echo Iniciando GlowAI + A.n.n Beauty...
+start cmd /k node proxy.js
+timeout /t 2
+start http://localhost:5500
