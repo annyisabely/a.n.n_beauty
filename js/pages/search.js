@@ -63,6 +63,7 @@ export default function searchPage() {
             <h3 class="font-body-md text-sm font-bold text-white line-clamp-1">${p.name}</h3>
             <span class="text-[8px] bg-primary/10 text-primary px-1.5 py-0.5 rounded uppercase tracking-widest font-bold">${p.code}</span>
           </div>
+          <p class="text-[10px] text-white/50 flex items-center gap-1 mb-2"><span class="material-symbols-outlined text-[12px]">storefront</span> ${p.company_name || 'A.n.n Beauty'}</p>
           <div class="flex flex-col">
             <div class="flex items-center gap-2">
               <span class="font-label-md text-primary-fixed-dim font-bold">${p.price}</span>

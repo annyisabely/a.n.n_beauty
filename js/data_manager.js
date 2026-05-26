@@ -38,7 +38,44 @@ const videoTitles = [
     'Preparação de Pele', 'Removendo Make', 'Ritual de Spa', 'Favoritos do Mês'
 ];
 
+export { productImages };
+
 export const dataManager = {
+    // Get custom products from localStorage
+    getCustomProducts: () => {
+        return JSON.parse(localStorage.getItem('ann_custom_products') || '[]');
+    },
+
+    // Save a new custom product
+    addProduct: (product) => {
+        const customs = dataManager.getCustomProducts();
+        product.id = `custom-${Date.now()}`;
+        product.code = `ANN-C${(customs.length + 1).toString().padStart(3, '0')}`;
+        product.badge = 'Novo';
+        customs.push(product);
+        localStorage.setItem('ann_custom_products', JSON.stringify(customs));
+        return product;
+    },
+
+    // Edit existing custom product
+    editProduct: (productId, updates) => {
+        const customs = dataManager.getCustomProducts();
+        const idx = customs.findIndex(p => p.id === productId);
+        if (idx > -1) {
+            customs[idx] = { ...customs[idx], ...updates };
+            localStorage.setItem('ann_custom_products', JSON.stringify(customs));
+            return customs[idx];
+        }
+        return null;
+    },
+
+    // Delete custom product
+    deleteProduct: (productId) => {
+        const customs = dataManager.getCustomProducts();
+        const filtered = customs.filter(p => p.id !== productId);
+        localStorage.setItem('ann_custom_products', JSON.stringify(filtered));
+    },
+
     generateProducts: (count = 100) => {
         const products = [];
         const overrides = JSON.parse(localStorage.getItem('ann_price_overrides') || '{}');
@@ -62,6 +99,22 @@ export const dataManager = {
                 }
             }
             
+            // Assign companies dynamically to make dashboard functional for any company
+            const userStr = localStorage.getItem('ann_beauty_user');
+            let currentUserCompanyId = 'nycoly';
+            let currentUserCompanyName = 'Nycoly';
+            
+            if (userStr) {
+                const u = JSON.parse(userStr);
+                if (u.role === 'empresa') {
+                    currentUserCompanyId = u.company_id || 'nycoly';
+                    currentUserCompanyName = u.company_name || 'Nycoly';
+                }
+            }
+
+            const company_id = i % 2 === 0 ? 'ann_beauty' : currentUserCompanyId;
+            const company_name = i % 2 === 0 ? 'A.n.n Beauty' : currentUserCompanyName;
+
             products.push({
                 id: id,
                 code: code,
@@ -71,10 +124,15 @@ export const dataManager = {
                 oldPrice: oldPrice,
                 cat: type.cat,
                 img: img,
+                company_id: company_id,
+                company_name: company_name,
                 badge: i < 10 ? 'Novo' : (i % 15 === 0 ? 'Bestseller' : (oldPrice ? 'Oferta' : ''))
             });
         }
-        return products;
+
+        // Merge custom products on top
+        const customs = dataManager.getCustomProducts();
+        return [...customs, ...products];
     },
 
     generateVideos: (count = 100) => {

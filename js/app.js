@@ -48,7 +48,15 @@ async function renderPage() {
     }
 
     // Load page module
-    const mod = await pageModules[page]();
+    let mod;
+    try {
+        mod = await pageModules[page]();
+    } catch (err) {
+        console.error(`Failed to load module for page: ${page}`, err);
+        app.innerHTML = `<div class="p-10 text-center"><h2 class="text-2xl font-serif text-error">Erro ao carregar página</h2><p class="text-on-surface-variant mt-2">Por favor, tente recarregar.</p><a href="#/home" class="text-primary underline mt-4 block">Voltar ao início</a></div>`;
+        return;
+    }
+
     const pageHTML = mod.default();
 
     // Build full page
@@ -71,6 +79,18 @@ async function renderPage() {
         document.body.className = 'bg-background text-on-background min-h-screen antialiased';
     }
 
+    // Mount GlowAI widget (re-mount on every navigation)
+    initGlowAI();
+
+    // Lifecycle Hook: mount()
+    // This allows pages to run their own logic after being added to the DOM
+    if (typeof mod.mount === 'function') {
+        // Wait for next frame to ensure elements are in DOM
+        requestAnimationFrame(() => {
+            mod.mount();
+        });
+    }
+
     // Scroll to top
     window.scrollTo(0, 0);
 
@@ -82,9 +102,6 @@ async function renderPage() {
             newContent.classList.add('fade-in');
         }
     });
-
-    // Mount GlowAI widget (re-mount on every navigation)
-    initGlowAI();
 
     // Update page title
     const titles = {
@@ -182,13 +199,20 @@ window.addEventListener('DOMContentLoaded', () => {
         renderPage();
     }
     
-    // Notification interval every 1 minute
+    // Notification interval - optimized to avoid spam
     setInterval(() => {
+        const lastNotif = localStorage.getItem('ann_last_notification_time') || 0;
+        const now = Date.now();
+        // Only show every 5 minutes max
+        if (now - lastNotif < 300000) return;
+
         if (localStorage.getItem('ann_notifications_enabled') === 'true' && ("Notification" in window) && Notification.permission === "granted") {
             new Notification("A.n.n Beauty - Novidade", {
                 body: "Temos uma nova oferta exclusiva esperando por você na loja!",
                 icon: "https://lh3.googleusercontent.com/aida-public/AB6AXuD41q-VUnwu5joHMxbWJsr36dy1zx3rIn2vEK7uzvQTDUffwl0ZH_HI_dTANk1KbB9owXbG4r3zHuZ0HVyYdnrM_iCEs2T28ZeOaR08HylhHFMcLQ7HbG_Sie4x-YY2ALCH46qv813TkJWK1AuLKhbgI70JyZ3h_2uFi-BnVubhKdnicfILcz2wGII7oUz38OzHYvodmNc7KWNeyoqLmi7hoHDJdbzNFetGZrb5-7anzBucsvdu8yAwBxA_KgpzWQXgXaiSjTNilD4W"
             });
+            localStorage.setItem('ann_last_notification_time', now);
         }
     }, 60000);
 });
+

@@ -56,24 +56,41 @@ export default function loginPage() {
       }, 2000);
     };
 
+    window.handleAccountTypeSelect = () => {
+      const fields = document.getElementById('auth-fields');
+      fields.classList.remove('hidden');
+      fields.classList.add('animate-in', 'fade-in', 'slide-in-from-top-4', 'duration-500');
+    };
+
     window.handleLogin = (event) => {
       event.preventDefault();
       const isEmail = !document.getElementById('email-section').classList.contains('hidden');
       const name = document.getElementById('login-name').value;
       const email = document.getElementById('email').value;
+      const password = document.getElementById('password') ? document.getElementById('password').value : '';
       const phone = document.getElementById('phone').value;
+      const accountTypeRadio = document.querySelector('input[name="account_type"]:checked');
+      const accountType = accountTypeRadio ? accountTypeRadio.value : 'pessoal';
 
       if (!name) {
         showToast('Por favor, insira seu nome.', 'error');
         return;
       }
 
-      if (isEmail && email) {
-        auth.login(name, email);
+      if (isEmail) {
+        if (!email) {
+          showToast('Por favor, insira seu e-mail.', 'error');
+          return;
+        }
+        if (!password) {
+          showToast('Por favor, insira sua senha.', 'error');
+          return;
+        }
+        auth.login(name, email, password, accountType);
         showToast(`Bem-vinda, ${name.split(' ')[0]}!`, 'success');
         window.location.hash = '#/home';
       } else if (!isEmail && phone) {
-        auth.login(name, phone);
+        auth.login(name, phone, '', accountType);
         showToast('Acesso via SMS confirmado.', 'success');
         window.location.hash = '#/home';
       }
@@ -96,52 +113,75 @@ export default function loginPage() {
           <p class="text-white/50 text-sm">Bem-vinda de volta ao seu ritual de luxo.</p>
         </div>
 
-        <!-- Tabs -->
-        <div class="flex border-b border-white/10 mb-8">
-          <button id="email-tab" onclick="window.switchAuthTab('email')" class="flex-1 pb-3 text-sm font-medium text-primary border-b-2 border-primary transition-all">E-mail</button>
-          <button id="phone-tab" onclick="window.switchAuthTab('phone')" class="flex-1 pb-3 text-sm font-medium text-on-primary-fixed-variant border-b-2 border-transparent transition-all">Telefone</button>
-        </div>
-
         <form class="space-y-6" onsubmit="window.handleLogin(event)">
-          <!-- Name Section -->
-          <div class="relative">
-            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-primary-fixed-dim material-symbols-outlined">person</span>
-            <input class="w-full pl-12 pr-6 py-4 rounded-full bg-white/5 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-white placeholder:text-white/30" id="login-name" placeholder="Seu Nome Completo" type="text" required/>
-          </div>
-
-          <!-- Email Section -->
-          <div id="email-section" class="space-y-4">
-            <div class="relative">
-              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-primary-fixed-dim material-symbols-outlined">mail</span>
-              <input class="w-full pl-12 pr-6 py-4 rounded-full bg-white/5 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-white placeholder:text-white/30" id="email" placeholder="seu@email.com" type="email"/>
+          <!-- Account Type (Radios) -->
+          <div class="space-y-3">
+            <label class="block text-xs font-bold text-white/50 uppercase tracking-widest ml-2">Qual é o seu objetivo?</label>
+            <div class="flex flex-col gap-3">
+              <label class="flex items-center gap-3 p-4 rounded-xl border border-white/10 bg-white/5 cursor-pointer hover:border-primary/50 transition-colors">
+                <input type="radio" name="account_type" value="pessoal" onchange="window.handleAccountTypeSelect()" class="w-5 h-5 text-primary bg-transparent border-white/30 focus:ring-primary focus:ring-offset-0 focus:ring-offset-transparent">
+                <div class="flex flex-col">
+                  <span class="text-sm font-bold text-white">Uso Pessoal</span>
+                  <span class="text-[10px] text-white/50">Quero comprar produtos da loja</span>
+                </div>
+              </label>
+              <label class="flex items-center gap-3 p-4 rounded-xl border border-white/10 bg-white/5 cursor-pointer hover:border-primary/50 transition-colors">
+                <input type="radio" name="account_type" value="comercial" onchange="window.handleAccountTypeSelect()" class="w-5 h-5 text-primary bg-transparent border-white/30 focus:ring-primary focus:ring-offset-0 focus:ring-offset-transparent">
+                <div class="flex flex-col">
+                  <span class="text-sm font-bold text-white">Uso Comercial</span>
+                  <span class="text-[10px] text-white/50">Sou uma Empresa e quero vender</span>
+                </div>
+              </label>
             </div>
-            <div class="relative">
-              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-primary-fixed-dim material-symbols-outlined">lock</span>
-              <input class="w-full pl-12 pr-6 py-4 rounded-full bg-white/5 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-white placeholder:text-white/30" id="password" placeholder="••••••••" type="password"/>
+          </div>
+
+          <div id="auth-fields" class="hidden space-y-6">
+            <!-- Tabs -->
+            <div class="flex border-b border-white/10 mb-8">
+              <button type="button" id="email-tab" onclick="window.switchAuthTab('email')" class="flex-1 pb-3 text-sm font-medium text-primary border-b-2 border-primary transition-all">E-mail</button>
+              <button type="button" id="phone-tab" onclick="window.switchAuthTab('phone')" class="flex-1 pb-3 text-sm font-medium text-on-primary-fixed-variant border-b-2 border-transparent transition-all">Telefone</button>
             </div>
-          </div>
 
-          <!-- Phone Section -->
-          <div id="phone-section" class="hidden space-y-4">
+            <!-- Name Section -->
             <div class="relative">
-              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-primary-fixed-dim material-symbols-outlined">call</span>
-              <input class="w-full pl-12 pr-6 py-4 rounded-full bg-white/5 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-white placeholder:text-white/30" id="phone" placeholder="(00) 00000-0000" type="tel"/>
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-primary-fixed-dim material-symbols-outlined">person</span>
+              <input class="w-full pl-12 pr-6 py-4 rounded-full bg-white/5 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-white placeholder:text-white/30" id="login-name" placeholder="Seu Nome Completo" type="text" required/>
             </div>
-            <button type="button" onclick="window.sendSMSCode()" class="w-full text-xs text-primary-fixed-dim text-right hover:underline">Enviar código SMS</button>
-          </div>
 
-          <div class="flex items-center justify-between px-2 pt-2 text-xs">
-            <label class="flex items-center space-x-2 cursor-pointer text-white/50 hover:text-white transition-colors">
-              <input class="w-4 h-4 rounded border-white/20 bg-white/5 text-primary focus:ring-primary" type="checkbox"/>
-              <span>Lembrar senha</span>
-            </label>
-            <a class="text-primary-fixed-dim hover:text-primary underline-offset-4 hover:underline" href="#/recover">Esqueceu a senha?</a>
-          </div>
+            <!-- Email Section -->
+            <div id="email-section" class="space-y-4">
+              <div class="relative">
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-primary-fixed-dim material-symbols-outlined">mail</span>
+                <input class="w-full pl-12 pr-6 py-4 rounded-full bg-white/5 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-white placeholder:text-white/30" id="email" placeholder="seu@email.com" type="email"/>
+              </div>
+              <div class="relative">
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-primary-fixed-dim material-symbols-outlined">lock</span>
+                <input class="w-full pl-12 pr-6 py-4 rounded-full bg-white/5 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-white placeholder:text-white/30" id="password" placeholder="••••••••" type="password"/>
+              </div>
+            </div>
 
-          <div class="pt-4">
-            <button class="w-full py-4 rounded-full bg-primary text-white font-bold shadow-lg shadow-primary/20 hover:bg-primary-container hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2" type="submit">
-              Entrar <span class="material-symbols-outlined text-sm">arrow_forward</span>
-            </button>
+            <!-- Phone Section -->
+            <div id="phone-section" class="hidden space-y-4">
+              <div class="relative">
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-primary-fixed-dim material-symbols-outlined">call</span>
+                <input class="w-full pl-12 pr-6 py-4 rounded-full bg-white/5 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-white placeholder:text-white/30" id="phone" placeholder="(00) 00000-0000" type="tel"/>
+              </div>
+              <button type="button" onclick="window.sendSMSCode()" class="w-full text-xs text-primary-fixed-dim text-right hover:underline">Enviar código SMS</button>
+            </div>
+
+            <div class="flex items-center justify-between px-2 pt-2 text-xs">
+              <label class="flex items-center space-x-2 cursor-pointer text-white/50 hover:text-white transition-colors">
+                <input class="w-4 h-4 rounded border-white/20 bg-white/5 text-primary focus:ring-primary" type="checkbox"/>
+                <span>Lembrar senha</span>
+              </label>
+              <a class="text-primary-fixed-dim hover:text-primary underline-offset-4 hover:underline" href="#/recover">Esqueceu a senha?</a>
+            </div>
+
+            <div class="pt-4">
+              <button class="w-full py-4 rounded-full bg-primary text-white font-bold shadow-lg shadow-primary/20 hover:bg-primary-container hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2" type="submit">
+                Entrar <span class="material-symbols-outlined text-sm">arrow_forward</span>
+              </button>
+            </div>
           </div>
         </form>
 

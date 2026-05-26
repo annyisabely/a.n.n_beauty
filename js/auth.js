@@ -18,9 +18,30 @@ export const auth = {
     },
 
     // Login with name and email/phone
-    login: (name, emailOrPhone) => {
+    login: (name, emailOrPhone, password, accountType = 'pessoal') => {
         const email = emailOrPhone.includes('@') ? emailOrPhone : 'usuario@email.com';
         
+        let role = 'user';
+        let company_id = null;
+        let company_name = null;
+
+        // Lista de e-mails com acesso admin_master (adicione qualquer e-mail aqui)
+        const ADMIN_EMAILS = [
+            'annyisabely@gmail.com',
+            'admin@annbeauty.com',
+        ];
+
+        // Lógica de cargos
+        if (ADMIN_EMAILS.includes(email.toLowerCase())) {
+            role = 'admin_master';
+        } else if (accountType === 'comercial') {
+            role = 'empresa';
+            company_id = email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '_');
+            company_name = name;
+        } else {
+            role = 'user';
+        }
+
         // Load existing profile for this email if it exists
         const savedProfile = localStorage.getItem(`ann_profile_${email}`);
         const profileData = savedProfile ? JSON.parse(savedProfile) : {
@@ -35,7 +56,9 @@ export const auth = {
             name: name || 'Usuária A.n.n',
             email: email,
             phone: !emailOrPhone.includes('@') ? emailOrPhone : '',
-            role: 'customer',
+            role: role,
+            company_id: company_id,
+            company_name: company_name,
             joined: new Date().toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' }),
             bio: profileData.bio,
             photo: profileData.photo,

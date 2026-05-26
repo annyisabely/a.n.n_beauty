@@ -55,9 +55,9 @@ const server = http.createServer((req, res) => {
             const payload = JSON.stringify(parsed);
 
             const options = {
-                hostname: 'api.openai.com',
+                hostname: 'opencode.ai',
                 port: 443,
-                path: '/v1/chat/completions',
+                path: '/zen/v1/chat/completions',
                 method: 'POST',
                 headers: {
                     'Content-Type':  'application/json',

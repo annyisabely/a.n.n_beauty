@@ -16,14 +16,12 @@ export function renderHeader(activePage) {
         { label: 'Shop', hash: '#/home', pages: ['home', 'product'] },
         { label: 'Tutorials', hash: '#/videos', pages: ['videos', 'tutorial', 'rituals'] },
         { label: 'About Us', hash: '#/about', pages: ['about'] },
-        { label: 'Favorites', hash: '#/favorites', pages: ['favorites'] },
-        { label: 'Track Order', hash: '#/tracking', pages: ['tracking'] },
     ];
 
     const navLinks = navItems.map(item => {
         const isActive = item.pages.includes(activePage);
         const activeClass = isActive
-            ? 'text-purple-800 dark:text-purple-300 border-b-2 border-purple-600 pb-1'
+            ? 'text-purple-800 dark:text-purple-300'
             : 'text-slate-500 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-300';
         return `<a class="${activeClass} hover:opacity-80 transition-all duration-300 active:scale-95 transform" href="${item.hash}">${item.label}</a>`;
     }).join('\n');
@@ -73,6 +71,11 @@ export function renderHeader(activePage) {
                                 <a href="#/profile" class="flex items-center gap-3 px-4 py-3 text-sm text-slate-600 hover:bg-purple-50 hover:text-purple-700 transition-colors">
                                     <span class="material-symbols-outlined text-[20px]">person</span>Meu Perfil
                                 </a>
+                                ${(user.role === 'admin_master' || user.role === 'empresa') ? `
+                                <a href="#/admin" class="flex items-center gap-3 px-4 py-3 text-sm text-primary font-bold hover:bg-primary/10 transition-colors">
+                                    <span class="material-symbols-outlined text-[20px]">storefront</span>${user.role === 'empresa' ? 'Meu Negócio' : 'Painel de Controle'}
+                                </a>
+                                ` : ''}
                                 <a href="#/favorites" class="flex items-center gap-3 px-4 py-3 text-sm text-slate-600 hover:bg-purple-50 hover:text-purple-700 transition-colors">
                                     <span class="material-symbols-outlined text-[20px]">favorite</span>Favoritos
                                 </a>
@@ -184,7 +187,7 @@ export function renderBottomNav(activePage) {
         { label: 'Home', icon: 'home', hash: '#/home', pages: ['home', 'product', 'cart', 'favorites', 'tracking', 'about'] },
         { label: 'Learn', icon: 'play_circle', hash: '#/videos', pages: ['videos', 'tutorial', 'rituals'] },
         { label: 'Search', icon: 'search', hash: '#/search', pages: ['search'] },
-        { label: 'Profile', icon: 'person_2', hash: '#/profile', pages: ['profile'] },
+        { label: 'Profile', icon: 'person', hash: '#/profile', pages: ['profile'] },
     ];
 
     const navItems = items.map(item => {
@@ -263,11 +266,6 @@ export function renderFooter() {
         </div>
     </footer>
     
-    <!-- Admin Floating Button -->
-    <a href="#/admin" class="fixed bottom-24 md:bottom-6 left-6 w-10 h-10 bg-white/10 backdrop-blur-md border border-white/10 rounded-full flex items-center justify-center text-white/30 hover:text-primary hover:bg-white/20 hover:border-primary/50 transition-all z-[40] shadow-xl group" title="Acesso Administrativo">
-        <span class="material-symbols-outlined text-[18px]">lock</span>
-        <span class="absolute left-full ml-3 px-2 py-1 bg-black/80 text-white text-[10px] rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Admin Panel</span>
-    </a>
     `;
 }
 // Listen for cart updates

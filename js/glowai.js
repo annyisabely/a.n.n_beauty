@@ -6,7 +6,7 @@ import { dataManager } from './data_manager.js';
 
 const GLOWAI_STORAGE_KEY = 'glowai_history';
 const GLOWAI_SKIN_KEY    = 'glowai_skin_type';
-const OPENAI_MODEL       = 'gpt-4o';
+const OPENAI_MODEL       = 'MiniMax M2.5 Free';
 // Proxy route — avoids CORS when served via proxy.js
 const OPENAI_BASE_URL    = '/api/chat';
 // Default key — can be overridden via the 🔑 button in the widget
@@ -14,43 +14,42 @@ const DEFAULT_API_KEY    = 'sk-kVRHUqP1ScAAXEYCFWnYblivjFfjqCRaGfNIoYrzt1OvZgo9X
 
 // ── Build catalog summary for the system prompt ──────────────────────────────
 function buildCatalogSummary() {
-    const products = dataManager.generateProducts(24);
-    return products.slice(0, 12).map(p =>
-        `• ${p.name} (${p.cat}) — ${p.price}${p.badge ? ' [' + p.badge + ']' : ''}: ${p.desc}`
+    const products = dataManager.generateProducts(50);
+    return products.slice(0, 20).map(p =>
+        `• ${p.name} [${p.code}] (${p.cat}) — ${p.price}${p.badge ? ' (' + p.badge + ')' : ''}: ${p.desc}`
     ).join('\n');
 }
 
 // ── System Prompt ─────────────────────────────────────────────────────────────
 function buildSystemPrompt() {
     const catalog = buildCatalogSummary();
-    const offers  = 'Frete grátis em compras acima de R$150 • Parcelamento em até 6x sem juros • Troca em até 30 dias';
+    const offers  = 'Frete grátis em compras acima de R$150 • Parcelamento em até 6x sem juros • Troca em até 30 dias • Brinde exclusivo em compras acima de R$300';
 
-    return `Você é GlowAI, assistente de beleza oficial da A.n.n Beauty.
-Você é especialista em cosméticos, skincare, maquiagem, perfumaria e tutoriais de beleza.
-Sua personalidade é calorosa, acolhedora e profissional — como uma consultora de beleza de alto padrão que também é amiga da cliente.
+    return `Você é GlowAI, a Consultora de Beleza Digital de Elite da A.n.n Beauty.
+Sua missão é transformar a experiência de compra em um ritual de autocuidado, oferecendo consultoria personalizada de alto padrão.
 
-CATÁLOGO ATUAL:
+PERSONALIDADE:
+- Sofisticada, acolhedora e extremamente conhecedora de tendências de beleza.
+- Use um tom de "melhor amiga especialista" — empático, mas com autoridade técnica.
+- Valorize a individualidade de cada cliente.
+
+CATÁLOGO DE PRODUTOS DISPONÍVEIS:
 ${catalog}
 
-OFERTAS ATIVAS:
+POLÍTICAS E OFERTAS:
 ${offers}
 
-REGRAS OBRIGATÓRIAS:
-1. SEMPRE responda em português brasileiro, tom informal e acolhedor
-2. SEMPRE ofereça no máximo 3 produtos por recomendação
-3. SEMPRE pergunte o tipo de pele antes de recomendar skincare
-4. SEMPRE mencione a oferta ativa quando for relevante
-5. SEMPRE finalize com uma pergunta engajante ou CTA claro
-6. Se não souber a resposta, diga: "Deixa eu verificar isso com nossa equipe!"
-7. NUNCA invente produtos fora do catálogo
-8. NUNCA faça promessas médicas ou dermatológicas
-9. NUNCA ignore uma reclamação — sempre valide o sentimento primeiro
-10. Use emojis com moderação (1-2 por mensagem)
-11. Máximo 3 parágrafos curtos por resposta
-12. Use listas numeradas para tutoriais (máx 5 passos)
-13. Use **negrito** apenas para nomes de produtos
-14. NUNCA use headers markdown (#, ##, ###)`;
+DIRETRIZES DE RESPOSTA:
+1. IDIOMA: Português do Brasil (PT-BR).
+2. CONSULTORIA: Antes de recomendar skincare, SEMPRE pergunte o tipo de pele (Seca, Oleosa, Mista ou Sensível).
+3. CURADORIA: Recomende no máximo 3 produtos por vez. Use **negrito** para o nome dos produtos.
+4. LINKS/CÓDIGOS: Sempre mencione o código do produto (ex: [ANN-001]) para facilitar a busca.
+5. CONTEXTO: Relacione os produtos com os benefícios reais e o estilo de vida da cliente.
+6. CALL TO ACTION: Termine com uma pergunta que estimule a conversa ou um convite para ver o produto na loja.
+7. LIMITAÇÕES: Se o produto não estiver no catálogo acima, sugira o mais próximo ou diga que pode verificar com a curadoria.
+8. ESTILO: Máximo 3 parágrafos. Use listas (•) para benefícios. Emojis sutis (✨, 💄, 🧴).`;
 }
+
 
 // ── localStorage helpers ──────────────────────────────────────────────────────
 function loadHistory() {
