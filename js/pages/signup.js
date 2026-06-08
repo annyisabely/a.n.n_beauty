@@ -25,7 +25,42 @@ export default function signupPage() {
     }
   };
 
+  let googleTokenClient = null;
+
   window.handleSocialSignup = (provider) => {
+    if (provider === 'Google') {
+      if (typeof google === 'undefined') {
+        showToast('Google Services ainda estão carregando. Tente novamente.', 'info');
+        return;
+      }
+      if (!googleTokenClient) {
+        googleTokenClient = google.accounts.oauth2.initTokenClient({
+          client_id: '309142671074-ncgamrc6cdffnsd13bqnk0s81k01lkhn.apps.googleusercontent.com',
+          scope: 'email profile',
+          prompt: 'select_account',
+          callback: (tokenResponse) => {
+            if (tokenResponse && tokenResponse.access_token) {
+              showToast('Conectando ao Google...', 'info');
+              fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
+              })
+              .then(res => res.json())
+              .then(data => {
+                // Ao criar conta pelo Google, o usuário é cadastrado como cliente (pessoal)
+                auth.login(data.name, data.email, '', 'pessoal');
+                showToast(`Conta criada com sucesso, ${data.given_name || data.name}!`, 'success');
+                window.location.hash = '#/home';
+              })
+              .catch(err => showToast('Erro ao obter perfil do Google', 'error'));
+            }
+          },
+        });
+      }
+      googleTokenClient.requestAccessToken({prompt: 'select_account'});
+      return;
+    }
+
+    // Fallback for Facebook
     showToast(`Conectando ao ${provider}...`, 'info');
     
     const overlay = document.createElement('div');
@@ -56,6 +91,13 @@ export default function signupPage() {
     const phone = document.getElementById('signup-phone') ? document.getElementById('signup-phone').value : '';
     const password = document.getElementById('signup-password').value;
 
+    // Ler tipo de conta selecionado pelos radio buttons
+    const accountTypeRadios = document.getElementsByName('signup-account-type');
+    let accountType = 'pessoal';
+    for (const radio of accountTypeRadios) {
+      if (radio.checked) { accountType = radio.value; break; }
+    }
+
     if (!nome) {
       showToast('Por favor, insira seu nome.', 'error');
       return;
@@ -70,26 +112,18 @@ export default function signupPage() {
         showToast('Por favor, insira seu e-mail.', 'error');
         return;
       }
-      window.signupData = { name: nome, loginId: email, password, isEmail: true };
+      window.signupData = { name: nome, loginId: email, password, isEmail: true, accountType };
     } else {
       if (!phone) {
         showToast('Por favor, insira seu telefone.', 'error');
         return;
       }
-      window.signupData = { name: nome, loginId: phone, password, isEmail: false };
+      window.signupData = { name: nome, loginId: phone, password, isEmail: false, accountType };
     }
 
-    // Hide step 1, show step 2
-    document.getElementById('signup-step-1').classList.add('hidden');
-    document.getElementById('signup-step-2').classList.remove('hidden');
-    document.getElementById('signup-step-2').classList.add('animate-in', 'fade-in', 'slide-in-from-right-4', 'duration-500');
-  };
-
-  window.handleSignupStep2 = (accountType) => {
-    const data = window.signupData;
-    auth.login(data.name, data.loginId, data.password, accountType);
-    
-    showToast(`Conta criada com sucesso, ${data.name.split(' ')[0]}!`, 'success');
+    // Criar conta direto sem precisar de step 2
+    auth.login(nome, window.signupData.loginId, password, accountType);
+    showToast(`Conta criada com sucesso, ${nome.split(' ')[0]}!`, 'success');
     window.location.hash = '#/home';
   };
 
@@ -143,8 +177,31 @@ export default function signupPage() {
               <input id="signup-password" class="w-full pl-12 pr-6 py-4 rounded-full bg-white/5 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-white placeholder:text-white/30" placeholder="Criar senha" type="password" required/>
             </div>
 
-            <button class="w-full py-4 mt-4 rounded-full bg-primary text-white font-bold shadow-lg shadow-primary/20 hover:bg-primary-container hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2" type="submit">
-              Continuar <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            <!-- Tipo de Conta -->
+            <div class="pt-2">
+              <p class="text-white/50 text-xs uppercase tracking-widest mb-3 text-center">Você é:</p>
+              <div class="grid grid-cols-2 gap-3">
+                <label class="relative cursor-pointer">
+                  <input type="radio" name="signup-account-type" value="pessoal" checked class="sr-only peer"/>
+                  <div class="flex flex-col items-center gap-2 p-4 rounded-2xl border border-white/10 bg-white/5 peer-checked:border-primary peer-checked:bg-primary/10 transition-all hover:bg-white/10">
+                    <span class="material-symbols-outlined text-primary text-2xl">shopping_bag</span>
+                    <span class="text-sm font-bold text-white">Sou Cliente</span>
+                    <span class="text-[10px] text-white/40 text-center">Quero comprar produtos</span>
+                  </div>
+                </label>
+                <label class="relative cursor-pointer">
+                  <input type="radio" name="signup-account-type" value="comercial" class="sr-only peer"/>
+                  <div class="flex flex-col items-center gap-2 p-4 rounded-2xl border border-white/10 bg-white/5 peer-checked:border-secondary peer-checked:bg-secondary/10 transition-all hover:bg-white/10">
+                    <span class="material-symbols-outlined text-secondary text-2xl">storefront</span>
+                    <span class="text-sm font-bold text-white">Sou Vendedor</span>
+                    <span class="text-[10px] text-white/40 text-center">Quero vender produtos</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <button class="w-full py-4 mt-2 rounded-full bg-primary text-white font-bold shadow-lg shadow-primary/20 hover:bg-primary-container hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2" type="submit">
+              Criar Conta <span class="material-symbols-outlined text-sm">arrow_forward</span>
             </button>
           </form>
 
@@ -168,36 +225,6 @@ export default function signupPage() {
           <p class="mt-8 text-center text-sm text-white/60">
             Já tem uma conta? <a href="#/login" class="text-primary-fixed-dim hover:text-primary underline underline-offset-4">Faça login</a>
           </p>
-        </div>
-
-        <!-- STEP 2: ACCOUNT TYPE -->
-        <div id="signup-step-2" class="hidden transition-all duration-500 absolute inset-0 bg-[#121212] flex flex-col justify-center items-center text-center z-20 px-8">
-          <button type="button" onclick="document.getElementById('signup-step-2').classList.add('hidden'); document.getElementById('signup-step-1').classList.remove('hidden');" class="absolute top-6 left-6 text-white/50 hover:text-white flex items-center gap-1 text-sm"><span class="material-symbols-outlined text-lg">arrow_back</span> Voltar</button>
-          
-          <h2 class="font-display text-2xl text-primary-fixed mb-2 mt-8">Quase lá!</h2>
-          <p class="text-white/70 text-sm mb-8">Como você deseja usar a plataforma?</p>
-
-          <div class="flex flex-col gap-4 w-full max-w-[320px]">
-            <button type="button" onclick="window.handleSignupStep2('pessoal')" class="flex items-center gap-4 p-4 rounded-2xl border border-white/10 bg-white/5 hover:border-primary/50 hover:bg-white/10 transition-all text-left group">
-              <div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                <span class="material-symbols-outlined text-primary">shopping_bag</span>
-              </div>
-              <div class="flex flex-col">
-                <span class="text-base font-bold text-white">Comprador</span>
-                <span class="text-xs text-white/50">Quero comprar produtos</span>
-              </div>
-            </button>
-
-            <button type="button" onclick="window.handleSignupStep2('comercial')" class="flex items-center gap-4 p-4 rounded-2xl border border-white/10 bg-white/5 hover:border-primary/50 hover:bg-white/10 transition-all text-left group">
-              <div class="w-12 h-12 rounded-full bg-secondary/20 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                <span class="material-symbols-outlined text-secondary">storefront</span>
-              </div>
-              <div class="flex flex-col">
-                <span class="text-base font-bold text-white">Empresa</span>
-                <span class="text-xs text-white/50">Quero vender produtos</span>
-              </div>
-            </button>
-          </div>
         </div>
 
       </div>

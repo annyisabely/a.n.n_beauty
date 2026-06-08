@@ -34,7 +34,41 @@ export default function loginPage() {
     }
   };
 
+  let googleTokenClient = null;
+
   window.handleSocialLogin = (provider) => {
+    if (provider === 'Google') {
+      if (typeof google === 'undefined') {
+        showToast('Google Services ainda estão carregando. Tente novamente.', 'info');
+        return;
+      }
+      if (!googleTokenClient) {
+        googleTokenClient = google.accounts.oauth2.initTokenClient({
+          client_id: '309142671074-ncgamrc6cdffnsd13bqnk0s81k01lkhn.apps.googleusercontent.com',
+          scope: 'email profile',
+          prompt: 'select_account',
+          callback: (tokenResponse) => {
+            if (tokenResponse && tokenResponse.access_token) {
+              showToast('Conectando ao Google...', 'info');
+              fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
+              })
+              .then(res => res.json())
+              .then(data => {
+                auth.login(data.name, data.email, '', 'pessoal');
+                showToast(`Bem-vinda, ${data.given_name || data.name}!`, 'success');
+                window.location.hash = '#/home';
+              })
+              .catch(err => showToast('Erro ao obter perfil do Google', 'error'));
+            }
+          },
+        });
+      }
+      googleTokenClient.requestAccessToken({prompt: 'select_account'});
+      return;
+    }
+
+    // Fallback for Facebook
     showToast(`Conectando ao ${provider}...`, 'info');
     
     const overlay = document.createElement('div');
@@ -85,7 +119,7 @@ export default function loginPage() {
       window.loginData = { name, loginId: phone, password: '', isEmail: false };
     }
 
-    // Hide step 1, show step 2
+    // Show step 2 to choose account type
     document.getElementById('login-step-1').classList.add('hidden');
     document.getElementById('login-step-2').classList.remove('hidden');
     document.getElementById('login-step-2').classList.add('animate-in', 'fade-in', 'slide-in-from-right-4', 'duration-500');

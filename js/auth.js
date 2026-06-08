@@ -21,9 +21,19 @@ export const auth = {
     login: (name, emailOrPhone, password, accountType = 'pessoal') => {
         const email = emailOrPhone.includes('@') ? emailOrPhone : 'usuario@email.com';
         
-        let role = 'user';
-        let company_id = null;
-        let company_name = null;
+        // Load existing profile for this email if it exists
+        const savedProfile = localStorage.getItem(`ann_profile_${email}`);
+        const profileData = savedProfile ? JSON.parse(savedProfile) : {
+            bio: '"Entusiasta de beleza etérea | Minimalista em skincare ✨"',
+            photo: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC77ZoIlcWkWMv6PoHvkxSm9AoIAod0TJnJZWF2MeQxi2AruIoztM2Esx1b7bu7WxXGBGql9gTS2qlzljZWZAgMwk3SP1E-X-LjEVwToyizyz0TQShvF0SJnfPxI85iPPDiyG4Hcj8ZowqeUsmVL7FgblL1dmjET0-akwNh34c4Wg5a6Miix5O7Dh_wwJUW2CLFx_SwKVGVqV0yXrLrcEmYdC9FimpquKe5z8CwL80QMWe0xc3-uZYa93ToeCwEUhDkvbtB7Ccw8obU',
+            followers: 0,
+            following: 0,
+            postsCount: 0
+        };
+
+        let role = profileData.role;
+        let company_id = profileData.company_id;
+        let company_name = profileData.company_name;
 
         // Lista de e-mails com acesso admin_master (adicione qualquer e-mail aqui)
         const ADMIN_EMAILS = [
@@ -34,23 +44,17 @@ export const auth = {
         // Lógica de cargos
         if (ADMIN_EMAILS.includes(email.toLowerCase())) {
             role = 'admin_master';
-        } else if (accountType === 'comercial') {
-            role = 'empresa';
-            company_id = email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '_');
-            company_name = name;
-        } else {
-            role = 'user';
+        } else if (!role || (role === 'user' && accountType === 'comercial')) {
+            // Set or upgrade role based on accountType
+            if (accountType === 'comercial') {
+                role = 'empresa';
+                company_id = email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '_');
+                company_name = name;
+            } else {
+                role = 'user';
+            }
         }
 
-        // Load existing profile for this email if it exists
-        const savedProfile = localStorage.getItem(`ann_profile_${email}`);
-        const profileData = savedProfile ? JSON.parse(savedProfile) : {
-            bio: '"Entusiasta de beleza etérea | Minimalista em skincare ✨"',
-            photo: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC77ZoIlcWkWMv6PoHvkxSm9AoIAod0TJnJZWF2MeQxi2AruIoztM2Esx1b7bu7WxXGBGql9gTS2qlzljZWZAgMwk3SP1E-X-LjEVwToyizyz0TQShvF0SJnfPxI85iPPDiyG4Hcj8ZowqeUsmVL7FgblL1dmjET0-akwNh34c4Wg5a6Miix5O7Dh_wwJUW2CLFx_SwKVGVqV0yXrLrcEmYdC9FimpquKe5z8CwL80QMWe0xc3-uZYa93ToeCwEUhDkvbtB7Ccw8obU',
-            followers: 0,
-            following: 0,
-            postsCount: 0
-        };
 
         const user = {
             name: name || 'Usuária A.n.n',
@@ -69,13 +73,16 @@ export const auth = {
         
         localStorage.setItem('ann_beauty_user', JSON.stringify(user));
         
-        // Save back to specific key to persist these stats
+        // Save back to specific key to persist these stats and roles
         localStorage.setItem(`ann_profile_${email}`, JSON.stringify({
             bio: user.bio,
             photo: user.photo,
             followers: user.followers,
             following: user.following,
-            postsCount: user.postsCount
+            postsCount: user.postsCount,
+            role: user.role,
+            company_id: user.company_id,
+            company_name: user.company_name
         }));
         
         // Also ensure these are in current "global" keys for backward compatibility with existing components
