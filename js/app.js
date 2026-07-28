@@ -1,9 +1,11 @@
 // ============================================
-// A.n.n Beauty — SPA Router & App Init
+// Beleza na Web — SPA Router & App Init
 // ============================================
 
 import { renderHeader, renderBottomNav, renderFooter, FULLSCREEN_PAGES } from './components.js';
 import { initGlowAI } from './glowai.js';
+import { auth } from './auth.js';
+import './social_manager.js'; // Registers window.socialManager globally
 
 // Lazy-load page modules
 const pageModules = {
@@ -25,18 +27,44 @@ const pageModules = {
     notifications: () => import('./pages/notifications.js'),
     settings: () => import('./pages/settings.js'),
     admin:    () => import('./pages/admin.js'),
+    store:    () => import('./pages/store.js'),
 };
 
 // Get current page from hash
 function getCurrentPage() {
     const hash = window.location.hash || '#/home';
-    const page = hash.replace('#/', '') || 'home';
-    return pageModules[page] ? page : 'home';
+    const cleanHash = hash.replace('#/', '').split('?')[0].split('/')[0] || 'home';
+    return pageModules[cleanHash] ? cleanHash : 'home';
 }
 
 // Main render function
 async function renderPage() {
     const page = getCurrentPage();
+    
+    // Auth route guard
+    const publicPages = ['login', 'signup', 'recover'];
+    const isLoggedIn = auth.isLoggedIn();
+    if (!isLoggedIn && !publicPages.includes(page)) {
+        window.location.hash = '#/login';
+        return;
+    }
+    if (isLoggedIn && publicPages.includes(page)) {
+        window.location.hash = '#/home';
+        return;
+    }
+
+    // Admin route security guard
+    if (page === 'admin') {
+        const currentUser = auth.getUser();
+        if (!currentUser || (currentUser.role !== 'admin' && currentUser.role !== 'admin_master')) {
+            window.location.hash = '#/home';
+            setTimeout(() => {
+                import('./components.js').then(m => m.showToast('Acesso negado. Apenas administradores podem acessar o painel.', 'error'));
+            }, 100);
+            return;
+        }
+    }
+
     const app = document.getElementById('app');
     const isFullscreen = FULLSCREEN_PAGES.includes(page);
 
@@ -105,28 +133,35 @@ async function renderPage() {
 
     // Update page title
     const titles = {
-        home: 'A.n.n Beauty - Store',
-        search: 'A.n.n Beauty - Search',
-        login: 'A.n.n Beauty - Login',
-        signup: 'A.n.n Beauty - Sign Up',
-        recover: 'A.n.n Beauty - Password Recovery',
-        profile: 'User Profile - A.n.n Beauty',
-        product: 'A.n.n Beauty - Product Detail',
-        cart: 'A.n.n Beauty - Shopping Cart',
-        checkout: 'A.n.n Beauty - Checkout',
-        favorites: 'A.n.n Beauty - Favorites',
-        tracking: 'Track Your Order - A.n.n Beauty',
-        videos: 'A.n.n Beauty - Tutorials',
-        tutorial: 'A.n.n Beauty - Tutorial',
-        rituals: 'A.n.n Beauty - Ritual Guide',
-        about: 'About Us - A.n.n Beauty',
-        notifications: 'Notificações - A.n.n Beauty',
+        home: 'Beleza na Web - Store',
+        search: 'Beleza na Web - Search',
+        login: 'Beleza na Web - Login',
+        signup: 'Beleza na Web - Sign Up',
+        recover: 'Beleza na Web - Password Recovery',
+        profile: 'User Profile - Beleza na Web',
+        product: 'Beleza na Web - Product Detail',
+        cart: 'Beleza na Web - Shopping Cart',
+        checkout: 'Beleza na Web - Checkout',
+        favorites: 'Beleza na Web - Favorites',
+        tracking: 'Track Your Order - Beleza na Web',
+        videos: 'Beleza na Web - Tutorials',
+        tutorial: 'Beleza na Web - Tutorial',
+        rituals: 'Beleza na Web - Ritual Guide',
+        about: 'About Us - Beleza na Web',
+        notifications: 'Notificações - Beleza na Web',
     };
-    document.title = titles[page] || 'A.n.n Beauty';
+    document.title = titles[page] || 'Beleza na Web';
 }
 
-// Listen for hash changes
-window.addEventListener('hashchange', renderPage);
+// Listen for hash changes — re-render even when only query params change
+let _lastFullHash = '';
+window.addEventListener('hashchange', () => {
+    const newHash = window.location.hash;
+    if (newHash !== _lastFullHash) {
+        _lastFullHash = newHash;
+        renderPage();
+    }
+});
 
 // Listen for auth changes to update header/footer
 window.addEventListener('auth-change', renderPage);
@@ -207,7 +242,7 @@ window.addEventListener('DOMContentLoaded', () => {
         if (now - lastNotif < 300000) return;
 
         if (localStorage.getItem('ann_notifications_enabled') === 'true' && ("Notification" in window) && Notification.permission === "granted") {
-            new Notification("A.n.n Beauty - Novidade", {
+            new Notification("Beleza na Web - Novidade", {
                 body: "Temos uma nova oferta exclusiva esperando por você na loja!",
                 icon: "https://lh3.googleusercontent.com/aida-public/AB6AXuD41q-VUnwu5joHMxbWJsr36dy1zx3rIn2vEK7uzvQTDUffwl0ZH_HI_dTANk1KbB9owXbG4r3zHuZ0HVyYdnrM_iCEs2T28ZeOaR08HylhHFMcLQ7HbG_Sie4x-YY2ALCH46qv813TkJWK1AuLKhbgI70JyZ3h_2uFi-BnVubhKdnicfILcz2wGII7oUz38OzHYvodmNc7KWNeyoqLmi7hoHDJdbzNFetGZrb5-7anzBucsvdu8yAwBxA_KgpzWQXgXaiSjTNilD4W"
             });

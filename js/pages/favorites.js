@@ -1,34 +1,81 @@
+import { auth } from '../auth.js';
+import { cartManager } from '../cart_manager.js';
+import { showToast } from '../components.js';
+
 export default function favoritesPage() {
-  const favs = [
-    {name:'Luminous Night Serum',desc:'Reparação noturna restauradora',price:'R$ 128,00',badge:'Últimas unidades',img:'AB6AXuC4GA_67aY1N7hA37Z_u0SZTtDvmQgZXuI0IKCpWWDwQsAXhjglwF-D42Qcs01tgkoSC6D8xlCvN6yA6-ejFb0LHExM4IcIsLX0_bZ6lkpq9KEObhgQAXww5vLvCIpjlTFlXD3OqgpVeAy6WcSXOuAV6cNn4ZJ4JPqWocLYuSTtSctBBEG7ex1kpvMBJyL1aooq9sSovS72j_rwf67cdFVy9q5RzAgu6OdprTZWdSZy0q1ZXhfcK6PpCO3fqzA9G_f4Gan5cOJUesao'},
-    {name:'Ethereal Hydration Cream',desc:'Barreira de hidratação profunda',price:'R$ 85,00',img:'AB6AXuDH73IxZc-wW9MebvJPSiKSaysCLwGfJ_uVChy9knx7JdBtqj0aMGb5CAsdcPwqPCVgVLSK-4N-V9HvC7pfy7S7p5CnpqvHBtAcVdaLPL68NzuSwyPbn62GlQvIOoooz9_LtxZu1HzBiCITyvYdd6W8PtDkIVJsbW7jXLwHh_LnkCIN5MC8xBH1a62XTH4_CKCc2tZX9KwA8sEBCmC8dvnnu87WI9zwOY3_nPTA7hzkoSxgN2EL4OBgiTONdoHbGsUYNIk4qyTpN6H-'},
-    {name:'Velvet Matte Lip Color',desc:'Tom: Dusk Rose',price:'R$ 42,00',badge:'Bestseller',img:'AB6AXuCmGynp0tWFLudcUkNPCCNyCdh-6xgbI5v1HlfT8vTijKv7-ycl_F7x-t_5ERsdDHB2cxB3rB5mnL_uriv5me7i8YaFKrsCzeGprrFAJA1chrXqw9sCjfejNeVfPcpXxtWpPTOLdgEnClOtYNBe3uxCZPhHUnVcESDS5lzlOW8DH3O2kUWYkiCScH0RlVMUXGhMOYLLu05gimWPpPVheqszRzq8jhe6RzvR7VqbO-WX5AJZeBZTFwvGr4S4-o5HuDFORM68VKHU58ff'},
-  ];
-  const cards = favs.map(p => `
-    <article class="bg-white/50 backdrop-blur-sm rounded-2xl overflow-hidden group shadow-sm hover:shadow-xl transition-all duration-500 border border-purple-50 flex flex-col">
-      <div class="relative aspect-[4/5] bg-purple-50 overflow-hidden p-2">
-        <img alt="${p.name}" class="w-full h-full object-cover rounded-xl group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/${p.img}"/>
-        <button class="absolute top-4 right-4 bg-white/90 backdrop-blur-md p-2 rounded-full text-red-500 shadow-sm"><span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">favorite</span></button>
-        ${p.badge?`<span class="absolute bottom-4 left-4 bg-primary text-white font-label-sm text-label-sm px-3 py-1 rounded-full shadow-md">${p.badge}</span>`:''}
+  const savedItems = auth.getSavedItems();
+
+  window.removeFromFavorites = (id) => {
+    const item = savedItems.find(i => i.id === id);
+    if (item) {
+        auth.toggleSaveItem(item, item.contentType);
+        showToast('Removido dos favoritos', 'info');
+        // Rerender page
+        if(window.location.hash === '#/favorites') {
+           const hash = window.location.hash;
+           window.location.hash = '';
+           setTimeout(() => window.location.hash = hash, 10);
+        }
+    }
+  };
+
+  window.addFavoriteToCart = (index) => {
+    const product = savedItems[index];
+    cartManager.addItem(product);
+    showToast(`${product.name} adicionado ao carrinho!`, 'success');
+  };
+
+  const cards = savedItems.length > 0 ? savedItems.map((p, index) => {
+    const isVideo = p.contentType === 'video';
+    const name = isVideo ? p.title : p.name;
+    const desc = isVideo ? p.cat : p.desc;
+    const price = isVideo ? p.time : p.price;
+    const imgUrl = p.img.startsWith('http') ? p.img : 'https://lh3.googleusercontent.com/aida-public/' + p.img;
+
+    return `
+    <article class="bg-white rounded-[40px] overflow-hidden group shadow-ethereal hover:shadow-ethereal-hover transition-all duration-700 border border-primary/5 flex flex-col">
+      <div class="relative aspect-[4/5] bg-primary-container/10 overflow-hidden p-4">
+        <img alt="${name}" class="w-full h-full object-cover rounded-[32px] group-hover:scale-110 transition-transform duration-1000" src="${imgUrl}"/>
+        <button onclick="window.removeFromFavorites('${p.id}')" class="absolute top-6 right-6 bg-white/95 backdrop-blur-md p-3 rounded-full text-secondary shadow-lg hover:scale-110 transition-transform z-10">
+            <span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 1;">favorite</span>
+        </button>
+        ${p.badge?`<span class="absolute bottom-6 left-6 bg-secondary text-white font-bold text-[9px] px-4 py-1.5 rounded-full shadow-lg z-10 uppercase tracking-widest">${p.badge}</span>`:''}
+        ${isVideo?`<span class="absolute inset-0 flex items-center justify-center p-4"><div class="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 group-hover:scale-110 transition-transform"><span class="material-symbols-outlined text-white text-4xl" style="font-variation-settings:'FILL' 1;">play_arrow</span></div></span>`:''}
       </div>
-      <div class="p-6 flex flex-col flex-grow">
-        <h3 class="font-display text-xl text-on-surface mb-1">${p.name}</h3>
-        <p class="font-body-sm text-body-sm text-on-surface-variant mb-4">${p.desc}</p>
-        <div class="mt-auto flex items-end justify-between">
-          <span class="font-display text-xl text-primary font-bold">${p.price}</span>
-          <a href="#/cart" class="text-primary font-label-md flex items-center gap-2 hover:opacity-70 transition-opacity">
-            Adicionar <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+      <div class="p-8 flex flex-col flex-grow">
+        <h3 class="font-display text-2xl text-on-background mb-2 line-clamp-1">${name}</h3>
+        <p class="text-xs text-on-surface-variant font-medium opacity-60 mb-8 line-clamp-2 leading-relaxed">${desc}</p>
+        <div class="mt-auto flex items-center justify-between">
+          <span class="text-xl font-display font-bold text-primary">${price}</span>
+          ${!isVideo ? `
+          <button onclick="window.addFavoriteToCart(${index})" class="bg-primary/5 text-primary p-3 rounded-2xl hover:bg-primary hover:text-white transition-all shadow-sm">
+            <span class="material-symbols-outlined text-[22px]">add_shopping_cart</span>
+          </button>` : `
+          <a href="#/tutorial" class="bg-secondary/10 text-secondary p-3 rounded-2xl hover:bg-secondary hover:text-white transition-all shadow-sm">
+            <span class="material-symbols-outlined text-[22px]">play_circle</span>
           </a>
+          `}
         </div>
       </div>
-    </article>`).join('');
+    </article>`
+  }).join('') : `
+    <div class="col-span-full py-32 text-center flex flex-col items-center max-w-md mx-auto">
+        <div class="w-24 h-24 bg-primary-container/20 rounded-full flex items-center justify-center text-primary/30 mb-8">
+            <span class="material-symbols-outlined text-5xl" style="font-variation-settings:'FILL' 1;">favorite</span>
+        </div>
+        <h3 class="text-3xl font-display text-on-background mb-4 tracking-tighter">Sua Galeria de Desejos</h3>
+        <p class="text-on-surface-variant font-medium opacity-70 mb-10 leading-relaxed italic">"Ainda não há tesouros salvos. Explore nossa curadoria e guarde o que fizer seu coração vibrar."</p>
+        <a href="#/search" class="w-full bg-primary text-white py-4 rounded-2xl font-bold uppercase tracking-widest shadow-lg shadow-primary/20 hover:shadow-2xl transition-all">Explorar Coleção</a>
+    </div>
+  `;
 
   return `
-  <main class="flex-grow w-full max-w-[1280px] mx-auto px-4 md:px-10 py-12">
-    <header class="mb-12 text-center md:text-left">
-      <h1 class="font-display text-5xl text-on-surface mb-3">Sua Coleção</h1>
-      <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl italic">"Uma seleção curada das suas formulações mais desejadas."</p>
+  <main class="flex-grow w-full max-w-[1280px] mx-auto px-4 md:px-10 py-16 bg-background">
+    <header class="mb-16 text-center md:text-left">
+      <div class="inline-block px-4 py-1.5 bg-secondary/10 text-secondary rounded-full text-[9px] font-black uppercase tracking-[0.3em] mb-6 shadow-sm border border-secondary/5 text-center mx-auto md:mx-0">Vibrações de Luxo</div>
+      <h1 class="font-display text-4xl m:text-5xl text-on-background tracking-tighter mb-4">Itens <span class="italic text-primary">Desejados</span></h1>
+      <p class="text-base text-on-surface-variant font-medium max-w-2xl opacity-70">Uma curadoria pessoal das suas formulações, rituais e cores que definem a sua essência Beleza na Web.</p>
     </header>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">${cards}</div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">${cards}</div>
   </main>`;
 }

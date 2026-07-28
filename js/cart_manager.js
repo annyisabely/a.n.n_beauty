@@ -1,5 +1,5 @@
 // ============================================
-// A.n.n Beauty — Cart Manager
+// Beleza na Web — Cart Manager
 // ============================================
 
 const CART_STORAGE_KEY = 'ann_beauty_cart';

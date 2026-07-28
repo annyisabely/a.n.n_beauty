@@ -1,3 +1,5 @@
+import { showToast } from '../components.js';
+
 export default function notificationsPage() {
   window.dismissNotification = (id) => {
     const el = document.getElementById(`notif-${id}`);
@@ -41,16 +43,16 @@ export default function notificationsPage() {
 
   window.activateNotifications = () => {
     if (!("Notification" in window)) {
-      window.showToast('Seu navegador não suporta notificações.', 'error');
+      showToast('Seu navegador não suporta notificações.', 'error');
       return;
     }
     Notification.requestPermission().then(permission => {
       if (permission === "granted") {
-        new Notification("A.n.n Beauty", {
+        new Notification("Beleza na Web", {
           body: "Notificações ativadas! Você receberá alertas de ofertas, promoções e atualizações.",
           icon: "https://lh3.googleusercontent.com/aida-public/AB6AXuD41q-VUnwu5joHMxbWJsr36dy1zx3rIn2vEK7uzvQTDUffwl0ZH_HI_dTANk1KbB9owXbG4r3zHuZ0HVyYdnrM_iCEs2T28ZeOaR08HylhHFMcLQ7HbG_Sie4x-YY2ALCH46qv813TkJWK1AuLKhbgI70JyZ3h_2uFi-BnVubhKdnicfILcz2wGII7oUz38OzHYvodmNc7KWNeyoqLmi7hoHDJdbzNFetGZrb5-7anzBucsvdu8yAwBxA_KgpzWQXgXaiSjTNilD4W"
         });
-        window.showToast('Notificações ativadas com sucesso!', 'success');
+        showToast('Notificações ativadas com sucesso!', 'success');
         localStorage.setItem('ann_notifications_enabled', 'true');
         const btn = document.getElementById('btn-activate-notif');
         if (btn) {
@@ -58,7 +60,7 @@ export default function notificationsPage() {
           btn.classList.add('opacity-50', 'pointer-events-none');
         }
       } else {
-        window.showToast('Permissão de notificação negada.', 'error');
+        showToast('Permissão de notificação negada.', 'error');
       }
     });
   };

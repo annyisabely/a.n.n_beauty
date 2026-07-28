@@ -5,12 +5,12 @@ export default function recoverPage() {
       <img alt="Skincare" class="absolute inset-0 w-full h-full object-cover opacity-80 mix-blend-overlay" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2cChqBTVCbwZ6gGYgCU-5Tb42DxiWZuZAa_p7gur5STpTOW6lp0zaTi9SFpS6hYc29tzEwmXDt4kn_fS56mq2OPQNUsFyzQMPf8YteKi2KOfeWXRalTBtkvwjoN38wqYBpkLuX6f8LptOYzTbX3EJ8bFil0Y9NGElEUyhiwVSioiHaFH7EXIq_HRO7gGBeqHN9EdYH2fQ48GQeP43m1_MHomxBq_1VlflTZJOy3bEJe-JgktNlsxuAilr_T6uhOYMEThI__kJl-uG"/>
       <div class="absolute inset-0 bg-gradient-to-br from-primary/20 to-black/40 backdrop-blur-[1px]"></div>
       <div class="absolute top-12 left-12 z-10">
-        <span class="font-display text-4xl text-white drop-shadow-2xl tracking-tighter">A.n.n Beauty</span>
+        <span class="font-display text-4xl text-white drop-shadow-2xl tracking-tighter">Beleza na Web</span>
       </div>
     </div>
     <div class="w-full md:w-1/2 lg:w-[45%] flex items-center justify-center p-8 lg:p-16 bg-white relative z-10 shadow-2xl">
       <div class="md:hidden absolute top-10 left-10">
-        <span class="font-display text-2xl text-primary tracking-tighter">A.n.n Beauty</span>
+        <span class="font-display text-2xl text-primary tracking-tighter">Beleza na Web</span>
       </div>
       <div class="w-full max-w-md flex flex-col pt-16 md:pt-0">
         <div class="flex flex-col gap-3 mb-12">

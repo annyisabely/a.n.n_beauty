@@ -1,0 +1,17 @@
+{
+  "name": "a.n.n_beauty",
+  "version": "1.0.0",
+  "description": "A.n.n Beauty é uma plataforma de e-commerce de beleza premium, focada em skincare de alta performance com uma estética minimalista e luminosa. O projeto foi desenvolvido como uma Single Page Application (SPA) utilizando tecnologias web modernas para proporcionar uma experiência fluida e imersiva.",
+  "main": "proxy.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "sqlite3": "^6.0.1"
+  }
+}

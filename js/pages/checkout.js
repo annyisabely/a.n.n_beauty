@@ -107,7 +107,7 @@ export default function checkoutPage() {
     localStorage.setItem('ann_orders', JSON.stringify(orders));
 
     // Send purchase notification
-    auth.sendNotification('Pedido Confirmado!', `Obrigada pela sua compra na A.n.n Beauty. Um e-mail de confirmação foi enviado para ${email}.`);
+    auth.sendNotification('Pedido Confirmado!', `Obrigada pela sua compra na Beleza na Web. Um e-mail de confirmação foi enviado para ${email}.`);
     
     // Redirect to tracking
     window.location.hash = '#/tracking';
@@ -175,9 +175,12 @@ export default function checkoutPage() {
         <h3 class="font-label-md text-label-md text-on-surface mb-4">Resumo do Pedido</h3>
         <div class="flex justify-between font-body-md text-on-surface-variant mb-2"><span>Subtotal</span><span class="text-on-surface">R$ ${subtotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span></div>
         ${discount > 0 ? `<div class="flex justify-between font-body-md text-green-500 mb-2"><span>Descontos</span><span>- R$ ${discount.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span></div>` : ''}
-        <div class="flex justify-between font-body-md text-on-surface-variant mb-2"><span>Frete</span><span class="${shipping === 0 ? 'text-green-500 font-bold' : 'text-on-surface'}">${shipping === 0 ? 'Grátis' : `R$ ${shipping.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`}</span></div>
+        <h3 class="font-bold text-on-surface mb-4">Resumo do Pedido</h3>
+        <div class="flex justify-between text-sm text-on-surface-variant mb-2"><span>Subtotal</span><span class="text-on-surface">R$ ${subtotal.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span></div>
+        ${discount > 0 ? `<div class="flex justify-between text-sm text-secondary mb-2"><span>Descontos</span><span>- R$ ${discount.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span></div>` : ''}
+        <div class="flex justify-between text-sm text-on-surface-variant mb-2"><span>Frete</span><span class="${shipping === 0 ? 'text-secondary font-bold' : 'text-on-surface'}">${shipping === 0 ? 'Grátis' : `R$ ${shipping.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`}</span></div>
         ${benefitHTML}
-        <div class="border-t border-outline-variant/30 pt-4 flex justify-between items-center"><span class="font-headline-md text-on-surface">Total</span><span class="font-headline-md text-primary">R$ ${total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span></div>
+        <div class="border-t border-primary/10 pt-4 flex justify-between items-center"><span class="font-bold text-on-surface">Total</span><span class="text-xl font-bold text-primary">R$ ${total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span></div>
     `;
   };
 
@@ -186,70 +189,70 @@ export default function checkoutPage() {
   <main class="flex-grow w-full max-w-[1280px] mx-auto px-4 md:px-10 py-12 flex items-start justify-center min-h-screen bg-background">
     <div class="w-full max-w-3xl">
       <div class="text-center mb-10">
-        <a href="#/home" class="font-display-lg text-display-lg text-primary-container mb-3 tracking-widest italic inline-block hover:opacity-80 transition-opacity">A.n.n Beauty</a>
-        <h2 class="font-headline-md text-headline-md text-on-surface-variant">Finalizar Compra</h2>
-        <p class="font-body-md text-body-md text-outline mt-2">Preencha seus dados para concluir o pedido.</p>
+        <a href="#/home" class="text-3xl font-display font-semibold text-on-background mb-2 tracking-tighter inline-block hover:opacity-80 transition-all">Beleza na Web</a>
+        <h2 class="text-xl font-display font-bold text-primary">Finalizar Compra</h2>
+        <p class="text-sm text-on-surface-variant opacity-70 mt-2">Sua jornada de beleza está quase completa.</p>
       </div>
-      <div class="glass-panel ambient-shadow rounded-xl p-6 md:p-10 border border-surface-variant/50 relative overflow-hidden">
-        <div class="absolute -top-24 -right-24 w-64 h-64 bg-primary-fixed rounded-full mix-blend-multiply filter blur-3xl opacity-30 pointer-events-none"></div>
-        <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-secondary-fixed rounded-full mix-blend-multiply filter blur-3xl opacity-30 pointer-events-none"></div>
-        <form class="relative z-10 flex flex-col gap-8" onsubmit="window.handleOrderConfirmation(event)">
+      <div class="bg-white/70 backdrop-blur-xl rounded-[40px] shadow-ethereal-hover p-8 md:p-12 border border-primary/5 relative overflow-hidden">
+        <div class="absolute -top-24 -right-24 w-64 h-64 bg-primary-container rounded-full mix-blend-multiply filter blur-3xl opacity-20 pointer-events-none"></div>
+        <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-secondary-container rounded-full mix-blend-multiply filter blur-3xl opacity-20 pointer-events-none"></div>
+        
+        <form class="relative z-10 flex flex-col gap-10" onsubmit="window.handleOrderConfirmation(event)">
 
           <!-- Dados Pessoais -->
-          <div class="space-y-4">
-            <h3 class="font-label-md text-label-md text-primary uppercase tracking-widest border-b border-surface-variant pb-2 flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">person</span>Dados Pessoais</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="flex flex-col gap-1.5"><label class="font-label-md text-label-md text-on-surface-variant">Nome Completo</label><input class="w-full bg-surface-container-low border border-surface-variant rounded-lg focus:border-primary-container focus:ring-1 focus:ring-primary-container py-3 px-4 font-body-md text-on-surface transition-colors" placeholder="Maria da Silva" type="text" required/></div>
-              <div class="flex flex-col gap-1.5"><label class="font-label-md text-label-md text-on-surface-variant">CPF</label><input class="w-full bg-surface-container-low border border-surface-variant rounded-lg focus:border-primary-container focus:ring-1 focus:ring-primary-container py-3 px-4 font-body-md text-on-surface transition-colors" placeholder="000.000.000-00" type="text" required/></div>
+          <div class="space-y-6">
+            <h3 class="text-xs font-bold text-primary uppercase tracking-[0.2em] flex items-center gap-2"><span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1">person</span>Dados Pessoais</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div class="flex flex-col gap-2"><label class="text-xs font-bold text-on-surface ml-1">Nome Completo</label><input class="w-full bg-white border border-primary/10 rounded-2xl focus:border-primary focus:ring-4 focus:ring-primary/5 py-3.5 px-5 text-sm text-on-surface transition-all placeholder:opacity-30 shadow-sm" placeholder="Maria da Silva" type="text" required/></div>
+              <div class="flex flex-col gap-2"><label class="text-xs font-bold text-on-surface ml-1">CPF</label><input class="w-full bg-white border border-primary/10 rounded-2xl focus:border-primary focus:ring-4 focus:ring-primary/5 py-3.5 px-5 text-sm text-on-surface transition-all placeholder:opacity-30 shadow-sm" placeholder="000.000.000-00" type="text" required/></div>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="flex flex-col gap-1.5"><label class="font-label-md text-label-md text-on-surface-variant">Email</label><input id="checkout-email" class="w-full bg-surface-container-low border border-surface-variant rounded-lg focus:border-primary-container focus:ring-1 focus:ring-primary-container py-3 px-4 font-body-md text-on-surface transition-colors" placeholder="maria@email.com" type="email" required/></div>
-              <div class="flex flex-col gap-1.5"><label class="font-label-md text-label-md text-on-surface-variant">Telefone</label><input class="w-full bg-surface-container-low border border-surface-variant rounded-lg focus:border-primary-container focus:ring-1 focus:ring-primary-container py-3 px-4 font-body-md text-on-surface transition-colors" placeholder="(11) 99999-0000" type="tel" required/></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div class="flex flex-col gap-2"><label class="text-xs font-bold text-on-surface ml-1">Email</label><input id="checkout-email" class="w-full bg-white border border-primary/10 rounded-2xl focus:border-primary focus:ring-4 focus:ring-primary/5 py-3.5 px-5 text-sm text-on-surface transition-all placeholder:opacity-30 shadow-sm" placeholder="maria@email.com" type="email" required/></div>
+              <div class="flex flex-col gap-2"><label class="text-xs font-bold text-on-surface ml-1">Telefone</label><input class="w-full bg-white border border-primary/10 rounded-2xl focus:border-primary focus:ring-4 focus:ring-primary/5 py-3.5 px-5 text-sm text-on-surface transition-all placeholder:opacity-30 shadow-sm" placeholder="(11) 99999-0000" type="tel" required/></div>
             </div>
           </div>
-          ... (rest of the form content)
 
           <!-- Endereço -->
-          <div class="space-y-4">
-            <h3 class="font-label-md text-label-md text-primary uppercase tracking-widest border-b border-surface-variant pb-2 flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">location_on</span>Endereço de Entrega</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div class="flex flex-col gap-1.5"><label class="font-label-md text-label-md text-on-surface-variant">CEP</label><input id="checkout-cep" class="w-full bg-surface-container-low border border-surface-variant rounded-lg focus:border-primary-container focus:ring-1 focus:ring-primary-container py-3 px-4 font-body-md text-on-surface transition-colors" placeholder="00000-000" type="text" required/></div>
-              <div class="flex flex-col gap-1.5 md:col-span-2"><label class="font-label-md text-label-md text-on-surface-variant">Rua</label><input id="checkout-rua" class="w-full bg-surface-container-low border border-surface-variant rounded-lg focus:border-primary-container focus:ring-1 focus:ring-primary-container py-3 px-4 font-body-md text-on-surface transition-colors" placeholder="Rua das Flores" type="text" required/></div>
+          <div class="space-y-6">
+            <h3 class="text-xs font-bold text-primary uppercase tracking-[0.2em] flex items-center gap-2"><span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1">location_on</span>Endereço de Entrega</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+              <div class="flex flex-col gap-2"><label class="text-xs font-bold text-on-surface ml-1">CEP</label><input id="checkout-cep" class="w-full bg-white border border-primary/10 rounded-2xl focus:border-primary focus:ring-4 focus:ring-primary/5 py-3.5 px-5 text-sm text-on-surface transition-all placeholder:opacity-30 shadow-sm" placeholder="00000-000" type="text" required/></div>
+              <div class="flex flex-col gap-2 md:col-span-2"><label class="text-xs font-bold text-on-surface ml-1">Rua</label><input id="checkout-rua" class="w-full bg-white border border-primary/10 rounded-2xl focus:border-primary focus:ring-4 focus:ring-primary/5 py-3.5 px-5 text-sm text-on-surface transition-all placeholder:opacity-30 shadow-sm" placeholder="Rua das Flores" type="text" required/></div>
             </div>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div class="flex flex-col gap-1.5"><label class="font-label-md text-label-md text-on-surface-variant">Número</label><input id="checkout-numero" class="w-full bg-surface-container-low border border-surface-variant rounded-lg focus:border-primary-container focus:ring-1 focus:ring-primary-container py-3 px-4 font-body-md text-on-surface transition-colors" placeholder="123" type="text" required/></div>
-              <div class="flex flex-col gap-1.5"><label class="font-label-md text-label-md text-on-surface-variant">Complemento</label><input id="checkout-complemento" class="w-full bg-surface-container-low border border-surface-variant rounded-lg focus:border-primary-container focus:ring-1 focus:ring-primary-container py-3 px-4 font-body-md text-on-surface transition-colors" placeholder="Apt 4B" type="text"/></div>
-              <div class="flex flex-col gap-1.5"><label class="font-label-md text-label-md text-on-surface-variant">Bairro</label><input id="checkout-bairro" class="w-full bg-surface-container-low border border-surface-variant rounded-lg focus:border-primary-container focus:ring-1 focus:ring-primary-container py-3 px-4 font-body-md text-on-surface transition-colors" placeholder="Centro" type="text" required/></div>
-              <div class="flex flex-col gap-1.5"><label class="font-label-md text-label-md text-on-surface-variant">Cidade/UF</label><input id="checkout-cidade" class="w-full bg-surface-container-low border border-surface-variant rounded-lg focus:border-primary-container focus:ring-1 focus:ring-primary-container py-3 px-4 font-body-md text-on-surface transition-colors" placeholder="São Paulo/SP" type="text" required/></div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
+              <div class="flex flex-col gap-2"><label class="text-xs font-bold text-on-surface ml-1">Número</label><input id="checkout-numero" class="w-full bg-white border border-primary/10 rounded-2xl focus:border-primary focus:ring-4 focus:ring-primary/5 py-3.5 px-5 text-sm text-on-surface transition-all placeholder:opacity-30 shadow-sm" placeholder="123" type="text" required/></div>
+              <div class="flex flex-col gap-2"><label class="text-xs font-bold text-on-surface ml-1">Complemento</label><input id="checkout-complemento" class="w-full bg-white border border-primary/10 rounded-2xl focus:border-primary focus:ring-4 focus:ring-primary/5 py-3.5 px-5 text-sm text-on-surface transition-all placeholder:opacity-30 shadow-sm" placeholder="Apt 4B" type="text"/></div>
+              <div class="flex flex-col gap-2"><label class="text-xs font-bold text-on-surface ml-1">Bairro</label><input id="checkout-bairro" class="w-full bg-white border border-primary/10 rounded-2xl focus:border-primary focus:ring-4 focus:ring-primary/5 py-3.5 px-5 text-sm text-on-surface transition-all placeholder:opacity-30 shadow-sm" placeholder="Centro" type="text" required/></div>
+              <div class="flex flex-col gap-2"><label class="text-xs font-bold text-on-surface ml-1">Cidade/UF</label><input id="checkout-cidade" class="w-full bg-white border border-primary/10 rounded-2xl focus:border-primary focus:ring-4 focus:ring-primary/5 py-3.5 px-5 text-sm text-on-surface transition-all placeholder:opacity-30 shadow-sm" placeholder="São Paulo/SP" type="text" required/></div>
             </div>
           </div>
 
           <!-- Forma de Pagamento -->
-          <div class="space-y-4">
-            <h3 class="font-label-md text-label-md text-primary uppercase tracking-widest border-b border-surface-variant pb-2 flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">payments</span>Forma de Pagamento</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-3" id="payment-methods">
-              <label class="relative flex flex-col items-center gap-3 p-5 rounded-xl border-2 border-primary bg-primary-fixed/20 cursor-pointer transition-all hover:shadow-md">
-                <input type="radio" name="payment" value="pix" checked class="absolute top-3 right-3 accent-primary w-4 h-4"/>
-                <span class="material-symbols-outlined text-primary text-3xl">qr_code_2</span>
-                <div class="text-center"><span class="font-label-md text-label-md text-on-surface block">PIX</span><span class="font-body-sm text-body-sm text-on-surface-variant">Aprovação instantânea</span></div>
+          <div class="space-y-6">
+            <h3 class="text-xs font-bold text-primary uppercase tracking-[0.2em] flex items-center gap-2"><span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1">payments</span>Forma de Pagamento</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="payment-methods">
+              <label class="relative flex flex-col items-center gap-3 p-6 rounded-3xl border-2 border-primary bg-primary-container/30 cursor-pointer transition-all hover:shadow-lg">
+                <input type="radio" name="payment" value="pix" checked class="absolute top-4 right-4 accent-primary w-4 h-4"/>
+                <span class="material-symbols-outlined text-primary text-4xl" style="font-variation-settings: 'FILL' 1">qr_code_2</span>
+                <div class="text-center"><span class="text-sm font-bold text-on-surface block">PIX</span><span class="text-[10px] text-on-surface-variant opacity-70">Aprovação imediata</span></div>
               </label>
-              <label class="relative flex flex-col items-center gap-3 p-5 rounded-xl border-2 border-outline-variant bg-surface-container-lowest cursor-pointer transition-all hover:border-primary hover:shadow-md">
-                <input type="radio" name="payment" value="boleto" class="absolute top-3 right-3 accent-primary w-4 h-4"/>
-                <span class="material-symbols-outlined text-on-surface-variant text-3xl">receipt_long</span>
-                <div class="text-center"><span class="font-label-md text-label-md text-on-surface block">Boleto</span><span class="font-body-sm text-body-sm text-on-surface-variant">Até 3 dias úteis</span></div>
+              <label class="relative flex flex-col items-center gap-3 p-6 rounded-3xl border-2 border-primary/5 bg-white cursor-pointer transition-all hover:border-primary/20 hover:shadow-lg">
+                <input type="radio" name="payment" value="boleto" class="absolute top-4 right-4 accent-primary w-4 h-4"/>
+                <span class="material-symbols-outlined text-on-surface-variant text-4xl">receipt_long</span>
+                <div class="text-center"><span class="text-sm font-bold text-on-surface block">Boleto</span><span class="text-[10px] text-on-surface-variant opacity-70">Em até 3 dias</span></div>
               </label>
-              <label class="relative flex flex-col items-center gap-3 p-5 rounded-xl border-2 border-outline-variant bg-surface-container-lowest cursor-pointer transition-all hover:border-primary hover:shadow-md">
-                <input type="radio" name="payment" value="cartao" class="absolute top-3 right-3 accent-primary w-4 h-4"/>
-                <span class="material-symbols-outlined text-on-surface-variant text-3xl">credit_card</span>
-                <div class="text-center"><span class="font-label-md text-label-md text-on-surface block">Cartão</span><span class="font-body-sm text-body-sm text-on-surface-variant">Crédito ou Débito</span></div>
+              <label class="relative flex flex-col items-center gap-3 p-6 rounded-3xl border-2 border-primary/5 bg-white cursor-pointer transition-all hover:border-primary/20 hover:shadow-lg">
+                <input type="radio" name="payment" value="cartao" class="absolute top-4 right-4 accent-primary w-4 h-4"/>
+                <span class="material-symbols-outlined text-on-surface-variant text-4xl">credit_card</span>
+                <div class="text-center"><span class="text-sm font-bold text-on-surface block">Cartão</span><span class="text-[10px] text-on-surface-variant opacity-70">Crédito/Débito</span></div>
               </label>
             </div>
-            <!-- Card fields (shown when cartão selected) -->
-            <div id="card-fields" class="hidden grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 p-4 bg-surface-container-low rounded-lg border border-outline-variant/30">
-              <div class="flex flex-col gap-1.5 md:col-span-2"><label class="font-label-md text-label-md text-on-surface-variant">Nome Impresso no Cartão</label><input id="checkout-card-name" class="w-full bg-surface-container-lowest border border-surface-variant rounded-lg py-3 px-4 font-body-md text-on-surface" placeholder="MARIA DA SILVA" type="text"/></div>
-              <div class="flex flex-col gap-1.5 md:col-span-2"><label class="font-label-md text-label-md text-on-surface-variant">Número do Cartão</label><input id="checkout-card-num" class="w-full bg-surface-container-lowest border border-surface-variant rounded-lg py-3 px-4 font-body-md text-on-surface" placeholder="0000 0000 0000 0000" type="text"/></div>
-              <div class="flex flex-col gap-1.5"><label class="font-label-md text-label-md text-on-surface-variant">Bandeira</label>
-                <select id="checkout-card-brand" class="w-full bg-surface-container-lowest border border-surface-variant rounded-lg py-3 px-4 font-body-md text-on-surface">
+            
+            <div id="card-fields" class="hidden grid grid-cols-1 md:grid-cols-2 gap-5 mt-6 p-6 bg-primary-container/10 rounded-3xl border border-primary/5">
+              <div class="flex flex-col gap-2 md:col-span-2"><label class="text-xs font-bold text-on-surface ml-1">Nome no Cartão</label><input id="checkout-card-name" class="w-full bg-white border border-primary/10 rounded-2xl py-3.5 px-5 text-sm text-on-surface" placeholder="MARIA DA SILVA" type="text"/></div>
+              <div class="flex flex-col gap-2 md:col-span-2"><label class="text-xs font-bold text-on-surface ml-1">Número do Cartão</label><input id="checkout-card-num" class="w-full bg-white border border-primary/10 rounded-2xl py-3.5 px-5 text-sm text-on-surface" placeholder="0000 0000 0000 0000" type="text"/></div>
+              <div class="flex flex-col gap-2"><label class="text-xs font-bold text-on-surface ml-1">Bandeira</label>
+                <select id="checkout-card-brand" class="w-full bg-white border border-primary/10 rounded-2xl py-3.5 px-5 text-sm text-on-surface outline-none">
                   <option value="Visa">Visa</option>
                   <option value="Mastercard">Mastercard</option>
                   <option value="Elo">Elo</option>
@@ -257,49 +260,56 @@ export default function checkoutPage() {
                 </select>
               </div>
               <div class="grid grid-cols-2 gap-4">
-                <div class="flex flex-col gap-1.5"><label class="font-label-md text-label-md text-on-surface-variant">Validade</label><input id="checkout-card-val" class="w-full bg-surface-container-lowest border border-surface-variant rounded-lg py-3 px-4 font-body-md text-on-surface" placeholder="MM/AA" type="text"/></div>
-                <div class="flex flex-col gap-1.5"><label class="font-label-md text-label-md text-on-surface-variant">CVV</label><input id="checkout-card-cvv" class="w-full bg-surface-container-lowest border border-surface-variant rounded-lg py-3 px-4 font-body-md text-on-surface" placeholder="000" type="text"/></div>
+                <div class="flex flex-col gap-2"><label class="text-xs font-bold text-on-surface ml-1">Validade</label><input id="checkout-card-val" class="w-full bg-white border border-primary/10 rounded-2xl py-3.5 px-5 text-sm text-on-surface" placeholder="MM/AA" type="text"/></div>
+                <div class="flex flex-col gap-2"><label class="text-xs font-bold text-on-surface ml-1">CVV</label><input id="checkout-card-cvv" class="w-full bg-white border border-primary/10 rounded-2xl py-3.5 px-5 text-sm text-on-surface" placeholder="000" type="text"/></div>
               </div>
             </div>
 
-            <!-- PIX fields (shown when pix selected) -->
-            <div id="pix-fields" class="grid grid-cols-1 gap-4 mt-4 p-4 bg-surface-container-low rounded-lg border border-outline-variant/30 text-center">
-              <span class="material-symbols-outlined text-4xl text-primary mb-2">qr_code_scanner</span>
-              <p class="font-body-md text-on-surface-variant mb-2">Chave PIX (Telefone): <strong>(41) 99619-0987</strong></p>
-              <div class="flex flex-col items-center gap-2">
-                <label class="font-label-md text-label-md text-primary bg-primary/10 px-4 py-2 rounded-lg cursor-pointer hover:bg-primary/20 transition-colors inline-flex items-center">
-                    <span class="material-symbols-outlined text-[18px] mr-2">upload_file</span>Anexar Comprovante
+            <div id="pix-fields" class="grid grid-cols-1 gap-4 mt-6 p-8 bg-primary-container/10 rounded-3xl border border-primary/5 text-center">
+              <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-2 shadow-sm">
+                <span class="material-symbols-outlined text-3xl text-primary">qr_code_scanner</span>
+              </div>
+              <p class="text-sm text-on-surface"><span class="opacity-60">Chave PIX (Telefone):</span> <br><strong class="text-lg">41996190987</strong></p>
+              <div class="flex flex-col items-center gap-3">
+                <label class="text-xs font-bold text-primary bg-white px-6 py-3 rounded-full cursor-pointer hover:bg-primary-container transition-all shadow-sm border border-primary/10 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[18px]">upload_file</span>Anexar Comprovante
                     <input id="checkout-pix-receipt" type="file" class="hidden" accept="image/*,.pdf" onchange="document.getElementById('pix-filename').textContent = this.files[0] ? this.files[0].name : ''" />
                 </label>
-                <span id="pix-filename" class="text-xs text-on-surface-variant font-bold"></span>
+                <span id="pix-filename" class="text-xs text-on-surface-variant font-bold opacity-60"></span>
               </div>
             </div>
           </div>
 
           <!-- Cupom -->
-          <div class="bg-primary/5 rounded-xl p-6 border border-primary/20">
-            <h3 class="font-label-md text-label-md text-primary mb-3">Possui um cupom?</h3>
-            <div class="flex gap-2">
-                <input id="coupon-input" type="text" placeholder="Código do cupom" class="flex-grow bg-white border border-primary/20 rounded-lg px-4 py-2 text-sm focus:border-primary outline-none uppercase font-bold tracking-widest">
-                <button type="button" onclick="window.applyDiscount()" class="bg-primary text-white px-6 py-2 rounded-lg text-xs font-bold hover:bg-primary-container transition-all">Aplicar</button>
+          <div class="bg-secondary-container/20 rounded-3xl p-6 border border-secondary/5">
+            <h3 class="text-xs font-bold text-secondary mb-3 ml-1 uppercase tracking-widest">Resgatar Cupom</h3>
+            <div class="flex gap-3">
+                <input id="coupon-input" type="text" placeholder="CÓDIGO" class="flex-grow bg-white border border-secondary/10 rounded-2xl px-5 py-3 text-sm focus:border-secondary outline-none uppercase font-bold tracking-[0.2em] shadow-sm">
+                <button type="button" onclick="window.applyDiscount()" class="bg-secondary text-white px-8 py-3 rounded-2xl text-xs font-bold hover:opacity-90 transition-all shadow-lg shadow-secondary/10">Aplicar</button>
             </div>
           </div>
 
           <!-- Resumo -->
-          <div id="checkout-summary" class="bg-surface-container-low rounded-xl p-6 border border-outline-variant/30">
+          <div id="checkout-summary" class="bg-white/50 rounded-3xl p-8 border border-primary/5 shadow-sm">
             <!-- Rendered by renderCheckoutTotals -->
           </div>
 
           <!-- Actions -->
-          <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between pt-2">
-            <a class="font-label-md text-label-md text-outline hover:text-primary transition-colors flex items-center gap-2 group" href="#/cart"><span class="material-symbols-outlined text-[18px] group-hover:-translate-x-1 transition-transform">arrow_back</span>Voltar ao Carrinho</a>
-            <button class="w-full sm:w-auto bg-primary text-on-primary py-3.5 px-10 rounded-lg font-label-md shadow-[0_4px_16px_rgba(84,64,140,0.25)] hover:shadow-[0_8px_24px_rgba(84,64,140,0.35)] hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2" type="submit">Confirmar Pedido <span class="material-symbols-outlined text-[18px]">check_circle</span></button>
+          <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between pt-4">
+            <a class="text-xs font-bold text-on-surface-variant hover:text-primary transition-colors flex items-center gap-2 group ml-4" href="#/cart">
+                <span class="material-symbols-outlined text-[18px] group-hover:-translate-x-1 transition-transform">arrow_back</span>
+                VOLTAR AO CARRINHO
+            </a>
+            <button class="w-full sm:w-auto bg-primary text-white py-4 px-12 rounded-2xl font-bold shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-1 transition-all flex items-center justify-center gap-3" type="submit">
+                FINALIZAR PEDIDO 
+                <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1">check_circle</span>
+            </button>
           </div>
         </form>
       </div>
-      <div class="mt-4 flex justify-center items-center gap-6 text-outline">
-        <div class="flex items-center gap-2"><span class="material-symbols-outlined text-[20px]">lock</span><span class="font-body-sm text-body-sm">Pagamento Seguro</span></div>
-        <div class="flex items-center gap-2"><span class="material-symbols-outlined text-[20px]">verified</span><span class="font-body-sm text-body-sm">Dados Criptografados</span></div>
+      <div class="mt-8 flex justify-center items-center gap-8 text-on-surface-variant opacity-40">
+        <div class="flex items-center gap-2"><span class="material-symbols-outlined text-[20px]">lock</span><span class="text-[10px] font-bold">100% SEGURO</span></div>
+        <div class="flex items-center gap-2"><span class="material-symbols-outlined text-[20px]">verified</span><span class="text-[10px] font-bold">CERTIFICADO SSL</span></div>
       </div>
     </div>
   </main>`;

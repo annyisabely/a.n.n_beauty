@@ -46,11 +46,14 @@ export default function profilePage() {
     const grid = document.getElementById('profile-grid-container');
     if (items.length === 0) {
         grid.innerHTML = `
-          <div class="col-span-full py-20 text-center flex flex-col items-center gap-4">
-             <div class="w-20 h-20 bg-purple-50 rounded-full flex items-center justify-center text-primary/30">
-                <span class="material-symbols-outlined text-4xl">${type === 'posts' ? 'add_a_photo' : 'bookmark_border'}</span>
+          <div class="col-span-full py-24 text-center flex flex-col items-center gap-6">
+             <div class="w-24 h-24 bg-primary-container/30 rounded-full flex items-center justify-center text-primary/40">
+                <span class="material-symbols-outlined text-5xl">${type === 'posts' ? 'add_a_photo' : 'bookmark_border'}</span>
              </div>
-             <p class="text-outline text-sm">${type === 'posts' ? 'Você ainda não tem publicações.<br>Clique no "+" para começar sua jornada!' : 'Você ainda não salvou nenhuma publicação.'}</p>
+             <div class="space-y-1">
+                <p class="text-on-surface font-bold text-base">${type === 'posts' ? 'Sua galeria está em branco' : 'Nenhuma inspiração salva'}</p>
+                <p class="text-on-surface-variant opacity-60 text-xs">${type === 'posts' ? 'Compartilhe seu primeiro ritual de beleza com o mundo.' : 'Seus produtos e tutoriais favoritos aparecerão aqui.'}</p>
+             </div>
           </div>
         `;
         return;
@@ -60,34 +63,33 @@ export default function profilePage() {
       const interactions = socialManager.getInteractions(item.id);
       const rating = socialManager.getRating(item.id);
       
-      // Handle different types of content in the grid
       const isProduct = item.contentType === 'product' || item.price;
       const isVideo = item.contentType === 'video' || item.type === 'video';
       const imageUrl = isProduct ? (item.img.startsWith('http') ? item.img : `https://lh3.googleusercontent.com/aida-public/${item.img}`) : item.data;
 
       return `
-      <div onclick="${isProduct ? `window.location.hash = '#/search'` : `window.viewPostDetail(${item.id})`}" class="aspect-square rounded-2xl overflow-hidden bg-purple-50 group cursor-pointer relative shadow-sm hover:shadow-xl transition-all duration-500">
+      <div onclick="${isProduct ? `window.location.hash = '#/search'` : `window.viewPostDetail(${item.id})`}" class="aspect-square rounded-[32px] overflow-hidden bg-primary-container/10 group cursor-pointer relative shadow-ethereal hover:shadow-ethereal-hover transition-all duration-700 border border-primary/5">
         ${isVideo ? `
           <video class="w-full h-full object-cover" ${type === 'posts' ? 'muted loop onmouseover="this.play()" onmouseout="this.pause()"' : 'controls'}>
             <source src="${item.data || imageUrl}">
           </video>
         ` : `
-          <img alt="Item" class="w-full h-full object-cover product-image-zoom" src="${imageUrl}"/>
+          <img alt="Item" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" src="${imageUrl}"/>
         `}
-        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-4 text-center">
+        <div class="absolute inset-0 bg-primary/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-center p-4 text-center backdrop-blur-[2px]">
            ${isProduct ? `
-             <div class="text-white">
-                <p class="font-bold text-xs mb-1">${item.name}</p>
-                <p class="text-[10px] opacity-80">${item.price}</p>
+             <div class="text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                <p class="font-display font-bold text-sm mb-1">${item.name}</p>
+                <p class="text-[10px] font-black tracking-widest opacity-90">${item.price}</p>
              </div>
            ` : `
-             <div class="flex gap-4">
-               <span class="text-white font-bold flex items-center gap-1 text-xs"><span class="material-symbols-outlined text-sm text-red-400" style="font-variation-settings: 'FILL' 1">favorite</span> ${interactions.likes.length}</span>
-               <span class="text-white font-bold flex items-center gap-1 text-xs"><span class="material-symbols-outlined text-sm text-amber-400" style="font-variation-settings: 'FILL' 1">grade</span> ${rating}</span>
+             <div class="flex gap-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+               <span class="text-white font-black flex items-center gap-2 text-xs"><span class="material-symbols-outlined text-[20px] text-secondary" style="font-variation-settings: 'FILL' 1">favorite</span> ${interactions.likes.length}</span>
+               <span class="text-white font-black flex items-center gap-2 text-xs"><span class="material-symbols-outlined text-[20px] text-secondary-container" style="font-variation-settings: 'FILL' 1">grade</span> ${rating}</span>
              </div>
            `}
         </div>
-        ${isProduct ? `<div class="absolute top-2 right-2 bg-primary text-white p-1 rounded-full"><span class="material-symbols-outlined text-[14px]">shopping_bag</span></div>` : ''}
+        ${isProduct ? `<div class="absolute top-4 right-4 bg-white/90 backdrop-blur-md text-primary p-2 rounded-full shadow-sm"><span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1">shopping_bag</span></div>` : ''}
       </div>
     `;}).join('');
   }
@@ -362,63 +364,81 @@ export default function profilePage() {
   };
 
   return `
-  <main class="flex-grow max-w-[1280px] mx-auto px-4 md:px-10 py-12 w-full">
-    <section class="flex flex-col items-center text-center max-w-3xl mx-auto mb-16">
-      <div class="relative mb-8 group">
-        <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-purple-50 shadow-2xl transition-transform duration-500 group-hover:scale-105">
+  <main class="flex-grow max-w-[1280px] mx-auto px-4 md:px-10 py-16 w-full bg-background">
+    <section class="flex flex-col items-center text-center max-w-4xl mx-auto mb-20">
+      <div class="relative mb-10 group">
+        <div class="absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-full blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+        <div class="relative w-40 h-40 rounded-full overflow-hidden border-4 border-white shadow-ethereal transition-transform duration-700 group-hover:scale-105">
           <img alt="Avatar" id="profile-avatar" class="w-full h-full object-cover" src="${savedPhoto}"/>
         </div>
-        <label class="absolute bottom-1 right-1 w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center shadow-lg hover:bg-primary-container transition-all active:scale-90 border-2 border-white cursor-pointer">
-          <span class="material-symbols-outlined text-[20px]">photo_camera</span>
+        <label class="absolute bottom-2 right-2 w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all active:scale-95 border-4 border-white cursor-pointer z-10">
+          <span class="material-symbols-outlined text-[22px]">photo_camera</span>
           <input type="file" class="hidden" accept="image/*" onchange="window.handleProfilePhotoUpload(this)">
         </label>
       </div>
       
-      <div id="profile-info">
-        <h1 class="font-display text-4xl text-on-surface mb-2">${user.name}</h1>
-        <p class="font-body-md text-on-surface-variant mb-8 italic">${savedBio}</p>
-        <button onclick="window.toggleProfileEdit()" class="text-xs text-primary hover:underline mb-4">Editar Bio</button>
+      <div id="profile-info" class="space-y-4">
+        <h1 class="font-display text-4xl m:text-5xl text-on-background tracking-tighter">${user.name}</h1>
+        <p class="text-base text-on-surface-variant font-medium opacity-80 max-w-lg mx-auto italic">"${savedBio.replace(/"/g, '')}"</p>
+        <div class="flex items-center justify-center gap-3 pt-2">
+            <button onclick="window.toggleProfileEdit()" class="text-[10px] font-black uppercase tracking-[0.2em] text-primary hover:text-secondary transition-colors border border-primary/20 px-4 py-2 rounded-full">Personalizar Perfil</button>
+            ${(user.role === 'admin_master' || user.role === 'empresa') ? `
+            <a href="#/admin" class="text-[10px] font-black uppercase tracking-[0.2em] bg-primary text-white hover:bg-primary/90 transition-all px-5 py-2.5 rounded-full shadow-md flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1">storefront</span> Minha Loja
+            </a>
+            ` : `
+            <button onclick="window.openCreateStoreModal()" class="text-[10px] font-black uppercase tracking-[0.2em] bg-gradient-to-r from-primary to-secondary text-white hover:brightness-110 transition-all px-5 py-2.5 rounded-full shadow-md flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1">storefront</span> Criar Minha Loja
+            </button>
+            `}
+        </div>
       </div>
 
-      <div id="edit-fields" class="hidden w-full max-w-md space-y-4 mb-8">
-        <textarea id="edit-bio" class="w-full bg-surface-container-low border border-surface-variant rounded-2xl px-6 py-4 text-sm outline-none focus:border-primary" rows="3">${savedBio}</textarea>
-        <div class="flex gap-4 justify-center">
-            <button onclick="window.saveDirectProfile()" class="bg-primary text-white px-8 py-2 rounded-full text-sm font-bold">Salvar</button>
-            <button onclick="window.toggleProfileEdit()" class="border border-outline text-outline px-8 py-2 rounded-full text-sm">Cancelar</button>
+      <div id="edit-fields" class="hidden w-full max-w-lg space-y-6 mt-6 p-8 bg-white rounded-[32px] shadow-ethereal border border-primary/5">
+        <div class="space-y-2 text-left">
+            <label class="text-[10px] font-bold text-on-surface opacity-40 uppercase tracking-widest ml-4">Sua Bio</label>
+            <textarea id="edit-bio" class="w-full bg-primary-container/20 border-none rounded-2xl px-6 py-4 text-sm font-medium outline-none focus:ring-2 focus:ring-primary/20 transition-all" rows="3">${savedBio}</textarea>
+        </div>
+        <div class="flex gap-4">
+            <button onclick="window.saveDirectProfile()" class="flex-grow bg-primary text-white py-3 rounded-2xl text-xs font-bold uppercase tracking-widest shadow-lg shadow-primary/20">Salvar Alterações</button>
+            <button onclick="window.toggleProfileEdit()" class="px-8 border border-primary/20 text-on-surface-variant py-3 rounded-2xl text-xs font-bold">Cancelar</button>
         </div>
       </div>
       
-      <div class="flex gap-12 mb-10">
-        <div class="text-center"><span class="font-display text-2xl text-primary block">${posts.length}</span><span class="font-label-xs text-outline uppercase tracking-tighter">Publicações</span></div>
-        <div class="text-center"><span class="font-display text-2xl text-primary block">${user.followers > 999 ? (user.followers / 1000).toFixed(1) + 'k' : user.followers}</span><span class="font-label-xs text-outline uppercase tracking-tighter">Seguidores</span></div>
-        <div class="text-center"><span class="font-display text-2xl text-primary block">${user.following || 0}</span><span class="font-label-xs text-outline uppercase tracking-tighter">Seguindo</span></div>
-      </div>
-      
-      <div class="flex gap-4">
-        <a href="#/tracking" class="px-8 py-3 border-2 border-primary text-primary font-label-md rounded-full hover:bg-purple-50 transition-all flex items-center gap-2">
-          Rastrear Pedidos <span class="material-symbols-outlined text-sm">local_shipping</span>
-        </a>
+      <div class="grid grid-cols-3 gap-8 md:gap-16 mt-12 bg-white px-12 py-8 rounded-[32px] shadow-ethereal border border-primary/5">
+        <div class="text-center group cursor-pointer">
+            <span class="font-display text-3xl text-primary block group-hover:scale-110 transition-transform">${posts.length}</span>
+            <span class="text-[9px] font-black text-on-surface-variant opacity-40 uppercase tracking-widest">Publicações</span>
+        </div>
+        <div class="text-center group cursor-pointer">
+            <span class="font-display text-3xl text-primary block group-hover:scale-110 transition-transform">${user.followers > 999 ? (user.followers / 1000).toFixed(1) + 'k' : user.followers}</span>
+            <span class="text-[9px] font-black text-on-surface-variant opacity-40 uppercase tracking-widest">Seguidores</span>
+        </div>
+        <div class="text-center group cursor-pointer">
+            <span class="font-display text-3xl text-primary block group-hover:scale-110 transition-transform">${user.following || 0}</span>
+            <span class="text-[9px] font-black text-on-surface-variant opacity-40 uppercase tracking-widest">Seguindo</span>
+        </div>
       </div>
     </section>
 
-    <section>
-      <div class="flex justify-center gap-8 mb-10 border-b border-purple-50">
-        <button id="tab-posts-btn" onclick="window.switchProfileTab('posts')" class="px-8 py-4 font-label-md text-primary border-b-2 border-primary transition-all">Postagens</button>
-        <button id="tab-saved-btn" onclick="window.switchProfileTab('saved')" class="px-8 py-4 font-label-md text-on-surface-variant hover:text-primary transition-colors border-b-2 border-transparent transition-all">Salvos</button>
+    <section class="mt-8">
+      <div class="flex justify-center gap-12 mb-12 border-b border-primary/10">
+        <button id="tab-posts-btn" onclick="window.switchProfileTab('posts')" class="px-8 py-6 font-bold text-xs uppercase tracking-[0.2em] text-primary border-b-2 border-primary transition-all">Minha Jornada</button>
+        <button id="tab-saved-btn" onclick="window.switchProfileTab('saved')" class="px-8 py-6 font-bold text-xs uppercase tracking-[0.2em] text-on-surface-variant opacity-40 hover:opacity-100 border-b-2 border-transparent transition-all">Desejos & Salvos</button>
       </div>
       
-      <div id="profile-grid-container" class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-        ${posts.length === 0 ? `
+      <div id="profile-grid-container" class="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-10">
+         ${posts.length === 0 ? `
           <div class="col-span-full py-20 text-center flex flex-col items-center gap-4">
-             <div class="w-20 h-20 bg-purple-50 rounded-full flex items-center justify-center text-primary/30">
+             <div class="w-20 h-20 bg-primary/5 rounded-full flex items-center justify-center text-primary/30">
                 <span class="material-symbols-outlined text-4xl">add_a_photo</span>
              </div>
-             <p class="text-outline text-sm">Você ainda não tem publicações.<br>Clique no "+" para começar sua jornada!</p>
+             <p class="text-on-surface-variant/50 text-sm font-medium">Nenhuma publicação ainda.<br>Comece a compartilhar sua beleza!</p>
           </div>
         ` : posts.map(post => {
             const interactions = socialManager.getInteractions(post.id);
             return `
-          <div onclick="window.viewPostDetail(${post.id})" class="aspect-square rounded-2xl overflow-hidden bg-purple-50 group cursor-pointer relative shadow-sm hover:shadow-xl transition-all duration-500">
+          <div onclick="window.viewPostDetail(${post.id})" class="aspect-square rounded-[32px] overflow-hidden bg-white group cursor-pointer relative shadow-ethereal hover:shadow-ethereal-hover transition-all duration-500 border border-primary/5">
             ${post.type === 'video' ? `
               <video class="w-full h-full object-cover" muted loop onmouseover="this.play()" onmouseout="this.pause()">
                 <source src="${post.data}">
@@ -426,7 +446,7 @@ export default function profilePage() {
             ` : `
               <img alt="Post" class="w-full h-full object-cover product-image-zoom" src="${post.data}"/>
             `}
-            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-4 text-center">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-end p-6 text-center">
                <div class="flex gap-4">
                  <span class="text-white font-bold flex items-center gap-1 text-xs"><span class="material-symbols-outlined text-sm text-red-400" style="font-variation-settings: 'FILL' 1">favorite</span> ${interactions.likes.length}</span>
                  <span class="text-white font-bold flex items-center gap-1 text-xs"><span class="material-symbols-outlined text-sm text-amber-400" style="font-variation-settings: 'FILL' 1">star</span> ${interactions.stars.length}</span>
@@ -436,11 +456,21 @@ export default function profilePage() {
         `;}).join('')}
       </div>
     </section>
-    </section>
+
+    <div class="mt-20 flex justify-center">
+        <a href="#/tracking" class="group flex items-center gap-4 bg-white border border-primary/10 px-10 py-5 rounded-full shadow-ethereal hover:shadow-ethereal-hover transition-all">
+            <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined text-[20px]">local_shipping</span>
+            </div>
+            <div class="text-left">
+                <p class="text-[10px] font-black text-primary uppercase tracking-widest leading-none mb-1">Logística de Beleza</p>
+                <p class="text-sm font-bold text-on-background">RASTREAR MEUS PEDIDOS</p>
+            </div>
+        </a>
+    </div>
   </main>
 
   <!-- Post Detail Modal -->
-  <div id="post-detail-modal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-[110] items-center justify-center p-0 md:p-10">
     <button onclick="window.toggleDetailModal()" class="absolute top-6 right-6 text-white/50 hover:text-white z-[120]">
       <span class="material-symbols-outlined text-4xl">close</span>
     </button>
@@ -450,43 +480,57 @@ export default function profilePage() {
   </div>
 
   <!-- Floating Post Button -->
-  <button onclick="window.togglePostModal()" class="fixed bottom-24 md:bottom-10 right-6 w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all z-50">
-    <span class="material-symbols-outlined text-3xl">add</span>
+  <button onclick="window.togglePostModal()" class="fixed bottom-24 md:bottom-12 left-8 w-16 h-16 bg-gradient-to-br from-primary to-primary-container text-white rounded-[24px] flex items-center justify-center shadow-2xl shadow-primary/40 hover:scale-110 hover:-rotate-12 active:scale-95 transition-all z-50 group border border-white/20">
+    <span class="material-symbols-outlined text-3xl group-hover:rotate-90 transition-transform duration-500">add</span>
+    <div class="absolute -top-12 left-1/2 -translate-x-1/2 bg-on-background text-white text-[9px] font-black uppercase tracking-widest px-4 py-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">Novo Ritual</div>
   </button>
 
   <!-- Post Modal -->
-  <div id="post-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] items-center justify-center p-4">
-    <div class="bg-white rounded-3xl w-full max-w-md p-8 shadow-2xl animate-in zoom-in duration-300">
-      <div class="flex justify-between items-center mb-6">
-        <h3 class="font-display text-2xl text-on-surface">Nova Publicação</h3>
-        <button onclick="window.togglePostModal()" class="text-outline hover:text-on-surface transition-colors">
-          <span class="material-symbols-outlined">close</span>
+  <div id="post-modal" class="hidden fixed inset-0 bg-primary/20 backdrop-blur-xl z-[100] items-center justify-center p-6">
+    <div class="bg-white rounded-[48px] w-full max-w-md p-10 md:p-12 shadow-ethereal-hover animate-in zoom-in duration-300 border border-primary/10 relative overflow-hidden">
+      <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary via-secondary to-primary-container"></div>
+      
+      <div class="flex justify-between items-center mb-10">
+        <div class="space-y-1">
+            <h3 class="font-display text-3xl text-on-background tracking-tighter">Manifestar <span class="italic text-primary">Beleza</span></h3>
+            <p class="text-[10px] font-black text-on-surface-variant opacity-40 uppercase tracking-[0.2em]">Crie uma nova publicação</p>
+        </div>
+        <button onclick="window.togglePostModal()" class="w-10 h-10 rounded-full bg-primary/5 text-primary hover:bg-primary hover:text-white transition-all flex items-center justify-center group">
+          <span class="material-symbols-outlined group-hover:rotate-90 transition-transform">close</span>
         </button>
       </div>
 
-      <form onsubmit="window.handleProfilePost(event)" class="space-y-6">
-        <div class="space-y-2">
-          <label class="text-[10px] text-outline uppercase tracking-widest font-bold ml-2">O que você quer postar?</label>
-          <select id="modal-post-type" class="w-full bg-surface-container-low border border-surface-variant rounded-full px-6 py-3 text-sm outline-none focus:border-primary">
-            <option value="photo">Foto (Look do dia)</option>
-            <option value="video">Vídeo (Ritual/Tutorial)</option>
-          </select>
+      <form onsubmit="window.handleProfilePost(event)" class="space-y-8">
+        <div class="space-y-3">
+          <label class="text-[10px] font-black text-on-surface-variant opacity-40 uppercase tracking-[0.2em] ml-4">Categorização do Ritual</label>
+          <div class="relative">
+            <select id="modal-post-type" class="w-full bg-primary-container/10 border-none rounded-2xl px-6 py-4 text-sm font-medium outline-none focus:ring-2 focus:ring-primary/20 transition-all appearance-none cursor-pointer text-on-background">
+              <option value="photo">Foto (Look do dia)</option>
+              <option value="video">Vídeo (Ritual/Tutorial)</option>
+            </select>
+            <span class="material-symbols-outlined absolute right-6 top-1/2 -translate-y-1/2 text-primary opacity-40 pointer-events-none">expand_more</span>
+          </div>
         </div>
 
-        <div class="space-y-2">
-          <label class="text-[10px] text-outline uppercase tracking-widest font-bold ml-2">Legenda</label>
-          <textarea id="modal-post-caption" class="w-full bg-surface-container-low border border-surface-variant rounded-2xl px-6 py-3 text-sm outline-none focus:border-primary" rows="3" placeholder="Escreva algo sobre este momento..."></textarea>
+        <div class="space-y-3">
+          <label class="text-[10px] font-black text-on-surface-variant opacity-40 uppercase tracking-[0.2em] ml-4">Manifesto / Legenda</label>
+          <textarea id="modal-post-caption" class="w-full bg-primary-container/10 border-none rounded-[24px] px-6 py-4 text-sm font-medium outline-none focus:ring-2 focus:ring-primary/20 transition-all resize-none text-on-background" rows="3" placeholder="Escreva algo sobre este momento..."></textarea>
         </div>
 
         <div class="relative group">
           <input id="modal-post-file" type="file" accept="image/*,video/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" required>
-          <div class="border-2 border-dashed border-purple-100 rounded-2xl p-10 text-center group-hover:border-primary transition-colors">
-            <span class="material-symbols-outlined text-4xl text-purple-200 mb-2">upload_file</span>
-            <p class="text-outline text-xs">Clique para selecionar do aparelho</p>
+          <div class="border-2 border-dashed border-primary/10 rounded-[32px] p-12 text-center group-hover:border-primary/40 group-hover:bg-primary/5 transition-all flex flex-col items-center gap-4">
+            <div class="w-16 h-16 rounded-full bg-primary-container/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined text-3xl">add_a_photo</span>
+            </div>
+            <div>
+                <p class="text-xs font-bold text-on-background">Carregar Essência Visual</p>
+                <p class="text-[10px] text-on-surface-variant opacity-50 mt-1 uppercase tracking-widest">Clique ou arraste seu arquivo</p>
+            </div>
           </div>
         </div>
 
-        <button type="submit" class="w-full bg-primary text-white py-4 rounded-full font-bold shadow-lg shadow-primary/20 hover:bg-primary-container transition-all">
+        <button type="submit" class="w-full bg-gradient-to-r from-primary to-primary-container text-white py-5 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] shadow-lg shadow-primary/20 hover:shadow-2xl hover:-translate-y-1 transition-all active:scale-[0.98]">
           Publicar Agora
         </button>
       </form>

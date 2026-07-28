@@ -10,20 +10,20 @@
 /* Custom scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #e1e3e4; border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: #cac4d2; }
+::-webkit-scrollbar-thumb { background: #D8B4E2; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #A78BFA; }
 
 /* Ambient ethereal shadow */
 .ambient-shadow {
-    box-shadow: 0 10px 40px -10px rgba(109, 88, 166, 0.08);
+    box-shadow: 0 10px 40px -10px rgba(124, 58, 237, 0.15);
 }
 
 /* Ethereal shadow variants */
 .shadow-ethereal {
-    box-shadow: 0 12px 40px -12px rgba(109, 88, 166, 0.12);
+    box-shadow: 0 12px 40px -12px rgba(124, 58, 237, 0.12);
 }
 .shadow-ethereal-hover {
-    box-shadow: 0 20px 50px -10px rgba(109, 88, 166, 0.18);
+    box-shadow: 0 20px 50px -10px rgba(124, 58, 237, 0.2);
 }
 
 /* Glassmorphism panel */
@@ -36,7 +36,7 @@
 
 /* Soft shadow */
 .soft-shadow {
-    box-shadow: 0 10px 40px -10px rgba(109, 88, 166, 0.08);
+    box-shadow: 0 10px 40px -10px rgba(124, 58, 237, 0.1);
 }
 
 /* Page transition */
@@ -52,8 +52,8 @@
 
 /* Smooth selection */
 ::selection {
-    background: #e9ddff;
-    color: #220458;
+    background: #EDE9FE;
+    color: #2E1065;
 }
 
 /* Body defaults */
@@ -82,13 +82,13 @@ h1, h2, h3, h4, h5, h6, .font-serif {
 
 /* ─── Variables ─────────────────────────────── */
 :root {
-    --gai-primary:     #7c3aed;
-    --gai-primary-dk:  #5b21b6;
-    --gai-primary-lt:  #ede9fe;
-    --gai-bg:          #ffffff;
-    --gai-bg2:         #f5f3ff;
-    --gai-border:      rgba(124,58,237,0.12);
-    --gai-shadow:      0 24px 80px -12px rgba(109,88,166,0.35);
+    --gai-primary:     #A78BFA;
+    --gai-primary-dk:  #8B5CF6;
+    --gai-primary-lt:  #F5F3FF;
+    --gai-bg:          #FDFAFF;
+    --gai-bg2:         #FAF7FC;
+    --gai-border:      rgba(167,139,250,0.12);
+    --gai-shadow:      0 24px 80px -12px rgba(167,139,250,0.35);
     --gai-radius:      20px;
     --gai-panel-w:     380px;
     --gai-panel-h:     600px;
@@ -111,7 +111,7 @@ h1, h2, h3, h4, h5, h6, .font-serif {
     width: var(--gai-fab-size);
     height: var(--gai-fab-size);
     border-radius: 50%;
-    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 50%, #ec4899 100%);
+    background: linear-gradient(135deg, #A78BFA 0%, #C084FC 50%, #E879F9 100%);
     border: none;
     cursor: pointer;
     display: flex;
@@ -129,7 +129,7 @@ h1, h2, h3, h4, h5, h6, .font-serif {
 }
 #glowai-fab:active { transform: scale(0.95); }
 #glowai-fab.glowai-fab--open {
-    background: linear-gradient(135deg, #5b21b6, #7c3aed);
+    background: linear-gradient(135deg, #8B5CF6, #A78BFA);
 }
 
 /* Pulse ring */
@@ -152,7 +152,7 @@ h1, h2, h3, h4, h5, h6, .font-serif {
     position: absolute;
     top: -4px;
     right: -4px;
-    background: #ec4899;
+    background: #D946EF;
     color: white;
     font-size: 10px;
     font-weight: 700;
@@ -205,7 +205,7 @@ h1, h2, h3, h4, h5, h6, .font-serif {
     align-items: center;
     justify-content: space-between;
     padding: 14px 16px;
-    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 60%, #ec4899 100%);
+    background: linear-gradient(135deg, #A78BFA 0%, #C084FC 60%, #E879F9 100%);
     flex-shrink: 0;
 }
 .glowai-header-left {
@@ -242,7 +242,7 @@ h1, h2, h3, h4, h5, h6, .font-serif {
 .glowai-online-dot {
     width: 7px;
     height: 7px;
-    background: #4ade80;
+    background: #22c55e;
     border-radius: 50%;
     display: inline-block;
     animation: gai-blink 2s infinite;
@@ -290,7 +290,7 @@ h1, h2, h3, h4, h5, h6, .font-serif {
     font-size: 11.5px;
     font-weight: 600;
     color: var(--gai-primary);
-    background: white;
+    background: #FCFBFE;
     border: 1.5px solid rgba(124,58,237,0.22);
     border-radius: 999px;
     padding: 5px 12px;
@@ -365,7 +365,7 @@ h1, h2, h3, h4, h5, h6, .font-serif {
     border: 1px solid var(--gai-border);
 }
 .glowai-bubble--user {
-    background: linear-gradient(135deg, #7c3aed, #a855f7);
+    background: linear-gradient(135deg, #A78BFA, #C084FC);
     color: white;
     border-bottom-right-radius: 4px;
     font-weight: 500;
@@ -522,14 +522,14 @@ h1, h2, h3, h4, h5, h6, .font-serif {
 #glowai-input:focus {
     border-color: var(--gai-primary);
     box-shadow: 0 0 0 3px rgba(124,58,237,0.08);
-    background: white;
+    background: #FCFBFE;
 }
-#glowai-input::placeholder { color: #a78bfa; }
+#glowai-input::placeholder { color: #A78BFA; }
 #glowai-send {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #7c3aed, #a855f7);
+    background: linear-gradient(135deg, #A78BFA, #C084FC);
     border: none;
     color: white;
     cursor: pointer;
@@ -550,7 +550,7 @@ h1, h2, h3, h4, h5, h6, .font-serif {
 .glowai-branding {
     text-align: center;
     font-size: 10px;
-    color: #a78bfa;
+    color: #A78BFA;
     padding: 5px 0 7px;
     letter-spacing: 0.03em;
     background: white;

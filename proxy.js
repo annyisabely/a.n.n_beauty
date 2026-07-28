@@ -1,111 +1,126 @@
 /**
- * GlowAI Proxy Server
- * Serves the static A.n.n Beauty app AND proxies /api/chat → OpenAI
- * Run: node proxy.js
+ * GlowAI Proxy Server + Express API
+ * Serves the static A.n.n Beauty app, proxies /api/chat → OpenAI,
+ * and provides REST API for the SQLite database.
  */
-const http  = require('http');
+const express = require('express');
+const cors = require('cors');
+const path = require('path');
 const https = require('https');
-const fs    = require('fs');
-const path  = require('path');
+const db = require('./server/db');
 
-const PORT    = 5500;
-const STATIC  = __dirname;
+const app = express();
+const PORT = 5500;
+const STATIC = __dirname;
 
-// MIME types
-const MIME = {
-    '.html': 'text/html',
-    '.js':   'application/javascript',
-    '.css':  'text/css',
-    '.json': 'application/json',
-    '.png':  'image/png',
-    '.jpg':  'image/jpeg',
-    '.svg':  'image/svg+xml',
-    '.ico':  'image/x-icon',
-    '.webp': 'image/webp',
-    '.woff2':'font/woff2',
-};
+app.use(cors());
+app.use(express.json());
+app.use(express.static(STATIC)); // Serve HTML/JS/CSS files
 
-function setCORS(res) {
-    res.setHeader('Access-Control-Allow-Origin',  '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
-}
+// ── OpenAI proxy ──────────────────────────────────────────────────────────
+app.post('/api/chat', (req, res) => {
+    const apiKey = req.body._apiKey || '';
+    delete req.body._apiKey; // remove before forwarding
 
-const server = http.createServer((req, res) => {
-    setCORS(res);
+    const payload = JSON.stringify(req.body);
 
-    // Pre-flight
-    if (req.method === 'OPTIONS') {
-        res.writeHead(204); res.end(); return;
-    }
+    const options = {
+        hostname: 'opencode.ai',
+        port: 443,
+        path: '/zen/v1/chat/completions',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`,
+            'Content-Length': Buffer.byteLength(payload),
+        }
+    };
 
-    // ── OpenAI proxy ──────────────────────────────────────────────────────────
-    if (req.url === '/api/chat' && req.method === 'POST') {
-        let body = '';
-        req.on('data', d => body += d);
-        req.on('end', () => {
-            let parsed;
-            try { parsed = JSON.parse(body); } catch {
-                res.writeHead(400); res.end('Bad JSON'); return;
-            }
+    const proxyReq = https.request(options, proxyRes => {
+        res.status(proxyRes.statusCode);
+        res.set(proxyRes.headers);
+        proxyRes.pipe(res);
+    });
 
-            const apiKey = parsed._apiKey || '';
-            delete parsed._apiKey;          // remove before forwarding
+    proxyReq.on('error', err => {
+        res.status(502).json({ error: { message: err.message } });
+    });
 
-            const payload = JSON.stringify(parsed);
+    proxyReq.write(payload);
+    proxyReq.end();
+});
 
-            const options = {
-                hostname: 'opencode.ai',
-                port: 443,
-                path: '/zen/v1/chat/completions',
-                method: 'POST',
-                headers: {
-                    'Content-Type':  'application/json',
-                    'Authorization': `Bearer ${apiKey}`,
-                    'Content-Length': Buffer.byteLength(payload),
+// ── Database API (SQLite) ──────────────────────────────────────────────────
+const tables = ['users', 'stores', 'products', 'orders', 'reports', 'coupons', 'categories', 'settings'];
+
+// GET all records from a table
+app.get('/api/:table', (req, res) => {
+    const table = req.params.table;
+    if (!tables.includes(table)) return res.status(400).json({ error: 'Invalid table' });
+
+    db.all(`SELECT * FROM ${table}`, [], (err, rows) => {
+        if (err) return res.status(500).json({ error: err.message });
+        
+        if (table === 'settings') {
+            const settingsObj = {};
+            rows.forEach(r => settingsObj[r.key] = r.value);
+            return res.json(settingsObj);
+        }
+        
+        res.json(rows);
+    });
+});
+
+// POST to overwrite a table (mimics the save... methods from localStorage)
+app.post('/api/save/:table', (req, res) => {
+    const table = req.params.table;
+    if (!tables.includes(table)) return res.status(400).json({ error: 'Invalid table' });
+
+    const data = req.body; 
+
+    if (table === 'settings') {
+        db.serialize(() => {
+            db.run("DELETE FROM settings", (err) => {
+                if (err) return res.status(500).json({ error: err.message });
+                const stmt = db.prepare("INSERT INTO settings (key, value) VALUES (?, ?)");
+                for (const key in data) {
+                    stmt.run(key, data[key]);
                 }
-            };
-
-            const proxyReq = https.request(options, proxyRes => {
-                res.writeHead(proxyRes.statusCode, { 'Content-Type': 'application/json' });
-                proxyRes.pipe(res);
+                stmt.finalize();
+                res.json({ success: true });
             });
-
-            proxyReq.on('error', err => {
-                res.writeHead(502);
-                res.end(JSON.stringify({ error: { message: err.message } }));
-            });
-
-            proxyReq.write(payload);
-            proxyReq.end();
         });
         return;
     }
 
-    // ── Static file server ────────────────────────────────────────────────────
-    let urlPath = req.url.split('?')[0];
-    if (urlPath === '/' || urlPath.startsWith('/#')) urlPath = '/index.html';
+    if (!Array.isArray(data)) return res.status(400).json({ error: 'Expected an array' });
 
-    const filePath = path.join(STATIC, urlPath);
+    db.serialize(() => {
+        db.run(`DELETE FROM ${table}`, (err) => {
+            if (err) return res.status(500).json({ error: err.message });
+            
+            if (data.length === 0) return res.json({ success: true });
 
-    fs.readFile(filePath, (err, data) => {
-        if (err) {
-            // SPA fallback
-            fs.readFile(path.join(STATIC, 'index.html'), (e2, d2) => {
-                if (e2) { res.writeHead(404); res.end('Not found'); return; }
-                res.writeHead(200, { 'Content-Type': 'text/html' });
-                res.end(d2);
+            const keys = Object.keys(data[0]);
+            const placeholders = keys.map(() => '?').join(',');
+            const stmt = db.prepare(`INSERT INTO ${table} (${keys.join(',')}) VALUES (${placeholders})`);
+            
+            data.forEach(item => {
+                const values = keys.map(k => item[k]);
+                stmt.run(values);
             });
-            return;
-        }
-        const ext  = path.extname(filePath);
-        const mime = MIME[ext] || 'application/octet-stream';
-        res.writeHead(200, { 'Content-Type': mime });
-        res.end(data);
+            stmt.finalize();
+            res.json({ success: true });
+        });
     });
 });
 
-server.listen(PORT, () => {
-    console.log(`\n  ✦ GlowAI Proxy + A.n.n Beauty`);
+// SPA Fallback
+app.get('*', (req, res) => {
+    res.sendFile(path.join(STATIC, 'index.html'));
+});
+
+app.listen(PORT, () => {
+    console.log(`\n  ✦ GlowAI Proxy + A.n.n Beauty (Express + SQLite)`);
     console.log(`  → http://localhost:${PORT}\n`);
 });

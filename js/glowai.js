@@ -1,5 +1,5 @@
 // ============================================
-// GlowAI — Assistente de Beleza A.n.n Beauty
+// GlowAI — Assistente de Beleza Beleza na Web
 // ============================================
 
 import { dataManager } from './data_manager.js';
@@ -25,7 +25,7 @@ function buildSystemPrompt() {
     const catalog = buildCatalogSummary();
     const offers  = 'Frete grátis em compras acima de R$150 • Parcelamento em até 6x sem juros • Troca em até 30 dias • Brinde exclusivo em compras acima de R$300';
 
-    return `Você é GlowAI, a Consultora de Beleza Digital de Elite da A.n.n Beauty.
+    return `Você é GlowAI, a Consultora de Beleza Digital de Elite da Beleza na Web.
 Sua missão é transformar a experiência de compra em um ritual de autocuidado, oferecendo consultoria personalizada de alto padrão.
 
 PERSONALIDADE:
@@ -137,7 +137,7 @@ class GlowAIWidget {
             <span class="glowai-fab-icon">
                 <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 2C6.477 2 2 6.177 2 11.3c0 2.7 1.18 5.13 3.08 6.83L4 22l4.27-1.4A10.12 10.12 0 0 0 12 21.6c5.523 0 10-4.177 10-9.3S17.523 2 12 2Z" fill="white"/>
-                    <path d="M8 11h8M8 14.5h5" stroke="#7c3aed" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M8 11h8M8 14.5h5" stroke="#A78BFA" stroke-width="1.8" stroke-linecap="round"/>
                 </svg>
             </span>
             <span class="glowai-fab-pulse"></span>
@@ -215,7 +215,7 @@ class GlowAIWidget {
                     </svg>
                 </button>
             </div>
-            <div class="glowai-branding">Powered by <strong>GlowAI</strong> × A.n.n Beauty ✦</div>
+            <div class="glowai-branding">Powered by <strong>GlowAI</strong> × Beleza na Web ✦</div>
         </div>`;
 
         document.body.appendChild(root);
@@ -314,7 +314,7 @@ class GlowAIWidget {
     async _sendGreeting() {
         if (this.greetSent) return;
         this.greetSent = true;
-        const greet = `Olá! 💜 Sou a GlowAI, sua consultora de beleza da A.n.n Beauty. Posso te ajudar a encontrar o produto perfeito, ensinar tutoriais ou tirar dúvidas sobre skincare. Por onde quer começar?`;
+        const greet = `Olá! 💜 Sou a GlowAI, sua consultora de beleza da Beleza na Web. Posso te ajudar a encontrar o produto perfeito, ensinar tutoriais ou tirar dúvidas sobre skincare. Por onde quer começar?`;
         this._appendMessage('assistant', greet);
         this.history.push({ role: 'assistant', content: greet });
         saveHistory(this.history);
@@ -386,7 +386,7 @@ class GlowAIWidget {
             wrap.innerHTML = `
             <div class="glowai-msg-avatar">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 2C6.477 2 2 6.177 2 11.3c0 2.7 1.18 5.13 3.08 6.83L4 22l4.27-1.4A10.12 10.12 0 0 0 12 21.6c5.523 0 10-4.177 10-9.3S17.523 2 12 2Z" fill="#7c3aed"/>
+                    <path d="M12 2C6.477 2 2 6.177 2 11.3c0 2.7 1.18 5.13 3.08 6.83L4 22l4.27-1.4A10.12 10.12 0 0 0 12 21.6c5.523 0 10-4.177 10-9.3S17.523 2 12 2Z" fill="#A78BFA"/>
                 </svg>
             </div>
             <div class="glowai-bubble glowai-bubble--ai">
@@ -417,7 +417,7 @@ class GlowAIWidget {
         div.innerHTML = `
         <div class="glowai-msg-avatar">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                <path d="M12 2C6.477 2 2 6.177 2 11.3c0 2.7 1.18 5.13 3.08 6.83L4 22l4.27-1.4A10.12 10.12 0 0 0 12 21.6c5.523 0 10-4.177 10-9.3S17.523 2 12 2Z" fill="#7c3aed"/>
+                <path d="M12 2C6.477 2 2 6.177 2 11.3c0 2.7 1.18 5.13 3.08 6.83L4 22l4.27-1.4A10.12 10.12 0 0 0 12 21.6c5.523 0 10-4.177 10-9.3S17.523 2 12 2Z" fill="#A78BFA"/>
             </svg>
         </div>
         <div class="glowai-bubble glowai-bubble--ai glowai-typing-bubble">
