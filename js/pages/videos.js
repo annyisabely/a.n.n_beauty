@@ -2,8 +2,11 @@ import { dataManager } from '../data_manager.js';
 
 export default function videosPage() {
   const vids = dataManager.generateVideos(100);
-  const cards = vids.map(v => `
-    <div class="group flex flex-col bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_8px_30px_rgb(109,88,166,0.05)] hover:shadow-[0_8px_30px_rgb(109,88,166,0.1)] transition-all duration-300 cursor-pointer">
+
+  function buildVideoCard(v) {
+    return `
+    <div onclick="window.openVideoModal(${v.id || 0}, '${(v.title || '').replace(/'/g, "\\'")}', '${(v.cat || '').replace(/'/g, "\\'")}', '${(v.time || '').replace(/'/g, "\\'")}', '${(v.desc || '').replace(/'/g, "\\'")}', '${(v.img || '').replace(/'/g, "\\'")}')" 
+         class="group flex flex-col bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0_8px_30px_rgb(109,88,166,0.05)] hover:shadow-[0_8px_30px_rgb(109,88,166,0.1)] transition-all duration-300 cursor-pointer">
       <div class="relative aspect-[4/3] overflow-hidden bg-surface-container-low">
         <img alt="${v.title}" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/${v.img}"/>
         <div class="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors"></div>
@@ -15,7 +18,87 @@ export default function videosPage() {
         <h3 class="font-headline-md text-headline-md text-on-surface mb-1">${v.title}</h3>
         <p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">${v.desc || 'Assista a este tutorial exclusivo para dominar as técnicas de beleza A.n.n.'}</p>
       </div>
-    </div>`).join('');
+    </div>`;
+  }
+
+  // ── Video modal open ──
+  window.openVideoModal = (id, title, cat, time, desc, img) => {
+    const modal = document.getElementById('video-modal');
+    if (!modal) return;
+    const content = document.getElementById('video-modal-content');
+    content.innerHTML = `
+      <div class="relative w-full aspect-video bg-black rounded-t-2xl overflow-hidden flex items-center justify-center">
+        <img src="https://lh3.googleusercontent.com/aida-public/${img}" alt="${title}" class="w-full h-full object-cover opacity-70"/>
+        <div class="absolute inset-0 flex items-center justify-center">
+          <div class="w-20 h-20 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center">
+            <span class="material-symbols-outlined text-white text-4xl ml-1" style="font-variation-settings:'FILL' 1;">play_arrow</span>
+          </div>
+        </div>
+        <div class="absolute top-4 right-4">
+          <span class="px-3 py-1 bg-black/60 backdrop-blur-sm rounded-full text-white text-xs font-bold">${time}</span>
+        </div>
+      </div>
+      <div class="p-6">
+        <span class="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold mb-3 inline-block">${cat}</span>
+        <h3 class="text-xl font-bold text-on-surface mb-2" style="font-family:'Poppins',sans-serif">${title}</h3>
+        <p class="text-sm text-on-surface-variant leading-relaxed mb-4">${desc || 'Assista a este tutorial exclusivo para dominar as técnicas de beleza A.n.n.'}</p>
+        <div class="flex gap-3">
+          <button onclick="window.closeVideoModal()" class="px-5 py-2.5 rounded-xl bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors flex items-center gap-2">
+            <span class="material-symbols-outlined text-sm">play_arrow</span> Assistir Tutorial
+          </button>
+          <button onclick="window.closeVideoModal()" class="px-5 py-2.5 rounded-xl bg-surface-container-low text-on-surface-variant text-sm font-bold hover:bg-surface-dim transition-colors">
+            Fechar
+          </button>
+        </div>
+      </div>
+    `;
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+  };
+
+  window.closeVideoModal = () => {
+    const modal = document.getElementById('video-modal');
+    if (modal) {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+  };
+
+  // ── Filter logic ──
+  function initVideoFilters() {
+    const filterBtns = document.querySelectorAll('.video-cat-filter');
+    const grid = document.getElementById('videos-grid');
+    let activeCat = 'all';
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        activeCat = btn.dataset.cat;
+
+        // Update button styles
+        filterBtns.forEach(b => {
+          b.classList.toggle('bg-primary', b === btn);
+          b.classList.toggle('text-white', b === btn);
+          b.classList.toggle('shadow-sm', b === btn);
+          b.classList.toggle('bg-surface-container-low', b !== btn);
+          b.classList.toggle('text-on-surface-variant', b !== btn);
+        });
+
+        // Filter videos
+        const filtered = activeCat === 'all'
+          ? vids
+          : vids.filter(v => (v.cat || '').toLowerCase().includes(activeCat));
+
+        grid.innerHTML = filtered.length > 0
+          ? filtered.map(v => buildVideoCard(v)).join('')
+          : `<div class="col-span-full py-16 text-center">
+               <span class="material-symbols-outlined text-5xl text-primary/30 mb-3 block">video_library</span>
+               <p class="text-on-surface-variant text-sm">Nenhum vídeo encontrado nesta categoria.</p>
+             </div>`;
+      });
+    });
+  }
+
+  setTimeout(() => initVideoFilters(), 50);
 
   return `
   <main class="max-w-[1280px] mx-auto px-4 md:px-10 py-12">
@@ -24,10 +107,10 @@ export default function videosPage() {
       <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Descubra tutoriais guiados para elevar sua rotina diária de cuidados e maquiagem.</p>
     </div>
     <div class="flex flex-wrap gap-3 mb-8 justify-center md:justify-start">
-      <button class="px-4 py-2 rounded-full bg-primary text-white font-label-md text-label-md shadow-sm">Todos</button>
-      <button class="px-4 py-2 rounded-full bg-surface-container-low text-on-surface-variant font-label-md text-label-md hover:bg-primary-fixed hover:text-primary transition-colors border border-outline-variant/30">Skincare</button>
-      <button class="px-4 py-2 rounded-full bg-surface-container-low text-on-surface-variant font-label-md text-label-md hover:bg-primary-fixed hover:text-primary transition-colors border border-outline-variant/30">Maquiagem</button>
-      <button class="px-4 py-2 rounded-full bg-surface-container-low text-on-surface-variant font-label-md text-label-md hover:bg-primary-fixed hover:text-primary transition-colors border border-outline-variant/30">Rituais</button>
+      <button data-cat="all" class="video-cat-filter px-4 py-2 rounded-full bg-primary text-white font-label-md text-label-md shadow-sm transition-colors">Todos</button>
+      <button data-cat="skincare" class="video-cat-filter px-4 py-2 rounded-full bg-surface-container-low text-on-surface-variant font-label-md text-label-md hover:bg-primary-fixed hover:text-primary transition-colors border border-outline-variant/30">Skincare</button>
+      <button data-cat="maquiagem" class="video-cat-filter px-4 py-2 rounded-full bg-surface-container-low text-on-surface-variant font-label-md text-label-md hover:bg-primary-fixed hover:text-primary transition-colors border border-outline-variant/30">Maquiagem</button>
+      <button data-cat="rituais" class="video-cat-filter px-4 py-2 rounded-full bg-surface-container-low text-on-surface-variant font-label-md text-label-md hover:bg-primary-fixed hover:text-primary transition-colors border border-outline-variant/30">Rituais</button>
     </div>
 
     <!-- Vídeo em destaque: IA -->
@@ -65,7 +148,20 @@ export default function videosPage() {
       </a>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">${cards}</div>
-  </main>`;
-}
+    <div id="videos-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      ${vids.map(v => buildVideoCard(v)).join('')}
+    </div>
+  </main>
 
+  <!-- Video Modal -->
+  <div id="video-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] items-center justify-center p-4">
+    <div class="bg-surface-container-lowest w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl relative">
+      <button onclick="window.closeVideoModal()" class="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-black/40 text-white hover:bg-black/60 flex items-center justify-center transition-colors">
+        <span class="material-symbols-outlined text-lg">close</span>
+      </button>
+      <div id="video-modal-content">
+        <!-- Injected by JS -->
+      </div>
+    </div>
+  </div>`;
+}

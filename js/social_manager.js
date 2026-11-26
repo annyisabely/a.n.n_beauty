@@ -354,17 +354,56 @@ export const socialManager = {
     // ==========================================
     // 3. CONVERSAR COM VENDEDOR (CHAT WITH SELLER)
     // ==========================================
-    getSellerChatMessages: (sellerId) => {
+    getSellerStorageKey: (sellerId, context = null) => {
         const user = window.auth ? window.auth.getUser() : null;
-        const key = user ? `ann_seller_chat_${sellerId}_${user.email}` : `ann_seller_chat_${sellerId}_guest`;
-        const data = localStorage.getItem(key);
-        if (data) return JSON.parse(data);
+        const userPart = user ? user.email : 'guest';
+        let ctxPart = '';
+        if (context && context.type === 'product' && context.productId) {
+            ctxPart = `_prod_${context.productId}`;
+        } else if (context && context.type === 'order' && context.orderId) {
+            ctxPart = `_order_${context.orderId}`;
+        }
+        return `ann_seller_chat_${sellerId}${ctxPart}_${userPart}`;
+    },
 
-        // Initial welcome message from seller
+    getSellerChatMessages: (sellerId, context = null, sellerName = 'Consultor de Beleza') => {
+        const key = socialManager.getSellerStorageKey(sellerId, context);
+        const data = localStorage.getItem(key);
+        if (data) {
+            try {
+                return JSON.parse(data);
+            } catch (e) {
+                console.error('Error parsing chat messages:', e);
+            }
+        }
+
+        // Fallback to legacy key if exists and context is not product-specific
+        if (!context || !context.productId) {
+            const user = window.auth ? window.auth.getUser() : null;
+            const legacyKey = user ? `ann_seller_chat_${sellerId}_${user.email}` : `ann_seller_chat_${sellerId}_guest`;
+            const legacyData = localStorage.getItem(legacyKey);
+            if (legacyData) {
+                try {
+                    return JSON.parse(legacyData);
+                } catch (e) {}
+            }
+        }
+
+        // Initial contextual welcome message from seller
+        let initialText = `Olá! ✨ Seja muito bem-vinda(o) à loja ${sellerName}. Como posso te ajudar com os nossos produtos de beleza hoje?`;
+        
+        if (context && context.type === 'product' && context.productName) {
+            initialText = `Olá! ✨ Sou consultor de atendimento da loja ${sellerName}. Vi que você está de olho no "${context.productName}"${context.productPrice ? ` (${context.productPrice})` : ''}. Tem alguma dúvida sobre modo de uso, benefícios para a sua pele, estoque ou prazo de entrega?`;
+        } else if (context && context.type === 'order' && context.orderId) {
+            initialText = `Olá! Sou da equipe de expedição da loja ${sellerName}. Estou acompanhando o seu pedido #${context.orderId}. Em que posso te ajudar com o envio ou código de rastreio?`;
+        } else if (context && context.type === 'store' && context.storeName) {
+            initialText = `Olá! ✨ Seja bem-vinda(o) ao canal exclusivo da loja ${context.storeName}. Como posso te auxiliar com nosso catálogo e lançamentos hoje?`;
+        }
+
         const initial = [
             {
                 sender: 'seller',
-                text: 'Olá! ✨ Seja muito bem-vinda(o) à nossa loja. Como posso te ajudar com os produtos de beleza hoje?',
+                text: initialText,
                 time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
             }
         ];
@@ -372,12 +411,12 @@ export const socialManager = {
         return initial;
     },
 
-    sendSellerMessage: (sellerId, text, sellerName = 'Consultor de Beleza') => {
+    sendSellerMessage: (sellerId, text, sellerName = 'Consultor de Beleza', context = null) => {
         const user = window.auth ? window.auth.getUser() : null;
         if (!text || !text.trim()) return null;
 
-        const key = user ? `ann_seller_chat_${sellerId}_${user.email}` : `ann_seller_chat_${sellerId}_guest`;
-        const messages = socialManager.getSellerChatMessages(sellerId);
+        const key = socialManager.getSellerStorageKey(sellerId, context);
+        const messages = socialManager.getSellerChatMessages(sellerId, context, sellerName);
 
         const userMsg = {
             sender: 'user',
@@ -387,20 +426,58 @@ export const socialManager = {
         messages.push(userMsg);
         localStorage.setItem(key, JSON.stringify(messages));
 
-        // Generate automated seller response
+        // Signal typing start
+        window.dispatchEvent(new CustomEvent('seller-typing-start', { detail: { sellerId, context } }));
+
+        // Generate contextual automated seller response
         setTimeout(() => {
             const lower = text.toLowerCase();
             let reply = "";
-            if (lower.includes('frete') || lower.includes('entrega') || lower.includes('envio')) {
-                reply = "Realizamos envios para todo o Brasil com código de rastreio! Pedidos acima de R$ 150 ganham Frete Grátis 🚚✨";
-            } else if (lower.includes('desconto') || lower.includes('cupom') || lower.includes('promo')) {
-                reply = "Você pode usar o cupom GLOW10 para garantir 10% OFF na sua primeira compra! 💖";
-            } else if (lower.includes('ingrediente') || lower.includes('vegano') || lower.includes('pele')) {
-                reply = "Todos os nossos produtos são 100% veganos, dermatologicamente testados e livres de parabenos! 🌿";
-            } else if (lower.includes('estoque') || lower.includes('disponivel') || lower.includes('tem')) {
-                reply = "Sim! Temos estoque disponível a pronta entrega com envio imediato. 📦";
+            const prodName = (context && context.productName) ? context.productName : null;
+            const prodPrice = (context && context.productPrice) ? context.productPrice : null;
+
+            if (lower.includes('frete') || lower.includes('entrega') || lower.includes('envio') || lower.includes('prazo') || lower.includes('chega')) {
+                if (prodName) {
+                    reply = `O "${prodName}" está disponível no centro de distribuição com separação rápida! O frete é calculado pelo seu CEP na sacola e pedidos acima de R$ 149 ganham Frete Grátis 🚚✨`;
+                } else if (context && context.type === 'order') {
+                    reply = `O seu pedido #${context.orderId} está com envio monitorado! As atualizações da transportadora aparecem em tempo real no menu Rastreio de Pedidos 🚚📦`;
+                } else {
+                    reply = "Realizamos envios para todo o Brasil com código de rastreamento! Pedidos acima de R$ 149 ganham Frete Grátis 🚚✨";
+                }
+            } else if (lower.includes('desconto') || lower.includes('cupom') || lower.includes('promo') || lower.includes('preço') || lower.includes('preco') || lower.includes('valor') || lower.includes('quanto custa')) {
+                if (prodName && prodPrice) {
+                    reply = `O valor do "${prodName}" é ${prodPrice}. Dica exclusiva: você pode usar o cupom GLOW10 no checkout para garantir 10% de desconto adicional na sua compra! 💖🛍️`;
+                } else {
+                    reply = "Você pode usar o cupom GLOW10 para garantir 10% OFF na sua compra! Também oferecemos condições especiais no pagamento via PIX 💖";
+                }
+            } else if (lower.includes('ingrediente') || lower.includes('vegano') || lower.includes('composicao') || lower.includes('composição') || lower.includes('formula') || lower.includes('fórmula') || lower.includes('animal') || lower.includes('cruelty') || lower.includes('parabeno')) {
+                if (prodName) {
+                    reply = `Com certeza! O "${prodName}" tem fórmula 100% vegana, cruelty-free (não testado em animais), hipoalergênica e sem parabenos. Prezamos pela saúde e pureza da sua pele! 🌿🐰`;
+                } else {
+                    reply = "Todos os nossos produtos são 100% veganos, cruelty-free, dermatologicamente testados e livres de parabenos! 🌿🐰";
+                }
+            } else if (lower.includes('estoque') || lower.includes('disponivel') || lower.includes('disponível') || lower.includes('tem') || lower.includes('pronta')) {
+                if (prodName) {
+                    reply = `Sim! Temos o "${prodName}" disponível em estoque para pronta entrega com envio imediato e seguro garantido 📦✨`;
+                } else {
+                    reply = "Sim! Temos estoque a pronta entrega com despacho imediato para todos os itens ativos do nosso catálogo 📦";
+                }
+            } else if (lower.includes('pele') || lower.includes('usar') || lower.includes('como usa') || lower.includes('aplicar') || lower.includes('modo de uso') || lower.includes('serve') || lower.includes('indica') || lower.includes('indicado')) {
+                if (prodName) {
+                    reply = `O "${prodName}" é indicado para todos os tipos de pele (seca, mista, oleosa e sensível). A textura é fluida e de rápida absorção: recomendamos usar 3 a 4 gotas com movimentos ascendentes após higienizar o rosto! 🧴💆‍♀️`;
+                } else {
+                    reply = "Nossas formulações são dermatologicamente testadas e formuladas para alta eficácia em peles brasileiras ✨ Se quiser indicação para o seu tipo de pele específico, me avise!";
+                }
+            } else if (lower.includes('troca') || lower.includes('garantia') || lower.includes('devolucao') || lower.includes('devolução') || lower.includes('original')) {
+                reply = "Garantimos produtos 100% originais com nota fiscal e política de troca/devolução simplificada em até 7 dias após o recebimento! 🛡️";
+            } else if (lower.includes('obrigad') || lower.includes('valeu') || lower.includes('perfeito') || lower.includes('entendi') || lower.includes('otimo') || lower.includes('ótimo') || lower.includes('ok')) {
+                reply = `Por nada! Qualquer outra dúvida sobre ${prodName ? `o "${prodName}"` : 'nossos produtos e pedidos'}, fico à disposição. Tenha ótimas compras! 💜✨`;
             } else {
-                reply = `Obrigado por nos chamar! O consultor da ${sellerName} irá responder sua dúvida em detalhes logo em seguida. Como mais posso te auxiliar? ✨`;
+                if (prodName) {
+                    reply = `Entendido! Sobre o "${prodName}", nossa equipe da loja ${sellerName} está à disposição para te dar suporte total. Quer tirar mais alguma dúvida sobre aplicação, textura ou pagamento? ✨`;
+                } else {
+                    reply = `Obrigado pelo contato! O consultor da loja ${sellerName} recebeu sua mensagem. Como mais posso te auxiliar hoje? ✨`;
+                }
             }
 
             messages.push({
@@ -409,7 +486,21 @@ export const socialManager = {
                 time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
             });
             localStorage.setItem(key, JSON.stringify(messages));
-            window.dispatchEvent(new CustomEvent('seller-chat-updated', { detail: { sellerId } }));
+            
+            // Signal typing stop & chat updated
+            window.dispatchEvent(new CustomEvent('seller-typing-stop', { detail: { sellerId, context } }));
+            window.dispatchEvent(new CustomEvent('seller-chat-updated', { detail: { sellerId, context, lastReply: reply } }));
+
+            // Notify in-app notifications
+            const currentUser = window.auth ? window.auth.getUser() : null;
+            if (window.notificationsManager && currentUser) {
+                window.notificationsManager.addNotification(currentUser.email, {
+                    title: `Nova Mensagem de ${sellerName}`,
+                    message: `O vendedor de ${sellerName} respondeu: "${reply.substring(0, 75)}..."`,
+                    icon: 'chat',
+                    color: 'text-purple-500'
+                });
+            }
         }, 1200);
 
         return messages;

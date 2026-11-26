@@ -1,120 +1,90 @@
 import { auth } from '../auth.js';
-import { socialManager } from '../social_manager.js';
+import { showToast } from '../components.js';
+import { database } from '../database.js';
 
 export default function profilePage() {
-  const user = auth.getUser() || { name: 'Usuária A.n.n', email: '' };
-  const savedBio = localStorage.getItem('ann_profile_bio') || '"Entusiasta de beleza etérea | Minimalista em skincare ✨"';
-  const savedPhoto = localStorage.getItem('ann_profile_photo') || 'https://lh3.googleusercontent.com/aida-public/AB6AXuC77ZoIlcWkWMv6PoHvkxSm9AoIAod0TJnJZWF2MeQxi2AruIoztM2Esx1b7bu7WxXGBGql9gTS2qlzljZWZAgMwk3SP1E-X-LjEVwToyizyz0TQShvF0SJnfPxI85iPPDiyG4Hcj8ZowqeUsmVL7FgblL1dmjET0-akwNh34c4Wg5a6Miix5O7Dh_wwJUW2CLFx_SwKVGVqV0yXrLrcEmYdC9FimpquKe5z8CwL80QMWe0xc3-uZYa93ToeCwEUhDkvbtB7Ccw8obU';
-  const followers = parseInt(localStorage.getItem('ann_followers')) || 12450;
-  const posts = JSON.parse(localStorage.getItem(`ann_posts_${user.email}`) || '[]');
-  let savedItems = auth.getSavedItems();
+  const user = auth.getUser() || { name: 'Usuária', email: '' };
+  const savedPhoto = localStorage.getItem('ann_profile_photo') || user.photo || 'https://lh3.googleusercontent.com/aida-public/AB6AXuC77ZoIlcWkWMv6PoHvkxSm9AoIAod0TJnJZWF2MeQxi2AruIoztM2Esx1b7bu7WxXGBGql9gTS2qlzljZWZAgMwk3SP1E-X-LjEVwToyizyz0TQShvF0SJnfPxI85iPPDiyG4Hcj8ZowqeUsmVL7FgblL1dmjET0-akwNh34c4Wg5a6Miix5O7Dh_wwJUW2CLFx_SwKVGVqV0yXrLrcEmYdC9FimpquKe5z8CwL80QMWe0xc3-uZYa93ToeCwEUhDkvbtB7Ccw8obU';
 
+  // ── Load saved addresses ──
+  const getAddresses = () => JSON.parse(localStorage.getItem(`ann_addresses_${user.email}`) || '[]');
+  const saveAddresses = (addrs) => localStorage.setItem(`ann_addresses_${user.email}`, JSON.stringify(addrs));
+
+  // ── Load orders for this user ──
+  const getUserOrders = () => {
+    const allOrders = database.getOrders();
+    const localOrders = JSON.parse(localStorage.getItem('ann_orders') || '[]');
+    // Merge: dedupe by id
+    const map = new Map();
+    [...allOrders, ...localOrders].forEach(o => {
+      if (o.clientId === user.email || o.clientName === user.name) {
+        map.set(o.id, o);
+      }
+    });
+    return Array.from(map.values()).sort((a, b) => {
+      // Most recent first
+      const dateA = a.date || '';
+      const dateB = b.date || '';
+      return dateB.localeCompare(dateA);
+    });
+  };
+
+  // ═════════════════════════════════════════════════════
+  //  GLOBAL FUNCTIONS
+  // ═════════════════════════════════════════════════════
+
+  // ── Tab switching ──
   window.switchProfileTab = (tab) => {
-    const postBtn = document.getElementById('tab-posts-btn');
-    const savedBtn = document.getElementById('tab-saved-btn');
-    const grid = document.getElementById('profile-grid-container');
-    
-    if (tab === 'posts') {
-        postBtn.classList.add('text-primary', 'border-primary');
-        postBtn.classList.remove('text-on-surface-variant');
-        savedBtn.classList.add('text-on-surface-variant');
-        renderPostsGrid(posts, 'posts');
-    } else {
-        savedBtn.classList.add('text-primary', 'border-primary');
-        savedBtn.classList.remove('text-on-surface-variant');
-        postBtn.classList.remove('text-primary', 'border-primary');
-        postBtn.classList.add('text-on-surface-variant');
-        renderPostsGrid(auth.getSavedItems(), 'saved');
-    }
+    const tabs = ['data', 'orders', 'addresses', 'favorites'];
+    tabs.forEach(t => {
+      const btn = document.getElementById(`ptab-${t}`);
+      const panel = document.getElementById(`ppanel-${t}`);
+      if (btn) {
+        btn.classList.toggle('bg-[#8B5FBF]', t === tab);
+        btn.classList.toggle('text-white', t === tab);
+        btn.classList.toggle('border-[#8B5FBF]', t === tab);
+        btn.classList.toggle('bg-white', t !== tab);
+        btn.classList.toggle('text-[#5C4D6B]', t !== tab);
+        btn.classList.toggle('border-[#DDD0E8]', t !== tab);
+      }
+      if (panel) {
+        panel.classList.toggle('hidden', t !== tab);
+      }
+    });
   };
 
-  window.toggleSavePost = (postId) => {
-    // Determine the source of the post
-    let item = posts.find(p => p.id == postId) || auth.getSavedItems().find(p => p.id == postId);
-    if (!item) return;
-
-    const isSaved = auth.toggleSaveItem(item, item.type || 'photo');
-    showToast(isSaved ? 'Salvo com sucesso!' : 'Removido dos salvos', isSaved ? 'success' : 'info');
-    
-    // If we're on the saved tab, refresh the grid
-    if (document.getElementById('tab-saved-btn').classList.contains('text-primary')) {
-        renderPostsGrid(auth.getSavedItems(), 'saved');
-    }
-  };
-
-  function renderPostsGrid(items, type) {
-    const grid = document.getElementById('profile-grid-container');
-    if (items.length === 0) {
-        grid.innerHTML = `
-          <div class="col-span-full py-24 text-center flex flex-col items-center gap-6">
-             <div class="w-24 h-24 bg-primary-container/30 rounded-full flex items-center justify-center text-primary/40">
-                <span class="material-symbols-outlined text-5xl">${type === 'posts' ? 'add_a_photo' : 'bookmark_border'}</span>
-             </div>
-             <div class="space-y-1">
-                <p class="text-on-surface font-bold text-base">${type === 'posts' ? 'Sua galeria está em branco' : 'Nenhuma inspiração salva'}</p>
-                <p class="text-on-surface-variant opacity-60 text-xs">${type === 'posts' ? 'Compartilhe seu primeiro ritual de beleza com o mundo.' : 'Seus produtos e tutoriais favoritos aparecerão aqui.'}</p>
-             </div>
-          </div>
-        `;
-        return;
-    }
-    
-    grid.innerHTML = items.map(item => {
-      const interactions = socialManager.getInteractions(item.id);
-      const rating = socialManager.getRating(item.id);
-      
-      const isProduct = item.contentType === 'product' || item.price;
-      const isVideo = item.contentType === 'video' || item.type === 'video';
-      const imageUrl = isProduct ? (item.img.startsWith('http') ? item.img : `https://lh3.googleusercontent.com/aida-public/${item.img}`) : item.data;
-
-      return `
-      <div onclick="${isProduct ? `window.location.hash = '#/search'` : `window.viewPostDetail(${item.id})`}" class="aspect-square rounded-[32px] overflow-hidden bg-primary-container/10 group cursor-pointer relative shadow-ethereal hover:shadow-ethereal-hover transition-all duration-700 border border-primary/5">
-        ${isVideo ? `
-          <video class="w-full h-full object-cover" ${type === 'posts' ? 'muted loop onmouseover="this.play()" onmouseout="this.pause()"' : 'controls'}>
-            <source src="${item.data || imageUrl}">
-          </video>
-        ` : `
-          <img alt="Item" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" src="${imageUrl}"/>
-        `}
-        <div class="absolute inset-0 bg-primary/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-center p-4 text-center backdrop-blur-[2px]">
-           ${isProduct ? `
-             <div class="text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                <p class="font-display font-bold text-sm mb-1">${item.name}</p>
-                <p class="text-[10px] font-black tracking-widest opacity-90">${item.price}</p>
-             </div>
-           ` : `
-             <div class="flex gap-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-               <span class="text-white font-black flex items-center gap-2 text-xs"><span class="material-symbols-outlined text-[20px] text-secondary" style="font-variation-settings: 'FILL' 1">favorite</span> ${interactions.likes.length}</span>
-               <span class="text-white font-black flex items-center gap-2 text-xs"><span class="material-symbols-outlined text-[20px] text-secondary-container" style="font-variation-settings: 'FILL' 1">grade</span> ${rating}</span>
-             </div>
-           `}
-        </div>
-        ${isProduct ? `<div class="absolute top-4 right-4 bg-white/90 backdrop-blur-md text-primary p-2 rounded-full shadow-sm"><span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1">shopping_bag</span></div>` : ''}
-      </div>
-    `;}).join('');
-  }
-
+  // ── Profile edit ──
   window.toggleProfileEdit = () => {
-    const isEditing = document.getElementById('edit-fields').classList.contains('hidden');
-    document.getElementById('edit-fields').classList.toggle('hidden');
-    document.getElementById('profile-info').classList.toggle('hidden');
+    const form = document.getElementById('profile-edit-form');
+    const info = document.getElementById('profile-display-info');
+    if (form && info) {
+      form.classList.toggle('hidden');
+      info.classList.toggle('hidden');
+    }
   };
 
   window.saveDirectProfile = () => {
-    const newBio = document.getElementById('edit-bio').value;
-    localStorage.setItem('ann_profile_bio', newBio);
-    
-    // Persist to user-specific storage
-    if (user.email) {
-      const profile = { bio: newBio, photo: localStorage.getItem('ann_profile_photo') };
-      localStorage.setItem(`ann_profile_${user.email}`, JSON.stringify(profile));
-      
-      // Update session
-      user.bio = newBio;
-      localStorage.setItem('ann_beauty_user', JSON.stringify(user));
+    const newName = document.getElementById('edit-name')?.value?.trim() || user.name;
+    const newPhone = document.getElementById('edit-phone')?.value?.trim() || '';
+    const newBirth = document.getElementById('edit-birth')?.value?.trim() || '';
+
+    user.name = newName;
+    user.phone = newPhone;
+    user.birthdate = newBirth;
+    localStorage.setItem('ann_beauty_user', JSON.stringify(user));
+
+    // Update registry
+    const users = auth.getRegisteredUsers();
+    const key = (user.email || '').toLowerCase().trim();
+    if (users[key]) {
+      users[key].name = newName;
+      users[key].phone = newPhone;
+      users[key].birthdate = newBirth;
+      localStorage.setItem('ann_registered_users', JSON.stringify(users));
     }
-    
-    window.location.reload();
+
+    showToast('Dados atualizados com sucesso! ✨', 'success');
+    setTimeout(() => window.location.reload(), 800);
   };
 
   window.handleProfilePhotoUpload = (input) => {
@@ -122,420 +92,576 @@ export default function profilePage() {
       const reader = new FileReader();
       reader.onload = (e) => {
         localStorage.setItem('ann_profile_photo', e.target.result);
-        document.getElementById('profile-avatar').src = e.target.result;
-        
-        // Persist to user-specific storage
-        if (user.email) {
-            const profile = { bio: localStorage.getItem('ann_profile_bio'), photo: e.target.result };
-            localStorage.setItem(`ann_profile_${user.email}`, JSON.stringify(profile));
-            
-            // Update session
-            user.photo = e.target.result;
-            localStorage.setItem('ann_beauty_user', JSON.stringify(user));
-        }
+        const avatar = document.getElementById('profile-avatar');
+        if (avatar) avatar.src = e.target.result;
+        user.photo = e.target.result;
+        localStorage.setItem('ann_beauty_user', JSON.stringify(user));
+        showToast('Foto atualizada! 📸', 'success');
       };
       reader.readAsDataURL(input.files[0]);
     }
   };
 
-  let growthInterval = null;
+  // ── Logout ──
+  window.profileLogout = () => {
+    auth.logout();
+  };
 
-  window.viewPostDetail = (postId) => {
-    const post = posts.find(p => p.id == postId);
-    if (!post) return;
+  // ── Address management ──
+  window.addNewAddress = () => {
+    const modal = document.getElementById('address-modal');
+    if (modal) {
+      document.getElementById('addr-modal-title').textContent = 'Novo Endereço';
+      document.getElementById('addr-id').value = '';
+      document.getElementById('addr-label').value = '';
+      document.getElementById('addr-cep').value = '';
+      document.getElementById('addr-street').value = '';
+      document.getElementById('addr-number').value = '';
+      document.getElementById('addr-complement').value = '';
+      document.getElementById('addr-neighborhood').value = '';
+      document.getElementById('addr-city').value = '';
+      document.getElementById('addr-state').value = '';
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+  };
 
-    if (growthInterval) clearInterval(growthInterval);
+  window.editAddress = (id) => {
+    const addrs = getAddresses();
+    const addr = addrs.find(a => a.id === id);
+    if (!addr) return;
+    const modal = document.getElementById('address-modal');
+    if (modal) {
+      document.getElementById('addr-modal-title').textContent = 'Editar Endereço';
+      document.getElementById('addr-id').value = addr.id;
+      document.getElementById('addr-label').value = addr.label || '';
+      document.getElementById('addr-cep').value = addr.cep || '';
+      document.getElementById('addr-street').value = addr.street || '';
+      document.getElementById('addr-number').value = addr.number || '';
+      document.getElementById('addr-complement').value = addr.complement || '';
+      document.getElementById('addr-neighborhood').value = addr.neighborhood || '';
+      document.getElementById('addr-city').value = addr.city || '';
+      document.getElementById('addr-state').value = addr.state || '';
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+  };
 
-    const updateUI = () => {
-        const interactions = socialManager.getInteractions(postId);
-        const rating = socialManager.getRating(postId);
-        const isLiked = interactions.likes.some(u => u.email === user.email);
-        const isStarred = interactions.stars.some(u => u.email === user.email);
+  window.closeAddressModal = () => {
+    const modal = document.getElementById('address-modal');
+    if (modal) {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+  };
 
-        const modal = document.getElementById('post-detail-modal');
-        const content = document.getElementById('detail-modal-content');
-        
-        content.innerHTML = `
-          <div class="flex flex-col md:flex-row h-full max-h-[90vh]">
-            <div class="md:w-3/5 bg-black flex items-center justify-center">
-              ${post.type === 'video' ? `
-                <video class="w-full h-full object-contain" controls autoplay loop>
-                  <source src="${post.data}">
-                </video>
-              ` : `
-                <img class="w-full h-full object-contain" src="${post.data}"/>
-              `}
-            </div>
-            <div class="md:w-2/5 bg-white p-6 flex flex-col h-full overflow-y-auto">
-              <div class="flex items-center gap-3 mb-6 pb-6 border-b border-purple-50">
-                <img class="w-10 h-10 rounded-full object-cover" src="${savedPhoto}"/>
-                <div>
-                  <p class="font-bold text-sm text-on-surface">${user.name}</p>
-                  <p class="text-[10px] text-outline">${post.date}</p>
-                </div>
-              </div>
-              
-              <div class="mb-6">
-                <p class="text-sm text-on-surface leading-relaxed">${post.caption}</p>
-              </div>
-
-              <div class="flex items-center gap-6 mb-6">
-                <button onclick="window.toggleLikePost(${post.id})" class="flex items-center gap-1.5 transition-all active:scale-90 ${isLiked ? 'text-red-500' : 'text-outline'}">
-                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' ${isLiked ? 1 : 0}">favorite</span>
-                    <span id="like-count-${post.id}" class="font-bold hover:underline cursor-pointer" onclick="event.stopPropagation(); window.renderUserListModal('Curtidas', socialManager.getInteractions(${post.id}).likes)">${interactions.likes.length}</span>
-                </button>
-                <button onclick="window.toggleStarPost(${post.id})" class="flex items-center gap-1.5 transition-all active:scale-90 ${isStarred ? 'text-amber-500' : 'text-outline'}">
-                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' ${isStarred ? 1 : 0}">star</span>
-                    <span id="rating-${post.id}" class="font-bold hover:underline cursor-pointer" onclick="event.stopPropagation(); window.renderUserListModal('Estrelas', socialManager.getInteractions(${post.id}).stars)">${rating}</span>
-                </button>
-                <button onclick="window.toggleSavePost(${post.id}); this.querySelector('.material-symbols-outlined').style.fontVariationSettings = \`'FILL' \${auth.getSavedItems().some(s => s.id == post.id) ? 1 : 0}\`" class="ml-auto ${auth.getSavedItems().some(s => s.id == post.id) ? 'text-amber-500' : 'text-outline'}">
-                    <span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' ${auth.getSavedItems().some(s => s.id == post.id) ? 1 : 0}">bookmark</span>
-                </button>
-              </div>
-
-              <div class="flex-grow">
-                <h4 class="font-bold text-xs uppercase tracking-widest text-outline mb-4">Comentários (${interactions.comments.length})</h4>
-                <div id="comments-container-${post.id}" class="space-y-4">
-                  ${interactions.comments.map((c, idx) => `
-                    <div class="flex gap-2 group/comment">
-                      <div class="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-[10px] font-bold">${c.user.charAt(0)}</div>
-                      <div class="flex-grow">
-                        <p class="text-[11px] font-bold">${c.user}</p>
-                        <p class="text-xs text-on-surface-variant">${c.text}</p>
-                        <p class="text-[8px] text-outline mt-0.5">${c.date || ''}</p>
-                      </div>
-                      <button onclick="window.handleDeleteComment(${post.id}, ${idx})" class="opacity-0 group-hover/comment:opacity-100 text-outline hover:text-red-500 transition-all">
-                        <span class="material-symbols-outlined text-[16px]">delete</span>
-                      </button>
-                    </div>
-                  `).join('')}
-                </div>
-              </div>
-
-              <div class="mt-6 pt-6 border-t border-purple-50">
-                <form onsubmit="window.handleComment(event, ${post.id})" class="flex gap-2">
-                  <input id="comment-input-${post.id}" type="text" placeholder="Escreva um comentário..." class="flex-grow bg-surface-container-low border border-surface-variant rounded-full px-4 py-2 text-xs outline-none focus:border-primary">
-                  <button type="submit" class="bg-primary text-white p-2 rounded-full"><span class="material-symbols-outlined text-[18px]">send</span></button>
-                </form>
-              </div>
-            </div>
-          </div>
-        `;
-        
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
+  window.saveAddress = (e) => {
+    e.preventDefault();
+    const id = document.getElementById('addr-id').value;
+    const addrData = {
+      id: id || Date.now().toString(),
+      label: document.getElementById('addr-label').value.trim() || 'Casa',
+      cep: document.getElementById('addr-cep').value.trim(),
+      street: document.getElementById('addr-street').value.trim(),
+      number: document.getElementById('addr-number').value.trim(),
+      complement: document.getElementById('addr-complement').value.trim(),
+      neighborhood: document.getElementById('addr-neighborhood').value.trim(),
+      city: document.getElementById('addr-city').value.trim(),
+      state: document.getElementById('addr-state').value.trim(),
     };
 
-    updateUI();
-    growthInterval = socialManager.runBackgroundTasks(postId, user, updateUI);
+    const addrs = getAddresses();
+    const idx = addrs.findIndex(a => a.id === addrData.id);
+    if (idx > -1) {
+      addrs[idx] = addrData;
+    } else {
+      addrs.push(addrData);
+    }
+    saveAddresses(addrs);
+    showToast('Endereço salvo com sucesso! 📍', 'success');
+    window.closeAddressModal();
+    renderAddressCards();
   };
 
-  window.handleComment = (event, postId) => {
-    event.preventDefault();
-    const input = document.getElementById(`comment-input-${postId}`);
-    const text = input.value.trim();
-    if (!text) return;
+  window.deleteAddress = (id) => {
+    if (!confirm('Deseja excluir este endereço?')) return;
+    const addrs = getAddresses().filter(a => a.id !== id);
+    saveAddresses(addrs);
+    showToast('Endereço removido.', 'info');
+    renderAddressCards();
+  };
 
-    socialManager.addComment(postId, user, text);
-    input.value = '';
-    
-    // Refresh modal UI
-    window.viewPostDetail(postId);
-    
-    // Trigger automated response
-    socialManager.handleUserCommentResponse(postId, text, () => {
-        // Callback to refresh UI after bot responds
-        if (document.getElementById('post-detail-modal').style.display !== 'none') {
-            window.viewPostDetail(postId);
-        }
-    });
-
-    if (text.toUpperCase() === 'OK') {
-        showToast('Mensagens automáticas desativadas.', 'info');
+  // ── Remove favorite ──
+  window.removeFavorite = (itemId) => {
+    const saved = auth.getSavedItems();
+    const item = saved.find(s => s.id == itemId);
+    if (item) {
+      auth.toggleSaveItem(item, item.contentType || 'product');
+      showToast('Removido dos favoritos', 'info');
+      renderFavoritesGrid();
     }
   };
 
-  window.handleDeleteComment = (postId, commentIndex) => {
-    if (confirm('Deseja excluir este comentário?')) {
-        socialManager.deleteComment(postId, commentIndex);
-        window.viewPostDetail(postId); // Refresh modal
+  // ═════════════════════════════════════════════════════
+  //  RENDER HELPERS (called after DOM is built)
+  // ═════════════════════════════════════════════════════
+
+  function renderAddressCards() {
+    const container = document.getElementById('addresses-list');
+    if (!container) return;
+    const addrs = getAddresses();
+
+    if (addrs.length === 0) {
+      container.innerHTML = `
+        <div class="col-span-full py-12 text-center">
+          <span class="material-symbols-outlined text-5xl text-[#C4A8E0] mb-3 block">location_on</span>
+          <p class="text-[#5C4D6B] text-sm">Nenhum endereço cadastrado ainda.</p>
+          <button onclick="window.addNewAddress()" class="mt-4 px-6 py-2.5 rounded-full bg-[#8B5FBF] text-white text-sm font-bold hover:bg-[#7A4FAF] transition-colors">
+            Adicionar Endereço
+          </button>
+        </div>`;
+      return;
     }
-  };
 
-  window.toggleLikePost = (postId) => {
-    const interactions = socialManager.toggleLike(postId, user);
-    if (!interactions) return;
-    
-    // Update UI in modal
-    const countEl = document.getElementById(`like-count-${postId}`);
-    if (countEl) countEl.innerText = interactions.likes.length;
-    
-    // Toggle button color
-    const btn = event.currentTarget;
-    const isLiked = interactions.likes.some(u => u.email === user.email);
-    btn.classList.toggle('text-red-500', isLiked);
-    btn.classList.toggle('text-outline', !isLiked);
-    btn.querySelector('.material-symbols-outlined').style.fontVariationSettings = `'FILL' ${isLiked ? 1 : 0}`;
-  };
+    container.innerHTML = addrs.map((a, i) => `
+      <div class="bg-white rounded-2xl border border-[#DDD0E8] p-5 hover:border-[#C4A8E0] transition-all relative group">
+        <div class="flex items-start justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[#8B5FBF] text-lg">${a.label === 'Trabalho' ? 'business' : 'home'}</span>
+            <span class="font-bold text-sm text-[#2D1A40]">${a.label}</span>
+            ${i === 0 ? '<span class="text-[9px] bg-[#8B5FBF] text-white px-2 py-0.5 rounded-full font-bold">PRINCIPAL</span>' : ''}
+          </div>
+          <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            <button onclick="window.editAddress('${a.id}')" class="w-8 h-8 rounded-full hover:bg-[#F8F4FB] flex items-center justify-center text-[#5C4D6B] hover:text-[#8B5FBF] transition-colors">
+              <span class="material-symbols-outlined text-base">edit</span>
+            </button>
+            <button onclick="window.deleteAddress('${a.id}')" class="w-8 h-8 rounded-full hover:bg-red-50 flex items-center justify-center text-[#5C4D6B] hover:text-red-500 transition-colors">
+              <span class="material-symbols-outlined text-base">delete</span>
+            </button>
+          </div>
+        </div>
+        <p class="text-sm text-[#5C4D6B] leading-relaxed">${a.street}, ${a.number}${a.complement ? ' - ' + a.complement : ''}</p>
+        <p class="text-sm text-[#5C4D6B]">${a.neighborhood} — ${a.city}/${a.state}</p>
+        <p class="text-xs text-[#9D8AB0] mt-1">CEP: ${a.cep}</p>
+      </div>
+    `).join('');
+  }
 
-  window.toggleStarPost = (postId) => {
-    const interactions = socialManager.toggleStar(postId, user);
-    if (!interactions) return;
-    
-    // Update UI (label is the rating)
-    const ratingEl = document.getElementById(`rating-${postId}`);
-    if (ratingEl) ratingEl.innerText = socialManager.getRating(postId);
-    
-    // Toggle button color
-    const btn = event.currentTarget;
-    const isStarred = interactions.stars.some(u => u.email === user.email);
-    btn.classList.toggle('text-amber-500', isStarred);
-    btn.classList.toggle('text-outline', !isStarred);
-    btn.querySelector('.material-symbols-outlined').style.fontVariationSettings = `'FILL' ${isStarred ? 1 : 0}`;
-  };
+  function renderFavoritesGrid() {
+    const container = document.getElementById('favorites-list');
+    if (!container) return;
+    const saved = auth.getSavedItems();
 
-  window.toggleDetailModal = () => {
-    if (growthInterval) clearInterval(growthInterval);
-    document.getElementById('post-detail-modal').classList.toggle('hidden');
-    document.getElementById('post-detail-modal').classList.toggle('flex');
-  };
+    if (saved.length === 0) {
+      container.innerHTML = `
+        <div class="col-span-full py-12 text-center">
+          <span class="material-symbols-outlined text-5xl text-[#C4A8E0] mb-3 block">favorite</span>
+          <p class="text-[#5C4D6B] text-sm">Sua lista de desejos está vazia.</p>
+          <a href="#/home" class="mt-4 inline-block px-6 py-2.5 rounded-full bg-[#8B5FBF] text-white text-sm font-bold hover:bg-[#7A4FAF] transition-colors">
+            Explorar Produtos
+          </a>
+        </div>`;
+      return;
+    }
 
-  window.togglePostModal = () => {
-    document.getElementById('post-modal').classList.toggle('hidden');
-    document.getElementById('post-modal').classList.toggle('flex');
-  };
+    container.innerHTML = saved.map(item => {
+      const imgSrc = item.img ? (item.img.startsWith('http') ? item.img : `https://lh3.googleusercontent.com/aida-public/${item.img}`) : '';
+      return `
+      <div class="bg-white rounded-2xl border border-[#DDD0E8] overflow-hidden hover:border-[#C4A8E0] hover:shadow-lg transition-all group relative">
+        <a href="#/product?id=${item.id}" class="block">
+          <div class="aspect-square bg-[#F8F4FB] relative overflow-hidden">
+            <img alt="${item.name || 'Produto'}" src="${imgSrc}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+          </div>
+          <div class="p-4">
+            <p class="font-bold text-sm text-[#2D1A40] line-clamp-1 mb-1">${item.name || 'Produto'}</p>
+            <p class="text-xs text-[#9D8AB0] mb-2">${item.company_name || item.brand || 'Beleza na Web'}</p>
+            ${item.price ? `<p class="font-bold text-sm text-[#8B5FBF]">${item.price}</p>` : ''}
+          </div>
+        </a>
+        <button onclick="event.stopPropagation(); window.removeFavorite(${item.id})" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm shadow flex items-center justify-center text-red-400 hover:text-red-500 hover:bg-white transition-all" title="Remover">
+          <span class="material-symbols-outlined text-lg" style="font-variation-settings:'FILL' 1">favorite</span>
+        </button>
+      </div>`;
+    }).join('');
+  }
 
-  window.handleProfilePost = (event) => {
-    event.preventDefault();
-    const type = document.getElementById('modal-post-type').value;
-    const fileInput = document.getElementById('modal-post-file');
-    const caption = document.getElementById('modal-post-caption').value;
+  function renderOrders() {
+    const container = document.getElementById('orders-list');
+    if (!container) return;
+    const orders = getUserOrders();
 
-    if (fileInput.files && fileInput.files[0]) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const newPost = {
-          id: Date.now(),
-          type: type,
-          data: e.target.result,
-          caption: caption,
-          date: new Date().toLocaleDateString()
-        };
-        
-        // Initialize mock social proof
-        socialManager.initMockInteractions(newPost.id);
+    if (orders.length === 0) {
+      container.innerHTML = `
+        <div class="py-12 text-center">
+          <span class="material-symbols-outlined text-5xl text-[#C4A8E0] mb-3 block">shopping_bag</span>
+          <p class="text-[#5C4D6B] text-sm mb-1">Você ainda não fez nenhum pedido.</p>
+          <p class="text-xs text-[#9D8AB0] mb-4">Quando fizer sua primeira compra, ela aparecerá aqui.</p>
+          <a href="#/home" class="inline-block px-6 py-2.5 rounded-full bg-[#8B5FBF] text-white text-sm font-bold hover:bg-[#7A4FAF] transition-colors">
+            Começar a Comprar
+          </a>
+        </div>`;
+      return;
+    }
 
-        // Save to user-specific posts array
-        const userPosts = JSON.parse(localStorage.getItem(`ann_posts_${user.email}`) || '[]');
-        userPosts.unshift(newPost);
-        localStorage.setItem(`ann_posts_${user.email}`, JSON.stringify(userPosts));
+    container.innerHTML = orders.map(order => {
+      let items = [];
+      try {
+        items = typeof order.items === 'string' ? JSON.parse(order.items) : (order.items || []);
+      } catch (e) { items = []; }
 
-        // Mass Like Boost: Add 25 likes to ALL photos whenever a new one is posted
-        userPosts.forEach(p => {
-            for (let i = 0; i < 25; i++) {
-                const randomId = Math.floor(Math.random() * 100000);
-                socialManager.toggleLike(p.id, { 
-                    name: `Seguidora ${randomId}`, 
-                    email: `bot_boost_${randomId}_${p.id}@ann.com` 
-                });
-            }
-        });
-        
-        // Follower Growth Mechanic: 5 to 10 new followers per post
-        const followerGain = Math.floor(Math.random() * 6) + 5; // 5 to 10
-        user.followers = (user.followers || 0) + followerGain;
-        user.postsCount = (user.postsCount || 0) + 1;
-        
-        // Save to specific user profile
-        const profile = JSON.parse(localStorage.getItem(`ann_profile_${user.email}`) || '{}');
-        profile.followers = user.followers;
-        profile.postsCount = user.postsCount;
-        localStorage.setItem(`ann_profile_${user.email}`, JSON.stringify(profile));
-        
-        // Update session
-        localStorage.setItem('ann_beauty_user', JSON.stringify(user));
-        
-        showToast(`Publicado! Você ganhou ${followerGain} novos seguidores! ✨`, 'success');
-        
-        setTimeout(() => window.location.reload(), 1500);
+      let address = {};
+      try {
+        address = typeof order.address === 'string' ? JSON.parse(order.address) : (order.address || {});
+      } catch (e) { address = {}; }
+
+      const statusMap = {
+        'PAGAMENTO CONFIRMADO': { color: 'bg-green-100 text-green-700', icon: 'check_circle' },
+        'EM PREPARAÇÃO': { color: 'bg-yellow-100 text-yellow-700', icon: 'inventory_2' },
+        'ENVIADO': { color: 'bg-blue-100 text-blue-700', icon: 'local_shipping' },
+        'ENTREGUE': { color: 'bg-emerald-100 text-emerald-700', icon: 'package_2' },
+        'CANCELADO': { color: 'bg-red-100 text-red-700', icon: 'cancel' },
       };
-      reader.readAsDataURL(fileInput.files[0]);
-    }
-  };
+      const st = statusMap[order.status] || statusMap['PAGAMENTO CONFIRMADO'];
+
+      const totalVal = typeof order.totalValue === 'number'
+        ? `R$ ${order.totalValue.toFixed(2).replace('.', ',')}`
+        : (order.totalValue || 'R$ 0,00');
+
+      return `
+      <div class="bg-white rounded-2xl border border-[#DDD0E8] overflow-hidden hover:border-[#C4A8E0] transition-all">
+        <!-- Order header -->
+        <div class="px-5 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-[#F0E8F7]">
+          <div>
+            <p class="font-bold text-sm text-[#2D1A40]">Pedido <span class="text-[#8B5FBF]">${order.id}</span></p>
+            <p class="text-xs text-[#9D8AB0]">${order.date || 'Data não informada'}</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold ${st.color}">
+              <span class="material-symbols-outlined text-sm">${st.icon}</span>
+              ${order.status}
+            </span>
+          </div>
+        </div>
+
+        <!-- Order items -->
+        <div class="px-5 py-4">
+          ${Array.isArray(items) && items.length > 0 ? `
+            <div class="flex flex-wrap gap-3 mb-3">
+              ${items.slice(0, 4).map(it => {
+                const itImg = it.img ? (it.img.startsWith('http') ? it.img : `https://lh3.googleusercontent.com/aida-public/${it.img}`) : '';
+                return `
+                <div class="flex items-center gap-3 bg-[#F8F4FB] rounded-xl p-2 pr-4">
+                  ${itImg ? `<img src="${itImg}" class="w-10 h-10 rounded-lg object-cover" alt="${it.name || 'Item'}"/>` : ''}
+                  <div>
+                    <p class="text-xs font-bold text-[#2D1A40] line-clamp-1">${it.name || 'Produto'}</p>
+                    <p class="text-[10px] text-[#9D8AB0]">Qtd: ${it.quantity || 1}</p>
+                  </div>
+                </div>`;
+              }).join('')}
+              ${items.length > 4 ? `<span class="text-xs text-[#9D8AB0] self-center">+${items.length - 4} itens</span>` : ''}
+            </div>
+          ` : '<p class="text-xs text-[#9D8AB0] mb-3">Itens do pedido</p>'}
+
+          <div class="flex items-center justify-between pt-3 border-t border-[#F0E8F7]">
+            <div class="flex items-center gap-4 text-xs text-[#5C4D6B]">
+              <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">payments</span> ${order.paymentMethod || 'PIX'}</span>
+              ${order.storeName ? `<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">storefront</span> ${order.storeName}</span>` : ''}
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="font-bold text-sm text-[#2D1A40]">${totalVal}</span>
+              <a href="#/tracking?id=${order.id}" class="inline-flex items-center gap-1 px-4 py-2 rounded-full bg-[#F8F4FB] text-[#8B5FBF] text-xs font-bold hover:bg-[#8B5FBF] hover:text-white transition-all">
+                <span class="material-symbols-outlined text-sm">local_shipping</span>
+                Rastrear
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // ── Post-render init ──
+  setTimeout(() => {
+    renderOrders();
+    renderAddressCards();
+    renderFavoritesGrid();
+    // Activate first tab
+    window.switchProfileTab('data');
+  }, 50);
+
+  // ═════════════════════════════════════════════════════
+  //  HTML TEMPLATE
+  // ═════════════════════════════════════════════════════
+
+  const orders = getUserOrders();
+  const addresses = getAddresses();
+  const savedItems = auth.getSavedItems();
 
   return `
-  <main class="flex-grow max-w-[1280px] mx-auto px-4 md:px-10 py-16 w-full bg-background">
-    <section class="flex flex-col items-center text-center max-w-4xl mx-auto mb-20">
-      <div class="relative mb-10 group">
-        <div class="absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-full blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
-        <div class="relative w-40 h-40 rounded-full overflow-hidden border-4 border-white shadow-ethereal transition-transform duration-700 group-hover:scale-105">
-          <img alt="Avatar" id="profile-avatar" class="w-full h-full object-cover" src="${savedPhoto}"/>
-        </div>
-        <label class="absolute bottom-2 right-2 w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-all active:scale-95 border-4 border-white cursor-pointer z-10">
-          <span class="material-symbols-outlined text-[22px]">photo_camera</span>
-          <input type="file" class="hidden" accept="image/*" onchange="window.handleProfilePhotoUpload(this)">
-        </label>
-      </div>
-      
-      <div id="profile-info" class="space-y-4">
-        <h1 class="font-display text-4xl m:text-5xl text-on-background tracking-tighter">${user.name}</h1>
-        <p class="text-base text-on-surface-variant font-medium opacity-80 max-w-lg mx-auto italic">"${savedBio.replace(/"/g, '')}"</p>
-        <div class="flex items-center justify-center gap-3 pt-2">
-            <button onclick="window.toggleProfileEdit()" class="text-[10px] font-black uppercase tracking-[0.2em] text-primary hover:text-secondary transition-colors border border-primary/20 px-4 py-2 rounded-full">Personalizar Perfil</button>
-            ${(user.role === 'admin_master' || user.role === 'empresa') ? `
-            <a href="#/admin" class="text-[10px] font-black uppercase tracking-[0.2em] bg-primary text-white hover:bg-primary/90 transition-all px-5 py-2.5 rounded-full shadow-md flex items-center gap-1.5">
-                <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1">storefront</span> Minha Loja
-            </a>
-            ` : `
-            <button onclick="window.openCreateStoreModal()" class="text-[10px] font-black uppercase tracking-[0.2em] bg-gradient-to-r from-primary to-secondary text-white hover:brightness-110 transition-all px-5 py-2.5 rounded-full shadow-md flex items-center gap-1.5">
-                <span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1">storefront</span> Criar Minha Loja
-            </button>
-            `}
-        </div>
-      </div>
+  <main class="max-w-[1280px] mx-auto px-4 md:px-10 py-8 md:py-12">
 
-      <div id="edit-fields" class="hidden w-full max-w-lg space-y-6 mt-6 p-8 bg-white rounded-[32px] shadow-ethereal border border-primary/5">
-        <div class="space-y-2 text-left">
-            <label class="text-[10px] font-bold text-on-surface opacity-40 uppercase tracking-widest ml-4">Sua Bio</label>
-            <textarea id="edit-bio" class="w-full bg-primary-container/20 border-none rounded-2xl px-6 py-4 text-sm font-medium outline-none focus:ring-2 focus:ring-primary/20 transition-all" rows="3">${savedBio}</textarea>
-        </div>
-        <div class="flex gap-4">
-            <button onclick="window.saveDirectProfile()" class="flex-grow bg-primary text-white py-3 rounded-2xl text-xs font-bold uppercase tracking-widest shadow-lg shadow-primary/20">Salvar Alterações</button>
-            <button onclick="window.toggleProfileEdit()" class="px-8 border border-primary/20 text-on-surface-variant py-3 rounded-2xl text-xs font-bold">Cancelar</button>
-        </div>
-      </div>
-      
-      <div class="grid grid-cols-3 gap-8 md:gap-16 mt-12 bg-white px-12 py-8 rounded-[32px] shadow-ethereal border border-primary/5">
-        <div class="text-center group cursor-pointer">
-            <span class="font-display text-3xl text-primary block group-hover:scale-110 transition-transform">${posts.length}</span>
-            <span class="text-[9px] font-black text-on-surface-variant opacity-40 uppercase tracking-widest">Publicações</span>
-        </div>
-        <div class="text-center group cursor-pointer">
-            <span class="font-display text-3xl text-primary block group-hover:scale-110 transition-transform">${user.followers > 999 ? (user.followers / 1000).toFixed(1) + 'k' : user.followers}</span>
-            <span class="text-[9px] font-black text-on-surface-variant opacity-40 uppercase tracking-widest">Seguidores</span>
-        </div>
-        <div class="text-center group cursor-pointer">
-            <span class="font-display text-3xl text-primary block group-hover:scale-110 transition-transform">${user.following || 0}</span>
-            <span class="text-[9px] font-black text-on-surface-variant opacity-40 uppercase tracking-widest">Seguindo</span>
-        </div>
-      </div>
-    </section>
+    <!-- ═══ PAGE HEADER ═══ -->
+    <div class="mb-8">
+      <h1 class="text-2xl md:text-3xl font-bold text-[#2D1A40] mb-1" style="font-family:'Poppins',sans-serif">Minha Conta</h1>
+      <p class="text-sm text-[#9D8AB0]">Gerencie seus dados, pedidos, endereços e favoritos</p>
+    </div>
 
-    <section class="mt-8">
-      <div class="flex justify-center gap-12 mb-12 border-b border-primary/10">
-        <button id="tab-posts-btn" onclick="window.switchProfileTab('posts')" class="px-8 py-6 font-bold text-xs uppercase tracking-[0.2em] text-primary border-b-2 border-primary transition-all">Minha Jornada</button>
-        <button id="tab-saved-btn" onclick="window.switchProfileTab('saved')" class="px-8 py-6 font-bold text-xs uppercase tracking-[0.2em] text-on-surface-variant opacity-40 hover:opacity-100 border-b-2 border-transparent transition-all">Desejos & Salvos</button>
-      </div>
-      
-      <div id="profile-grid-container" class="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-10">
-         ${posts.length === 0 ? `
-          <div class="col-span-full py-20 text-center flex flex-col items-center gap-4">
-             <div class="w-20 h-20 bg-primary/5 rounded-full flex items-center justify-center text-primary/30">
-                <span class="material-symbols-outlined text-4xl">add_a_photo</span>
-             </div>
-             <p class="text-on-surface-variant/50 text-sm font-medium">Nenhuma publicação ainda.<br>Comece a compartilhar sua beleza!</p>
+    <div class="flex flex-col lg:flex-row gap-8">
+
+      <!-- ═══ SIDEBAR ═══ -->
+      <aside class="w-full lg:w-80 shrink-0 flex flex-col gap-5">
+
+        <!-- User Card -->
+        <div class="bg-white rounded-2xl border border-[#DDD0E8] p-6 text-center relative" style="box-shadow: 0 4px 20px -4px rgba(109, 76, 125, 0.06);">
+          <label class="relative w-24 h-24 mx-auto block mb-4 cursor-pointer group">
+            <img id="profile-avatar" alt="Avatar" class="w-24 h-24 rounded-full object-cover border-4 border-[#F0E8F7] shadow-sm group-hover:opacity-80 transition-opacity" src="${savedPhoto}"/>
+            <div class="absolute inset-0 rounded-full bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <span class="material-symbols-outlined text-white text-xl">photo_camera</span>
+            </div>
+            <input type="file" class="hidden" accept="image/*" onchange="window.handleProfilePhotoUpload(this)">
+          </label>
+          <h2 class="text-lg font-bold text-[#2D1A40] mb-0.5" style="font-family:'Poppins',sans-serif">${user.name}</h2>
+          <p class="text-xs text-[#9D8AB0] mb-1">${user.email}</p>
+          <p class="text-[10px] text-[#C4A8E0]">Cliente desde ${user.joined || 'outubro de 2026'}</p>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="grid grid-cols-3 gap-3">
+          <div class="bg-white rounded-xl border border-[#DDD0E8] p-3 text-center" style="box-shadow: 0 4px 20px -4px rgba(109, 76, 125, 0.04);">
+            <span class="text-xl font-bold text-[#8B5FBF] block">${orders.length}</span>
+            <span class="text-[10px] text-[#9D8AB0]">Pedidos</span>
           </div>
-        ` : posts.map(post => {
-            const interactions = socialManager.getInteractions(post.id);
-            return `
-          <div onclick="window.viewPostDetail(${post.id})" class="aspect-square rounded-[32px] overflow-hidden bg-white group cursor-pointer relative shadow-ethereal hover:shadow-ethereal-hover transition-all duration-500 border border-primary/5">
-            ${post.type === 'video' ? `
-              <video class="w-full h-full object-cover" muted loop onmouseover="this.play()" onmouseout="this.pause()">
-                <source src="${post.data}">
-              </video>
-            ` : `
-              <img alt="Post" class="w-full h-full object-cover product-image-zoom" src="${post.data}"/>
-            `}
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-end p-6 text-center">
-               <div class="flex gap-4">
-                 <span class="text-white font-bold flex items-center gap-1 text-xs"><span class="material-symbols-outlined text-sm text-red-400" style="font-variation-settings: 'FILL' 1">favorite</span> ${interactions.likes.length}</span>
-                 <span class="text-white font-bold flex items-center gap-1 text-xs"><span class="material-symbols-outlined text-sm text-amber-400" style="font-variation-settings: 'FILL' 1">star</span> ${interactions.stars.length}</span>
-               </div>
+          <div class="bg-white rounded-xl border border-[#DDD0E8] p-3 text-center" style="box-shadow: 0 4px 20px -4px rgba(109, 76, 125, 0.04);">
+            <span class="text-xl font-bold text-[#8B5FBF] block">${savedItems.length}</span>
+            <span class="text-[10px] text-[#9D8AB0]">Favoritos</span>
+          </div>
+          <div class="bg-white rounded-xl border border-[#DDD0E8] p-3 text-center" style="box-shadow: 0 4px 20px -4px rgba(109, 76, 125, 0.04);">
+            <span class="text-xl font-bold text-[#8B5FBF] block">${addresses.length}</span>
+            <span class="text-[10px] text-[#9D8AB0]">Endereços</span>
+          </div>
+        </div>
+
+        <!-- Navigation Menu -->
+        <nav class="bg-white rounded-2xl border border-[#DDD0E8] overflow-hidden" style="box-shadow: 0 4px 20px -4px rgba(109, 76, 125, 0.06);">
+          <button onclick="window.switchProfileTab('data')" id="ptab-data"
+            class="flex items-center gap-3 w-full px-5 py-3.5 text-left text-sm font-bold border-b border-[#F0E8F7] transition-colors bg-[#8B5FBF] text-white border-[#8B5FBF]">
+            <span class="material-symbols-outlined text-lg">person</span>
+            Meus Dados
+          </button>
+          <button onclick="window.switchProfileTab('orders')" id="ptab-orders"
+            class="flex items-center gap-3 w-full px-5 py-3.5 text-left text-sm font-bold border-b border-[#F0E8F7] transition-colors bg-white text-[#5C4D6B] border-[#DDD0E8] hover:bg-[#F8F4FB]">
+            <span class="material-symbols-outlined text-lg">shopping_bag</span>
+            Meus Pedidos
+            ${orders.length > 0 ? `<span class="ml-auto text-[10px] bg-[#8B5FBF] text-white px-2 py-0.5 rounded-full">${orders.length}</span>` : ''}
+          </button>
+          <button onclick="window.switchProfileTab('addresses')" id="ptab-addresses"
+            class="flex items-center gap-3 w-full px-5 py-3.5 text-left text-sm font-bold border-b border-[#F0E8F7] transition-colors bg-white text-[#5C4D6B] border-[#DDD0E8] hover:bg-[#F8F4FB]">
+            <span class="material-symbols-outlined text-lg">location_on</span>
+            Endereços
+          </button>
+          <button onclick="window.switchProfileTab('favorites')" id="ptab-favorites"
+            class="flex items-center gap-3 w-full px-5 py-3.5 text-left text-sm font-bold border-b border-[#F0E8F7] transition-colors bg-white text-[#5C4D6B] border-[#DDD0E8] hover:bg-[#F8F4FB]">
+            <span class="material-symbols-outlined text-lg">favorite</span>
+            Lista de Desejos
+            ${savedItems.length > 0 ? `<span class="ml-auto text-[10px] bg-[#8B5FBF] text-white px-2 py-0.5 rounded-full">${savedItems.length}</span>` : ''}
+          </button>
+          <button onclick="window.profileLogout()"
+            class="flex items-center gap-3 w-full px-5 py-3.5 text-left text-sm font-bold text-red-400 hover:bg-red-50 transition-colors">
+            <span class="material-symbols-outlined text-lg">logout</span>
+            Sair da Conta
+          </button>
+        </nav>
+      </aside>
+
+      <!-- ═══ MAIN CONTENT ═══ -->
+      <section class="flex-1 min-w-0">
+
+        <!-- ── TAB: Meus Dados ── -->
+        <div id="ppanel-data">
+          <div class="bg-white rounded-2xl border border-[#DDD0E8] overflow-hidden" style="box-shadow: 0 4px 20px -4px rgba(109, 76, 125, 0.06);">
+            <div class="px-6 py-4 border-b border-[#F0E8F7] flex items-center justify-between">
+              <h3 class="text-lg font-bold text-[#2D1A40]" style="font-family:'Poppins',sans-serif">Dados Pessoais</h3>
+              <button onclick="window.toggleProfileEdit()" class="text-xs font-bold text-[#8B5FBF] hover:underline flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm">edit</span> Editar
+              </button>
+            </div>
+
+            <!-- Display mode -->
+            <div id="profile-display-info" class="p-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="text-[10px] font-bold text-[#9D8AB0] uppercase tracking-widest mb-1 block">Nome Completo</label>
+                  <p class="text-sm font-semibold text-[#2D1A40]">${user.name}</p>
+                </div>
+                <div>
+                  <label class="text-[10px] font-bold text-[#9D8AB0] uppercase tracking-widest mb-1 block">E-mail</label>
+                  <p class="text-sm text-[#5C4D6B]">${user.email}</p>
+                </div>
+                <div>
+                  <label class="text-[10px] font-bold text-[#9D8AB0] uppercase tracking-widest mb-1 block">Telefone</label>
+                  <p class="text-sm text-[#5C4D6B]">${user.phone || 'Não informado'}</p>
+                </div>
+                <div>
+                  <label class="text-[10px] font-bold text-[#9D8AB0] uppercase tracking-widest mb-1 block">Data de Nascimento</label>
+                  <p class="text-sm text-[#5C4D6B]">${user.birthdate || 'Não informada'}</p>
+                </div>
+                <div>
+                  <label class="text-[10px] font-bold text-[#9D8AB0] uppercase tracking-widest mb-1 block">Tipo de Conta</label>
+                  <p class="text-sm text-[#5C4D6B] capitalize">${user.role === 'empresa' ? 'Conta Comercial' : user.role === 'admin_master' ? 'Administrador' : 'Conta Pessoal'}</p>
+                </div>
+                <div>
+                  <label class="text-[10px] font-bold text-[#9D8AB0] uppercase tracking-widest mb-1 block">Membro Desde</label>
+                  <p class="text-sm text-[#5C4D6B] capitalize">${user.joined || 'outubro de 2026'}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Edit mode -->
+            <div id="profile-edit-form" class="p-6 hidden">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                  <label class="text-[10px] font-bold text-[#9D8AB0] uppercase tracking-widest mb-1.5 block">Nome Completo</label>
+                  <input id="edit-name" type="text" value="${user.name}" class="w-full bg-[#F8F4FB] border border-[#DDD0E8] rounded-xl px-4 py-3 text-sm text-[#2D1A40] outline-none focus:border-[#8B5FBF] focus:ring-2 focus:ring-[#8B5FBF]/10 transition-all"/>
+                </div>
+                <div>
+                  <label class="text-[10px] font-bold text-[#9D8AB0] uppercase tracking-widest mb-1.5 block">E-mail</label>
+                  <input type="email" value="${user.email}" disabled class="w-full bg-[#F0E8F7] border border-[#DDD0E8] rounded-xl px-4 py-3 text-sm text-[#9D8AB0] outline-none cursor-not-allowed"/>
+                </div>
+                <div>
+                  <label class="text-[10px] font-bold text-[#9D8AB0] uppercase tracking-widest mb-1.5 block">Telefone</label>
+                  <input id="edit-phone" type="tel" value="${user.phone || ''}" placeholder="(00) 00000-0000" class="w-full bg-[#F8F4FB] border border-[#DDD0E8] rounded-xl px-4 py-3 text-sm text-[#2D1A40] outline-none focus:border-[#8B5FBF] focus:ring-2 focus:ring-[#8B5FBF]/10 transition-all"/>
+                </div>
+                <div>
+                  <label class="text-[10px] font-bold text-[#9D8AB0] uppercase tracking-widest mb-1.5 block">Data de Nascimento</label>
+                  <input id="edit-birth" type="date" value="${user.birthdate || ''}" class="w-full bg-[#F8F4FB] border border-[#DDD0E8] rounded-xl px-4 py-3 text-sm text-[#2D1A40] outline-none focus:border-[#8B5FBF] focus:ring-2 focus:ring-[#8B5FBF]/10 transition-all"/>
+                </div>
+              </div>
+              <div class="flex gap-3 mt-6">
+                <button onclick="window.saveDirectProfile()" class="px-6 py-2.5 rounded-xl bg-[#8B5FBF] text-white text-sm font-bold hover:bg-[#7A4FAF] transition-colors">
+                  Salvar Alterações
+                </button>
+                <button onclick="window.toggleProfileEdit()" class="px-6 py-2.5 rounded-xl bg-[#F8F4FB] text-[#5C4D6B] text-sm font-bold hover:bg-[#DDD0E8] transition-colors">
+                  Cancelar
+                </button>
+              </div>
             </div>
           </div>
-        `;}).join('')}
-      </div>
-    </section>
 
-    <div class="mt-20 flex justify-center">
-        <a href="#/tracking" class="group flex items-center gap-4 bg-white border border-primary/10 px-10 py-5 rounded-full shadow-ethereal hover:shadow-ethereal-hover transition-all">
-            <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                <span class="material-symbols-outlined text-[20px]">local_shipping</span>
+          <!-- Security card -->
+          <div class="bg-white rounded-2xl border border-[#DDD0E8] mt-5 overflow-hidden" style="box-shadow: 0 4px 20px -4px rgba(109, 76, 125, 0.06);">
+            <div class="px-6 py-4 border-b border-[#F0E8F7]">
+              <h3 class="text-lg font-bold text-[#2D1A40]" style="font-family:'Poppins',sans-serif">Segurança</h3>
             </div>
-            <div class="text-left">
-                <p class="text-[10px] font-black text-primary uppercase tracking-widest leading-none mb-1">Logística de Beleza</p>
-                <p class="text-sm font-bold text-on-background">RASTREAR MEUS PEDIDOS</p>
+            <div class="p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div>
+                <p class="text-sm font-semibold text-[#2D1A40] mb-1">Senha</p>
+                <p class="text-xs text-[#9D8AB0]">Última alteração: nunca</p>
+              </div>
+              <a href="#/settings?tab=security" class="px-5 py-2.5 rounded-xl border border-[#DDD0E8] text-sm font-bold text-[#5C4D6B] hover:border-[#8B5FBF] hover:text-[#8B5FBF] transition-colors">
+                Alterar Senha
+              </a>
             </div>
-        </a>
+          </div>
+        </div>
+
+        <!-- ── TAB: Meus Pedidos ── -->
+        <div id="ppanel-orders" class="hidden">
+          <div class="bg-white rounded-2xl border border-[#DDD0E8] overflow-hidden" style="box-shadow: 0 4px 20px -4px rgba(109, 76, 125, 0.06);">
+            <div class="px-6 py-4 border-b border-[#F0E8F7]">
+              <h3 class="text-lg font-bold text-[#2D1A40]" style="font-family:'Poppins',sans-serif">Meus Pedidos</h3>
+            </div>
+            <div id="orders-list" class="p-5 flex flex-col gap-4">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- ── TAB: Endereços ── -->
+        <div id="ppanel-addresses" class="hidden">
+          <div class="bg-white rounded-2xl border border-[#DDD0E8] overflow-hidden" style="box-shadow: 0 4px 20px -4px rgba(109, 76, 125, 0.06);">
+            <div class="px-6 py-4 border-b border-[#F0E8F7] flex items-center justify-between">
+              <h3 class="text-lg font-bold text-[#2D1A40]" style="font-family:'Poppins',sans-serif">Meus Endereços</h3>
+              <button onclick="window.addNewAddress()" class="px-4 py-2 rounded-full bg-[#8B5FBF] text-white text-xs font-bold hover:bg-[#7A4FAF] transition-colors flex items-center gap-1">
+                <span class="material-symbols-outlined text-sm">add</span> Novo
+              </button>
+            </div>
+            <div id="addresses-list" class="p-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- ── TAB: Favoritos ── -->
+        <div id="ppanel-favorites" class="hidden">
+          <div class="bg-white rounded-2xl border border-[#DDD0E8] overflow-hidden" style="box-shadow: 0 4px 20px -4px rgba(109, 76, 125, 0.06);">
+            <div class="px-6 py-4 border-b border-[#F0E8F7]">
+              <h3 class="text-lg font-bold text-[#2D1A40]" style="font-family:'Poppins',sans-serif">Lista de Desejos</h3>
+            </div>
+            <div id="favorites-list" class="p-5 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+        </div>
+
+      </section>
     </div>
   </main>
 
-  <!-- Post Detail Modal -->
-    <button onclick="window.toggleDetailModal()" class="absolute top-6 right-6 text-white/50 hover:text-white z-[120]">
-      <span class="material-symbols-outlined text-4xl">close</span>
-    </button>
-    <div id="detail-modal-content" class="bg-white w-full max-w-6xl h-full md:h-auto md:rounded-3xl overflow-hidden animate-in fade-in zoom-in duration-300">
-      <!-- Content injected via JS -->
-    </div>
-  </div>
-
-  <!-- Floating Post Button -->
-  <button onclick="window.togglePostModal()" class="fixed bottom-24 md:bottom-12 left-8 w-16 h-16 bg-gradient-to-br from-primary to-primary-container text-white rounded-[24px] flex items-center justify-center shadow-2xl shadow-primary/40 hover:scale-110 hover:-rotate-12 active:scale-95 transition-all z-50 group border border-white/20">
-    <span class="material-symbols-outlined text-3xl group-hover:rotate-90 transition-transform duration-500">add</span>
-    <div class="absolute -top-12 left-1/2 -translate-x-1/2 bg-on-background text-white text-[9px] font-black uppercase tracking-widest px-4 py-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">Novo Ritual</div>
-  </button>
-
-  <!-- Post Modal -->
-  <div id="post-modal" class="hidden fixed inset-0 bg-primary/20 backdrop-blur-xl z-[100] items-center justify-center p-6">
-    <div class="bg-white rounded-[48px] w-full max-w-md p-10 md:p-12 shadow-ethereal-hover animate-in zoom-in duration-300 border border-primary/10 relative overflow-hidden">
-      <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary via-secondary to-primary-container"></div>
-      
-      <div class="flex justify-between items-center mb-10">
-        <div class="space-y-1">
-            <h3 class="font-display text-3xl text-on-background tracking-tighter">Manifestar <span class="italic text-primary">Beleza</span></h3>
-            <p class="text-[10px] font-black text-on-surface-variant opacity-40 uppercase tracking-[0.2em]">Crie uma nova publicação</p>
-        </div>
-        <button onclick="window.togglePostModal()" class="w-10 h-10 rounded-full bg-primary/5 text-primary hover:bg-primary hover:text-white transition-all flex items-center justify-center group">
-          <span class="material-symbols-outlined group-hover:rotate-90 transition-transform">close</span>
+  <!-- ═══ ADDRESS MODAL ═══ -->
+  <div id="address-modal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] items-center justify-center p-4">
+    <div class="bg-white rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden">
+      <div class="px-6 py-4 border-b border-[#F0E8F7] flex items-center justify-between">
+        <h3 id="addr-modal-title" class="text-lg font-bold text-[#2D1A40]" style="font-family:'Poppins',sans-serif">Novo Endereço</h3>
+        <button onclick="window.closeAddressModal()" class="w-8 h-8 rounded-full hover:bg-[#F8F4FB] flex items-center justify-center text-[#5C4D6B] transition-colors">
+          <span class="material-symbols-outlined">close</span>
         </button>
       </div>
-
-      <form onsubmit="window.handleProfilePost(event)" class="space-y-8">
-        <div class="space-y-3">
-          <label class="text-[10px] font-black text-on-surface-variant opacity-40 uppercase tracking-[0.2em] ml-4">Categorização do Ritual</label>
-          <div class="relative">
-            <select id="modal-post-type" class="w-full bg-primary-container/10 border-none rounded-2xl px-6 py-4 text-sm font-medium outline-none focus:ring-2 focus:ring-primary/20 transition-all appearance-none cursor-pointer text-on-background">
-              <option value="photo">Foto (Look do dia)</option>
-              <option value="video">Vídeo (Ritual/Tutorial)</option>
-            </select>
-            <span class="material-symbols-outlined absolute right-6 top-1/2 -translate-y-1/2 text-primary opacity-40 pointer-events-none">expand_more</span>
+      <form onsubmit="window.saveAddress(event)" class="p-6">
+        <input type="hidden" id="addr-id"/>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="col-span-2">
+            <label class="text-[10px] font-bold text-[#9D8AB0] uppercase tracking-widest mb-1 block">Apelido</label>
+            <input id="addr-label" type="text" placeholder="Ex: Casa, Trabalho" class="w-full bg-[#F8F4FB] border border-[#DDD0E8] rounded-xl px-4 py-3 text-sm text-[#2D1A40] outline-none focus:border-[#8B5FBF] transition-all" required/>
+          </div>
+          <div>
+            <label class="text-[10px] font-bold text-[#9D8AB0] uppercase tracking-widest mb-1 block">CEP</label>
+            <input id="addr-cep" type="text" placeholder="00000-000" maxlength="9" class="w-full bg-[#F8F4FB] border border-[#DDD0E8] rounded-xl px-4 py-3 text-sm text-[#2D1A40] outline-none focus:border-[#8B5FBF] transition-all" required/>
+          </div>
+          <div>
+            <label class="text-[10px] font-bold text-[#9D8AB0] uppercase tracking-widest mb-1 block">Estado</label>
+            <input id="addr-state" type="text" placeholder="PR" maxlength="2" class="w-full bg-[#F8F4FB] border border-[#DDD0E8] rounded-xl px-4 py-3 text-sm text-[#2D1A40] outline-none focus:border-[#8B5FBF] transition-all" required/>
+          </div>
+          <div class="col-span-2">
+            <label class="text-[10px] font-bold text-[#9D8AB0] uppercase tracking-widest mb-1 block">Rua</label>
+            <input id="addr-street" type="text" placeholder="Nome da rua" class="w-full bg-[#F8F4FB] border border-[#DDD0E8] rounded-xl px-4 py-3 text-sm text-[#2D1A40] outline-none focus:border-[#8B5FBF] transition-all" required/>
+          </div>
+          <div>
+            <label class="text-[10px] font-bold text-[#9D8AB0] uppercase tracking-widest mb-1 block">Número</label>
+            <input id="addr-number" type="text" placeholder="123" class="w-full bg-[#F8F4FB] border border-[#DDD0E8] rounded-xl px-4 py-3 text-sm text-[#2D1A40] outline-none focus:border-[#8B5FBF] transition-all" required/>
+          </div>
+          <div>
+            <label class="text-[10px] font-bold text-[#9D8AB0] uppercase tracking-widest mb-1 block">Complemento</label>
+            <input id="addr-complement" type="text" placeholder="Apto, Bloco..." class="w-full bg-[#F8F4FB] border border-[#DDD0E8] rounded-xl px-4 py-3 text-sm text-[#2D1A40] outline-none focus:border-[#8B5FBF] transition-all"/>
+          </div>
+          <div>
+            <label class="text-[10px] font-bold text-[#9D8AB0] uppercase tracking-widest mb-1 block">Bairro</label>
+            <input id="addr-neighborhood" type="text" placeholder="Bairro" class="w-full bg-[#F8F4FB] border border-[#DDD0E8] rounded-xl px-4 py-3 text-sm text-[#2D1A40] outline-none focus:border-[#8B5FBF] transition-all" required/>
+          </div>
+          <div>
+            <label class="text-[10px] font-bold text-[#9D8AB0] uppercase tracking-widest mb-1 block">Cidade</label>
+            <input id="addr-city" type="text" placeholder="Cidade" class="w-full bg-[#F8F4FB] border border-[#DDD0E8] rounded-xl px-4 py-3 text-sm text-[#2D1A40] outline-none focus:border-[#8B5FBF] transition-all" required/>
           </div>
         </div>
-
-        <div class="space-y-3">
-          <label class="text-[10px] font-black text-on-surface-variant opacity-40 uppercase tracking-[0.2em] ml-4">Manifesto / Legenda</label>
-          <textarea id="modal-post-caption" class="w-full bg-primary-container/10 border-none rounded-[24px] px-6 py-4 text-sm font-medium outline-none focus:ring-2 focus:ring-primary/20 transition-all resize-none text-on-background" rows="3" placeholder="Escreva algo sobre este momento..."></textarea>
+        <div class="flex gap-3 mt-6">
+          <button type="submit" class="flex-1 px-6 py-3 rounded-xl bg-[#8B5FBF] text-white text-sm font-bold hover:bg-[#7A4FAF] transition-colors">
+            Salvar Endereço
+          </button>
+          <button type="button" onclick="window.closeAddressModal()" class="px-6 py-3 rounded-xl bg-[#F8F4FB] text-[#5C4D6B] text-sm font-bold hover:bg-[#DDD0E8] transition-colors">
+            Cancelar
+          </button>
         </div>
-
-        <div class="relative group">
-          <input id="modal-post-file" type="file" accept="image/*,video/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" required>
-          <div class="border-2 border-dashed border-primary/10 rounded-[32px] p-12 text-center group-hover:border-primary/40 group-hover:bg-primary/5 transition-all flex flex-col items-center gap-4">
-            <div class="w-16 h-16 rounded-full bg-primary-container/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                <span class="material-symbols-outlined text-3xl">add_a_photo</span>
-            </div>
-            <div>
-                <p class="text-xs font-bold text-on-background">Carregar Essência Visual</p>
-                <p class="text-[10px] text-on-surface-variant opacity-50 mt-1 uppercase tracking-widest">Clique ou arraste seu arquivo</p>
-            </div>
-          </div>
-        </div>
-
-        <button type="submit" class="w-full bg-gradient-to-r from-primary to-primary-container text-white py-5 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] shadow-lg shadow-primary/20 hover:shadow-2xl hover:-translate-y-1 transition-all active:scale-[0.98]">
-          Publicar Agora
-        </button>
       </form>
     </div>
-  </div>`;
+  </div>
+  `;
 }
-
-import { showToast } from '../components.js';

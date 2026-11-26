@@ -1,24 +1,293 @@
 import { cartManager } from '../cart_manager.js';
 import { showToast } from '../components.js';
 import { socialManager } from '../social_manager.js';
+import { database } from '../database.js';
+import { auth } from '../auth.js';
+import { dataManager, storesData, getProductImage } from '../data_manager.js';
 
 export default function productPage() {
-  const productId = 'prod_velvet_matte';
-  const storeId = 'store_glow_co';
-  const storeName = 'Glow & Co. Official';
-  const storePhoto = 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=100';
+  // Read product ID from URL query param: #/product?id=...
+  const hashQuery = window.location.hash.split('?')[1] || '';
+  const urlParams = new URLSearchParams(hashQuery);
+  const productIdParam = urlParams.get('id') || 'prod_velvet_matte';
+
+  // ── Helper to resolve product from multiple sources ──
+  function resolveProduct(id) {
+    // 1. Check Store Showcase Templates (_p1 to _p6)
+    const showcaseMap = {
+      p1: {
+        name: 'Sérum Hidratante Facial',
+        price: 'R$ 47,90',
+        oldPrice: 'R$ 59,90',
+        category: 'Skincare',
+        desc: 'Sérum com ácido hialurônico de tripla ação para hidratação profunda e pele luminosa.',
+        img: 'img/serum_facial_1791458880967.jpg'
+      },
+      p2: {
+        name: 'Creme Hidratante',
+        price: 'R$ 42,40',
+        oldPrice: 'R$ 49,90',
+        category: 'Skincare',
+        desc: 'Textura aveludada com manteiga de karité e ceramidas para restauração da barreira cutânea.',
+        img: 'img/creme_hidratante_1791458893023.jpg'
+      },
+      p3: {
+        name: 'Paleta de Sombras Rosé',
+        price: 'R$ 80,90',
+        oldPrice: 'R$ 89,90',
+        category: 'Maquiagem',
+        desc: '12 tons ultranaturais em acabamentos matte e cintilante com alta pigmentação e fixação prolongada.',
+        img: 'img/paleta_sombras_1791458911527.jpg'
+      },
+      p4: {
+        name: 'Batom Matte Aveludado',
+        price: 'R$ 32,90',
+        oldPrice: 'R$ 39,90',
+        category: 'Maquiagem',
+        desc: 'Longa duração de até 16 horas sem ressecar os lábios, enriquecido com óleo de rosa mosqueta.',
+        img: 'img/batom_matte_1791458925028.jpg'
+      },
+      p5: {
+        name: 'Kit de Pincéis Premium',
+        price: 'R$ 114,30',
+        oldPrice: 'R$ 129,90',
+        category: 'Acessórios',
+        desc: 'Cerdas veganas ultramacias com acabamento em ouro rosé para aplicação impecável de pós, sombras e bases.',
+        img: 'img/kit_pinceis_1791458940916.jpg'
+      },
+      p6: {
+        name: 'Base Fluida Glow',
+        price: 'R$ 68,90',
+        oldPrice: 'R$ 79,90',
+        category: 'Maquiagem',
+        desc: 'Cobertura média construível com acabamento radiante e toque seco que dura o dia todo.',
+        img: 'img/base_fluida_1791458954927.jpg'
+      }
+    };
+
+    // Check if ID matches pattern like `nycoly_p3` or `store_p3`
+    const showcaseMatch = id.match(/_?(p[1-6])$/i);
+    if (showcaseMatch && showcaseMap[showcaseMatch[1].toLowerCase()]) {
+      const template = showcaseMap[showcaseMatch[1].toLowerCase()];
+      // Extract store ID prefix (e.g. 'nycoly' from 'nycoly_p3')
+      const storePrefix = id.replace(/_?(p[1-6])$/i, '').replace(/^_/, '');
+      return {
+        id: id,
+        name: template.name,
+        price: template.price,
+        oldPrice: template.oldPrice,
+        category: template.category,
+        desc: template.desc,
+        img: template.img,
+        company_id: storePrefix || 'ann_beauty'
+      };
+    }
+
+    // 2. Check Custom Products from LocalStorage
+    try {
+      const customs = dataManager.getCustomProducts();
+      const foundCustom = customs.find(p => p.id === id);
+      if (foundCustom) return foundCustom;
+    } catch (e) {}
+
+    // 3. Check All Store Custom Products
+    try {
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('ann_store_products_')) {
+          const prods = JSON.parse(localStorage.getItem(key)) || [];
+          const found = prods.find(p => p.id === id);
+          if (found) return found;
+        }
+      }
+    } catch (e) {}
+
+    // 4. Check Generated Catalog Products
+    try {
+      const catalog = dataManager.generateProducts(200);
+      const foundCatalog = catalog.find(p => p.id === id);
+      if (foundCatalog) return foundCatalog;
+    } catch (e) {}
+
+    // 5. Check SQLite Database Products
+    try {
+      const dbProds = database.getProducts();
+      const foundDb = dbProds.find(p => p.id === id);
+      if (foundDb) return foundDb;
+    } catch (e) {}
+
+    // 6. Fallback based on ID keyword heuristics
+    const idLower = id.toLowerCase();
+    if (idLower.includes('paleta') || idLower.includes('sombra')) {
+      return {
+        id,
+        name: 'Paleta de Sombras Rosé',
+        price: 'R$ 80,90',
+        category: 'Maquiagem',
+        desc: '12 tons ultranaturais em acabamentos matte e cintilante com alta pigmentação.',
+        img: 'img/paleta_sombras_1791458911527.jpg',
+        company_id: 'nycoly'
+      };
+    } else if (idLower.includes('batom')) {
+      return {
+        id,
+        name: 'Batom Matte Aveludado',
+        price: 'R$ 32,90',
+        category: 'Maquiagem',
+        desc: 'Longa duração de até 16 horas sem ressecar os lábios.',
+        img: 'img/batom_matte_1791458925028.jpg',
+        company_id: 'nycoly'
+      };
+    } else if (idLower.includes('serum')) {
+      return {
+        id,
+        name: 'Sérum Hidratante Facial',
+        price: 'R$ 47,90',
+        category: 'Skincare',
+        desc: 'Sérum com ácido hialurônico de tripla ação para hidratação profunda.',
+        img: 'img/serum_facial_1791458880967.jpg',
+        company_id: 'glow_co'
+      };
+    } else if (idLower.includes('pincel') || idLower.includes('pinceis')) {
+      return {
+        id,
+        name: 'Kit de Pincéis Premium',
+        price: 'R$ 114,30',
+        category: 'Acessórios',
+        desc: 'Cerdas veganas ultramacias para aplicação impecável de maquiagem.',
+        img: 'img/kit_pinceis_1791458940916.jpg',
+        company_id: 'lumina'
+      };
+    } else if (idLower.includes('base')) {
+      return {
+        id,
+        name: 'Base Fluida Glow',
+        price: 'R$ 68,90',
+        category: 'Maquiagem',
+        desc: 'Cobertura média construível com acabamento radiante e toque seco.',
+        img: 'img/base_fluida_1791458954927.jpg',
+        company_id: 'ann_beauty'
+      };
+    }
+
+    // Default Fallback
+    return {
+      id: id || 'prod_velvet_matte',
+      name: 'Pó Facial Velvet Matte',
+      desc: 'Projetado para proporcionar um acabamento impecável e duradouro, mantendo uma sensação leve e natural na pele. Controla o brilho sem ressecar.',
+      price: 'R$ 45,90',
+      category: 'Maquiagem',
+      img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=500&q=80',
+      company_id: 'glow_co'
+    };
+  }
+
+  const rawProduct = resolveProduct(productIdParam);
+  
+  // Format Image URL properly
+  let productImage = rawProduct.img || getProductImage(rawProduct.name, rawProduct.category);
+  if (!productImage.startsWith('http') && !productImage.startsWith('img/') && !productImage.startsWith('../') && !productImage.startsWith('/')) {
+    productImage = 'https://lh3.googleusercontent.com/aida-public/' + productImage;
+  }
 
   const product = {
-    id: productId,
-    name: 'Pó Facial Velvet Matte',
-    desc: 'Ultra-fine milled texture for a seamless blend',
-    price: 'R$ 45,90',
-    img: 'AB6AXuD18GXwV-Fkc6wDo7J4wrXsDQej-dEfgu5VImTb9uItwdNW88u_1yCxDVF9on8jlVNCPo-eKZEl9aNMrTISfydrBo8SR077DCvYnLcSDxEAalZqqw8TZ3jpvZRULCa0zP9BNNQ-i470VZ5EDn7JHQ2btfru-a-pTCf15BaEHzY9QZpQAus_V57bsYk-VpSr7PEucVXEHnd0d4RBqKFQaBZaW1EDR4bo-Ej6RqvwLps8AyPi3RQMWfHu9arWD8Wneoh9RG_l1BG98xQC'
+    id: rawProduct.id,
+    name: rawProduct.name || 'Produto de Beleza',
+    desc: rawProduct.desc || 'Produto de alta performance com formulação exclusiva para realçar sua beleza natural.',
+    price: rawProduct.price || 'R$ 49,90',
+    oldPrice: rawProduct.oldPrice || null,
+    category: rawProduct.category || rawProduct.cat || 'Beleza',
+    img: productImage,
+    company_id: rawProduct.company_id || 'ann_beauty'
   };
 
+  // ── Store Resolution ──
+  const storeKey = product.company_id || 'ann_beauty';
+  const resolvedStore = storesData[storeKey] || {
+    id: storeKey,
+    name: rawProduct.company_name || 'Beleza na Web Official',
+    photo: rawProduct.company_photo || 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=100',
+    followersBase: 1240
+  };
+
+  const storeId = resolvedStore.id || storeKey;
+  const storeName = resolvedStore.name || 'Beleza na Web';
+  const storePhoto = resolvedStore.photo || 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=100';
+
+  let quantity = 1;
+
   window.addToCartProduct = () => {
-    cartManager.addItem(product);
-    showToast(`${product.name} adicionado ao carrinho!`, 'success');
+    cartManager.addItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      img: product.img,
+      desc: product.desc,
+      company_id: storeId,
+      company_name: storeName
+    }, quantity);
+    showToast(`✅ ${product.name} adicionado ao carrinho!`, 'success');
+  };
+
+  window.buyNowProduct = () => {
+    cartManager.addItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      img: product.img,
+      desc: product.desc,
+      company_id: storeId,
+      company_name: storeName
+    }, quantity);
+    window.location.hash = '#/checkout';
+  };
+
+  window.handleToggleProductFavorite = () => {
+    const isSavedNow = auth.toggleSaveItem(product, 'product');
+    const favBtn = document.getElementById('product-fav-btn');
+    if (favBtn) {
+      favBtn.classList.toggle('text-red-500', isSavedNow);
+      favBtn.classList.toggle('text-on-surface-variant', !isSavedNow);
+      const icon = favBtn.querySelector('.material-symbols-outlined');
+      if (icon) icon.style.fontVariationSettings = `'FILL' ${isSavedNow ? 1 : 0}`;
+    }
+    showToast(isSavedNow ? 'Produto salvo nos favoritos! ❤️' : 'Removido dos favoritos', isSavedNow ? 'success' : 'info');
+  };
+
+  window.updateProductQty = (delta) => {
+    quantity = Math.max(1, quantity + delta);
+    const qtyEl = document.getElementById('product-qty-display');
+    if (qtyEl) qtyEl.innerText = quantity;
+  };
+
+  window.reportProduct = (id, name) => {
+    const reason = prompt('Qual o motivo da denúncia para este produto?');
+    if (reason) {
+      const reports = database.getReports();
+      const reportId = `rep_${Date.now()}`;
+      const currentUser = auth.getUser();
+      reports.push({
+        id: reportId,
+        reporterName: currentUser ? currentUser.name : 'Cliente',
+        targetType: 'produto',
+        targetId: id,
+        targetName: name,
+        reason: reason,
+        status: 'pending',
+        date: 'Hoje'
+      });
+      database.saveReports(reports);
+
+      if (window.notificationsManager) {
+        window.notificationsManager.addNotification('admin', {
+          title: 'Produto Denunciado',
+          message: `O produto "${name}" foi denunciado por: "${reason}". Verifique a denúncia no painel.`,
+          icon: 'flag',
+          color: 'text-red-500'
+        });
+      }
+      showToast('Denúncia enviada com sucesso para análise.', 'success');
+    }
   };
 
   window.handleToggleFollowProductStore = () => {
@@ -66,7 +335,7 @@ export default function productPage() {
     const commentInput = document.getElementById('product-review-comment');
     const comment = commentInput ? commentInput.value : '';
 
-    const res = socialManager.addProductReview(productId, window.selectedRating, comment);
+    const res = socialManager.addProductReview(product.id, window.selectedRating, comment);
     if (res.success) {
       showToast(res.message, 'success');
       if (commentInput) commentInput.value = '';
@@ -82,7 +351,7 @@ export default function productPage() {
   };
 
   const renderRatingStats = () => {
-    const stats = socialManager.getProductAverageRating(productId);
+    const stats = socialManager.getProductAverageRating(product.id);
     const fullStars = Math.floor(stats.average);
     const starIcons = Array.from({ length: 5 }, (_, i) => 
       `<span class="material-symbols-outlined text-[20px] ${i < fullStars ? 'text-amber-400' : 'text-gray-300'}" style="font-variation-settings:'FILL' ${i < fullStars ? 1 : 0}">star</span>`
@@ -100,7 +369,7 @@ export default function productPage() {
   };
 
   const renderReviewsList = () => {
-    const reviews = socialManager.getProductReviews(productId);
+    const reviews = socialManager.getProductReviews(product.id);
     if (!reviews || reviews.length === 0) {
       return `<p class="text-xs text-on-surface-variant italic py-4">Seja a primeira pessoa a avaliar este produto!</p>`;
     }
@@ -136,155 +405,165 @@ export default function productPage() {
   const isFollowing = socialManager.isFollowingStore(storeId);
   const followersCount = socialManager.getStoreFollowersCount(storeId);
 
-  return `
-  <main class="flex-grow pt-12 px-4 md:px-10 pb-20 max-w-[1280px] mx-auto w-full flex flex-col items-center justify-center bg-background gap-12">
-    <!-- Top Grid: Product Image & Details -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 w-full max-w-6xl">
-      <!-- Product Image Section -->
-      <div class="bg-white rounded-[48px] p-12 shadow-ethereal-hover flex flex-col items-center justify-center relative group overflow-hidden border border-primary/5">
-        <div class="absolute -top-24 -left-24 w-64 h-64 bg-primary-container rounded-full mix-blend-multiply filter blur-3xl opacity-20 pointer-events-none transition-transform group-hover:scale-110"></div>
-        
-        <div class="absolute top-8 right-8 z-10 flex flex-col gap-4">
-          <button onclick="showToast('Adicionado aos favoritos', 'success')" class="w-14 h-14 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center text-primary shadow-ethereal hover:scale-110 transition-all duration-300">
-            <span class="material-symbols-outlined text-[24px]">favorite</span>
-          </button>
-          <a href="#/cart" class="w-14 h-14 bg-primary rounded-full flex items-center justify-center text-white shadow-lg shadow-primary/20 hover:scale-110 transition-all duration-300">
-            <span class="material-symbols-outlined text-[24px]">shopping_cart</span>
-          </a>
-        </div>
+  const isSavedInitial = auth.getSavedItems().some(s => s.id === product.id);
+  const galleryImages = [
+    product.img,
+    'img/serum_facial_1791458880967.jpg',
+    'img/creme_hidratante_1791458893023.jpg',
+    'img/paleta_sombras_1791458911527.jpg'
+  ];
 
-        <img alt="${product.name}" class="w-full max-w-[380px] h-auto object-contain mix-blend-multiply transform group-hover:scale-105 transition-transform duration-1000 ease-out mb-8" src="${product.img.startsWith('http') ? product.img : 'https://lh3.googleusercontent.com/aida-public/' + product.img}"/>
+  return `
+  <main class="max-w-[1280px] mx-auto px-6 md:px-10 py-12 bg-background flex flex-col gap-16">
+    
+    <!-- Top Grid: Product Image & Details -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+      
+      <!-- Galeria de Imagens (Esquerda) -->
+      <div class="flex flex-col gap-4">
+        <div class="aspect-square bg-white border border-[#DDD0E8] rounded-3xl overflow-hidden relative group shadow-sm flex items-center justify-center p-8">
+          
+          <!-- Botões flutuantes -->
+          <div class="absolute top-6 right-6 z-10 flex flex-col gap-3">
+            <button id="product-fav-btn" onclick="window.handleToggleProductFavorite()" title="Favoritar Produto" class="w-12 h-12 bg-white/90 border border-outline-variant rounded-full flex items-center justify-center ${isSavedInitial ? 'text-red-500' : 'text-on-surface-variant'} hover:text-primary hover:bg-surface transition-all shadow-sm">
+              <span class="material-symbols-outlined text-[22px]" style="font-variation-settings:'FILL' ${isSavedInitial ? 1 : 0}">favorite</span>
+            </button>
+            <button onclick="window.reportProduct('${product.id}', '${product.name}')" title="Denunciar Produto" class="w-12 h-12 bg-white/90 border border-outline-variant rounded-full flex items-center justify-center text-on-surface-variant hover:text-error hover:bg-error/5 transition-all shadow-sm">
+              <span class="material-symbols-outlined text-[22px]">flag</span>
+            </button>
+          </div>
+
+          <img alt="${product.name}" id="main-product-img" class="w-full h-full object-contain transform group-hover:scale-105 transition-transform duration-700" src="${product.img}"/>
+        </div>
         
-        <div class="text-center mt-6">
-          <div class="inline-block px-5 py-2 bg-secondary/10 text-secondary rounded-full text-[10px] font-black uppercase tracking-widest mb-4 shadow-sm">LANÇAMENTO</div>
-          <h1 class="font-display text-3xl md:text-4xl text-on-background tracking-tighter mb-4">${product.name}</h1>
-          <div class="text-3xl font-display font-bold text-primary">${product.price}</div>
+        <!-- Thumbnails -->
+        <div class="grid grid-cols-4 gap-4">
+          ${galleryImages.map((gImg, gIdx) => `
+          <button onclick="document.getElementById('main-product-img').src='${gImg}'; document.querySelectorAll('.gallery-thumb-btn').forEach(b => b.classList.replace('border-primary', 'border-[#DDD0E8]')); this.classList.replace('border-[#DDD0E8]', 'border-primary')" class="gallery-thumb-btn aspect-square bg-white border-2 ${gIdx === 0 ? 'border-primary' : 'border-[#DDD0E8]'} rounded-xl overflow-hidden shadow-sm p-1.5 hover:opacity-100 transition-all">
+            <img class="w-full h-full object-contain" src="${gImg}" onerror="this.src='${product.img}'" />
+          </button>
+          `).join('')}
         </div>
       </div>
 
-      <!-- Details Section -->
-      <div class="bg-white/60 backdrop-blur-xl rounded-[48px] p-10 md:p-14 shadow-ethereal border border-white/50 flex flex-col">
+      <!-- Detalhes do Produto (Direita) -->
+      <div class="flex flex-col">
+        <div class="mb-2">
+          <span class="inline-block px-3 py-1 bg-primary text-white rounded-md text-[10px] font-bold uppercase tracking-widest">${product.category}</span>
+        </div>
         
-        <!-- VENDEDOR & SEGUIR LOJA CARD -->
-        <div class="bg-white/90 rounded-3xl p-4 border border-primary/10 shadow-sm flex items-center justify-between mb-8">
-          <div class="flex items-center gap-3">
-            <div class="relative">
-              <img src="${storePhoto}" class="w-12 h-12 rounded-full object-cover border-2 border-primary/20 shadow-sm">
-              <span class="absolute -bottom-1 -right-1 w-4 h-4 bg-primary text-white rounded-full flex items-center justify-center text-[10px]">✓</span>
-            </div>
-            <div>
-              <h3 class="text-xs font-bold text-on-surface leading-tight">${storeName}</h3>
-              <p id="store-followers-count" class="text-[10px] text-outline font-medium">${followersCount} seguidores</p>
-            </div>
-          </div>
-
-          <div class="flex items-center gap-2">
-            <!-- Seguir Loja Button -->
-            <button id="follow-store-btn" onclick="window.handleToggleFollowProductStore()" class="${isFollowing ? 'px-4 py-2 rounded-full bg-primary/10 text-primary border border-primary/30 font-bold text-xs flex items-center gap-1.5 transition-all' : 'px-4 py-2 rounded-full bg-primary text-white font-bold text-xs flex items-center gap-1.5 shadow-md hover:scale-105 transition-all'}">
-              ${isFollowing ? `<span class="material-symbols-outlined text-[16px]">check</span> Seguindo` : `<span class="material-symbols-outlined text-[16px]">add</span> Seguir Loja`}
-            </button>
-
-            <!-- Conversar com Vendedor Button -->
-            <button onclick="window.openSellerChatModal('${storeId}', '${storeName}', '${storePhoto}')" title="Conversar com Vendedor" class="w-9 h-9 rounded-full bg-secondary/10 hover:bg-secondary/20 text-secondary flex items-center justify-center transition-all hover:scale-105">
-              <span class="material-symbols-outlined text-[20px]">chat</span>
-            </button>
+        <h1 class="font-display text-3xl md:text-4xl font-bold text-on-background mb-4">${product.name}</h1>
+        
+        <div class="flex items-center gap-4 mb-6">
+          <div id="product-rating-stats-mini" class="flex items-center gap-1 cursor-pointer hover:underline" onclick="document.getElementById('reviews-section').scrollIntoView({behavior: 'smooth'})">
+             ${Array.from({ length: 5 }, (_, i) => `<span class="material-symbols-outlined text-[16px] text-yellow-400" style="font-variation-settings:'FILL' 1">star</span>`).join('')}
+             <span class="text-sm font-bold ml-1 text-on-background">5.0</span>
+             <span class="text-xs text-on-surface-variant ml-1">(Ver avaliações)</span>
           </div>
         </div>
 
-        <div class="mb-8">
-            <h2 class="text-xs font-bold text-primary uppercase tracking-[0.3em] mb-4 flex items-center gap-2">
-                <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 1">auto_awesome</span>
-                A ESSÊNCIA DO PRODUTO
-            </h2>
-            <p class="text-base text-on-surface-variant leading-relaxed font-medium opacity-80">
-                Experimente o toque etéreo do nosso pó velvet matte. Projetado para proporcionar um acabamento impecável e duradouro, mantendo uma sensação leve e natural na pele. Uma joia em seu ritual diário.
-            </p>
+        <div class="flex items-baseline gap-3 mb-8">
+          <span class="font-display text-4xl font-bold text-primary">${product.price}</span>
+          ${product.oldPrice ? `<span class="text-lg text-[#5C4D6B] line-through font-medium">${product.oldPrice}</span>` : ''}
         </div>
 
-        <div class="flex-grow">
-          <h3 class="text-[10px] font-bold text-on-surface opacity-40 uppercase tracking-widest mb-6">Benefícios Reais</h3>
-          <ul class="space-y-4 mb-8">
-            <li class="flex items-center gap-4 text-sm font-bold text-on-surface">
-                <div class="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center text-secondary">
-                    <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 1;">check</span>
-                </div>
-                Textura ultra-fina para uma mistura perfeita
-            </li>
-            <li class="flex items-center gap-4 text-sm font-bold text-on-surface">
-                <div class="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center text-secondary">
-                    <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 1;">check</span>
-                </div>
-                Controla o brilho sem ressecar a pele
-            </li>
-            <li class="flex items-center gap-4 text-sm font-bold text-on-surface">
-                <div class="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center text-secondary">
-                    <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 1;">check</span>
-                </div>
-                Fórmula Vegana & High-Performance
-            </li>
-          </ul>
+        <!-- Descrição -->
+        <div class="mb-8 bg-white/60 p-6 rounded-2xl border border-[#DDD0E8]">
+          <h3 class="font-body text-sm font-bold text-on-background mb-3 flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-[18px]">description</span> Descrição do Produto
+          </h3>
+          <p class="text-sm text-on-surface-variant leading-relaxed">
+            ${product.desc}
+          </p>
         </div>
 
-        <div class="mt-4 pt-8 border-t border-primary/10 flex flex-col sm:flex-row gap-5">
-          <div class="flex items-center justify-between bg-primary-container/20 rounded-2xl px-6 py-4 min-w-[140px]">
-             <button class="text-primary hover:scale-125 transition-transform"><span class="material-symbols-outlined text-[20px]">remove</span></button>
-             <span class="text-base font-bold text-on-primary-container px-4">1</span>
-             <button class="text-primary hover:scale-125 transition-transform"><span class="material-symbols-outlined text-[20px]">add</span></button>
+        <!-- Ações -->
+        <div class="flex flex-col sm:flex-row gap-3 mb-10 pt-4 border-t border-[#DDD0E8]">
+          <div class="flex items-center justify-between bg-white border border-[#DDD0E8] rounded-2xl px-4 py-3 min-w-[110px]">
+             <button onclick="window.updateProductQty(-1)" class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">remove</span></button>
+             <span id="product-qty-display" class="text-sm font-bold text-on-background">1</span>
+             <button onclick="window.updateProductQty(1)" class="text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[20px]">add</span></button>
           </div>
-          <button onclick="window.addToCartProduct()" class="flex-grow bg-primary hover:shadow-2xl shadow-primary/20 text-white rounded-2xl py-4 px-8 font-bold text-sm uppercase tracking-widest transition-all duration-300 flex items-center justify-center gap-3 active:scale-95">
-            CONQUISTAR AGORA 
-            <span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 1;">expand_circle_right</span>
+          <button onclick="window.addToCartProduct()" class="flex-1 bg-white border-2 border-primary text-primary hover:bg-primary/5 rounded-2xl py-3.5 px-6 font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-sm">
+            <span class="material-symbols-outlined text-[18px]">shopping_cart</span>
+            Adicionar à Sacola
+          </button>
+          <button onclick="window.buyNowProduct()" class="flex-1 bg-primary hover:bg-primary-dark text-white rounded-2xl py-3.5 px-6 font-bold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined text-[18px]">flash_on</span>
+            Comprar Agora
           </button>
         </div>
+
+        <!-- Loja/Vendedor -->
+        <div class="bg-white rounded-2xl p-6 border border-[#DDD0E8] flex items-center justify-between shadow-sm">
+          <div class="flex items-center gap-4">
+            <a href="#/store?id=${storeId}">
+              <img src="${storePhoto}" class="w-14 h-14 rounded-full object-cover border border-[#DDD0E8] hover:opacity-85 transition-opacity">
+            </a>
+            <div>
+              <p class="text-xs text-on-surface-variant">Vendido por</p>
+              <a href="#/store?id=${storeId}" class="font-bold text-on-background hover:text-primary transition-colors">${storeName}</a>
+              <p id="store-followers-count" class="text-xs text-on-surface-variant">${followersCount} seguidores</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="follow-store-btn" onclick="window.handleToggleFollowProductStore()" class="${isFollowing ? 'px-4 py-2 rounded-xl bg-primary/10 text-primary font-bold text-xs transition-colors' : 'px-4 py-2 rounded-xl bg-primary text-white font-bold text-xs shadow-sm hover:bg-primary-dark transition-colors'}">
+              ${isFollowing ? 'Seguindo' : 'Seguir Loja'}
+            </button>
+            <button onclick="window.openSellerChatModal('${storeId}', '${storeName}', '${storePhoto}', { type: 'product', productId: '${product.id}', productName: '${product.name.replace(/'/g, "\\'")}', productPrice: '${product.price}', productImg: '${product.img}', productCategory: '${product.category}' })" class="px-3.5 py-2 rounded-xl bg-[#E8D8F4] hover:bg-primary hover:text-white text-primary flex items-center gap-1.5 font-bold text-xs transition-colors cursor-pointer shadow-xs" title="Conversar com o Vendedor sobre este produto">
+              <span class="material-symbols-outlined text-[18px]">chat</span>
+              <span class="hidden sm:inline">Conversar com Vendedor</span>
+              <span class="sm:hidden">Chat</span>
+            </button>
+          </div>
+        </div>
+
       </div>
     </div>
 
-    <!-- Bottom Section: Avaliações do Produto (Product Reviews & Ratings) -->
-    <div class="w-full max-w-6xl bg-white/70 backdrop-blur-xl rounded-[40px] p-8 md:p-12 shadow-ethereal border border-primary/10">
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-8 border-b border-primary/10">
+    <!-- Seção de Avaliações -->
+    <div id="reviews-section" class="border-t border-[#DDD0E8] pt-16">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
         <div>
-          <h2 class="text-2xl font-serif font-bold text-on-surface tracking-tight mb-2">Avaliações do Produto</h2>
-          <p class="text-xs text-on-surface-variant opacity-80">Opiniões sinceras de quem vivenciou o ritual de beleza</p>
+          <h2 class="font-display text-2xl font-bold text-on-background mb-2">Avaliações do Produto</h2>
+          <p class="text-sm text-on-surface-variant">Opiniões de quem já comprou</p>
         </div>
-        
         <div id="product-rating-stats">
           ${renderRatingStats()}
         </div>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 pt-8">
-        <!-- Form to Add Review -->
-        <div class="bg-white p-6 rounded-3xl border border-primary/10 shadow-sm space-y-4">
-          <h3 class="text-sm font-bold text-on-surface flex items-center gap-2">
-            <span class="material-symbols-outlined text-primary text-[20px]">edit_note</span> Avaliar este produto
-          </h3>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <!-- List of Reviews -->
+        <div class="lg:col-span-2 space-y-6" id="product-reviews-list">
+          ${renderReviewsList()}
+        </div>
 
-          <form onsubmit="window.handleSubmitProductReview(event)" class="space-y-4">
+        <!-- Form to Add Review -->
+        <div class="bg-white p-8 rounded-3xl border border-[#DDD0E8] shadow-sm h-fit">
+          <h3 class="font-display text-lg font-bold text-on-background mb-6">Deixe sua avaliação</h3>
+
+          <form onsubmit="window.handleSubmitProductReview(event)" class="space-y-6">
             <div>
-              <label class="block text-[10px] font-bold text-outline uppercase tracking-wider mb-2">Sua nota (1 a 5 estrelas)</label>
+              <label class="block text-sm font-bold text-on-background mb-2">Nota</label>
               <div class="flex items-center gap-1">
                 ${[1, 2, 3, 4, 5].map(i => `
-                  <button type="button" onclick="window.setRatingStars(${i})" class="focus:outline-none transition-transform hover:scale-125">
-                    <span id="star-${i}" class="material-symbols-outlined text-[28px] text-amber-400 cursor-pointer" style="font-variation-settings:'FILL' 1">star</span>
+                  <button type="button" onclick="window.setRatingStars(${i})" class="focus:outline-none">
+                    <span id="star-${i}" class="material-symbols-outlined text-[32px] text-amber-400 hover:scale-110 transition-transform" style="font-variation-settings:'FILL' 1">star</span>
                   </button>
                 `).join('')}
               </div>
             </div>
 
             <div>
-              <label class="block text-[10px] font-bold text-outline uppercase tracking-wider mb-1">Seu comentário</label>
-              <textarea id="product-review-comment" rows="3" placeholder="O que você achou da fixação, textura e resultado?" class="w-full bg-surface-container-low p-3.5 rounded-2xl border border-outline-variant/30 text-xs outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all"></textarea>
+              <label class="block text-sm font-bold text-on-background mb-2">Comentário</label>
+              <textarea id="product-review-comment" rows="4" placeholder="O que você achou do produto?" class="w-full bg-background border border-[#DDD0E8] rounded-xl px-4 py-3 text-sm focus:border-primary outline-none transition-colors resize-none"></textarea>
             </div>
 
-            <button type="submit" class="w-full py-3 rounded-full bg-gradient-to-r from-primary to-secondary text-white font-bold text-xs shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2">
-              <span class="material-symbols-outlined text-[16px]">rate_review</span> Enviar Avaliação
+            <button type="submit" class="w-full py-3 rounded-xl bg-primary text-white font-bold text-sm shadow-sm hover:bg-primary-dark transition-colors flex items-center justify-center gap-2">
+              <span class="material-symbols-outlined text-[18px]">send</span> Enviar Avaliação
             </button>
           </form>
-        </div>
-
-        <!-- List of Product Reviews -->
-        <div class="lg:col-span-2 space-y-4 max-h-[480px] overflow-y-auto subtle-scroll pr-1" id="product-reviews-list">
-          ${renderReviewsList()}
         </div>
       </div>
     </div>

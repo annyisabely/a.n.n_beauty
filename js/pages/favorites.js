@@ -22,7 +22,7 @@ export default function favoritesPage() {
   window.addFavoriteToCart = (index) => {
     const product = savedItems[index];
     cartManager.addItem(product);
-    showToast(`${product.name} adicionado ao carrinho!`, 'success');
+    showToast(`✅ ${product.name} adicionado ao carrinho com sucesso!`, 'success');
   };
 
   const cards = savedItems.length > 0 ? savedItems.map((p, index) => {
@@ -39,7 +39,7 @@ export default function favoritesPage() {
         <button onclick="window.removeFromFavorites('${p.id}')" class="absolute top-6 right-6 bg-white/95 backdrop-blur-md p-3 rounded-full text-secondary shadow-lg hover:scale-110 transition-transform z-10">
             <span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' 1;">favorite</span>
         </button>
-        ${p.badge?`<span class="absolute bottom-6 left-6 bg-secondary text-white font-bold text-[9px] px-4 py-1.5 rounded-full shadow-lg z-10 uppercase tracking-widest">${p.badge}</span>`:''}
+        ${p.badge?`<span class="absolute bottom-6 left-6 bg-[#8B5FBF] text-white font-bold text-[9px] px-4 py-1.5 rounded-full shadow-lg z-10 uppercase tracking-widest">${p.badge}</span>`:''}
         ${isVideo?`<span class="absolute inset-0 flex items-center justify-center p-4"><div class="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 group-hover:scale-110 transition-transform"><span class="material-symbols-outlined text-white text-4xl" style="font-variation-settings:'FILL' 1;">play_arrow</span></div></span>`:''}
       </div>
       <div class="p-8 flex flex-col flex-grow">
@@ -51,7 +51,7 @@ export default function favoritesPage() {
           <button onclick="window.addFavoriteToCart(${index})" class="bg-primary/5 text-primary p-3 rounded-2xl hover:bg-primary hover:text-white transition-all shadow-sm">
             <span class="material-symbols-outlined text-[22px]">add_shopping_cart</span>
           </button>` : `
-          <a href="#/tutorial" class="bg-secondary/10 text-secondary p-3 rounded-2xl hover:bg-secondary hover:text-white transition-all shadow-sm">
+          <a href="#/tutorial" class="bg-primary/10 text-primary p-3 rounded-2xl hover:bg-primary hover:text-white transition-all shadow-sm">
             <span class="material-symbols-outlined text-[22px]">play_circle</span>
           </a>
           `}

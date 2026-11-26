@@ -10,10 +10,12 @@ export const storesData = {
         name: 'Beleza na Web',
         tagline: 'A beleza que realça o que já existe em você.',
         desc: 'Somos especialistas em cuidados com a pele e maquiagem de alta performance. Nossa missão é empoderar cada pessoa com produtos que celebram a beleza natural.',
-        photo: 'https://picsum.photos/seed/store_ann/300/300',
-        cover: 'https://picsum.photos/seed/cover_ann/1200/400',
+        category: 'skincare',
+        photo: 'img/logo.png',
+        cover: 'img/hero_skin_spa.jpg',
         phone: '(11) 99999-0001',
         address: 'Av. Paulista, 1000 — Bela Vista, São Paulo/SP',
+        hours: 'Seg a Qua: 09:30 às 18:00 | Qui e Sex: 09:30 às 18:30 | Sábados: 09:30 às 17:00',
         rating: '4.9',
         reviews: 340,
         products: 350,
@@ -25,10 +27,12 @@ export const storesData = {
         name: 'Nycoly',
         tagline: 'Glamour e cor para cada momento.',
         desc: 'A Nycoly nasceu da paixão por cores vibrantes e maquiagem de impacto. Cada produto é formulado para mulheres que não têm medo de se expressar.',
-        photo: '../img/nycoly_profile.png',
-        cover: 'https://picsum.photos/seed/cover_nyc/1200/400',
+        category: 'maquiagem',
+        photo: 'img/nycoly_profile.png',
+        cover: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1200&q=80',
         phone: '(21) 98888-0002',
         address: 'Rua do Catete, 200 — Flamengo, Rio de Janeiro/RJ',
+        hours: 'Seg a Qua: 09:30 às 18:00 | Qui e Sex: 09:30 às 18:30 | Sábados: 09:30 às 17:00',
         rating: '4.7',
         reviews: 218,
         products: 210,
@@ -40,10 +44,12 @@ export const storesData = {
         name: 'Glow & Co.',
         tagline: 'Formulações botânicas para uma pele radiante.',
         desc: 'Especialistas em séruns e cremes com ingredientes naturais de alta concentração. Ciência e natureza unidos em cada gotinha.',
-        photo: 'https://picsum.photos/seed/store_glw/300/300',
-        cover: 'https://picsum.photos/seed/cover_glw/1200/400',
+        category: 'skincare',
+        photo: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&q=80',
+        cover: 'https://images.unsplash.com/photo-1608248597359-009110757271?w=1200&q=80',
         phone: '(41) 97777-0003',
         address: 'Rua XV de Novembro, 500 — Centro, Curitiba/PR',
+        hours: 'Seg a Qua: 09:30 às 18:00 | Qui e Sex: 09:30 às 18:30 | Sábados: 09:30 às 17:00',
         rating: '4.8',
         reviews: 512,
         products: 180,
@@ -55,10 +61,12 @@ export const storesData = {
         name: 'Rosé Lab',
         tagline: 'Skincare premium com toque parisiense.',
         desc: 'Inspirada na elegância francesa, a Rosé Lab combina ativos premium com embalagens sofisticadas para um ritual de beleza luxuoso.',
-        photo: 'https://picsum.photos/seed/store_rsl/300/300',
-        cover: 'https://picsum.photos/seed/cover_rsl/1200/400',
+        category: 'skincare',
+        photo: 'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=400&q=80',
+        cover: 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=1200&q=80',
         phone: '(51) 96666-0004',
         address: 'Av. Independência, 320 — Moinhos de Vento, Porto Alegre/RS',
+        hours: 'Seg a Qua: 09:30 às 18:00 | Qui e Sex: 09:30 às 18:30 | Sábados: 09:30 às 17:00',
         rating: '4.9',
         reviews: 389,
         products: 95,
@@ -70,37 +78,186 @@ export const storesData = {
         name: 'Lumina Studio',
         tagline: 'Iluminando cada passo da sua rotina.',
         desc: 'A Lumina Studio é referência em produtos de beleza acessíveis e de qualidade. Acreditamos que toda pessoa merece se sentir incrível, todos os dias.',
-        photo: 'https://picsum.photos/seed/store_lum/300/300',
-        cover: 'https://picsum.photos/seed/cover_lum/1200/400',
+        category: 'maquiagem',
+        photo: 'https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=400&q=80',
+        cover: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=1200&q=80',
         phone: '(31) 95555-0005',
         address: 'Av. do Contorno, 7000 — Savassi, Belo Horizonte/MG',
+        hours: 'Seg a Qua: 09:30 às 18:00 | Qui e Sex: 09:30 às 18:30 | Sábados: 09:30 às 17:00',
         rating: '4.6',
         reviews: 156,
         products: 130,
         delivery: '96.5%',
         followersBase: 620,
     },
+    cabelo_house: {
+        id: 'cabelo_house',
+        name: 'Cabelo House',
+        tagline: 'Tratamento profissional em casa.',
+        desc: 'Especialistas em reparação, hidratação e proteção para todos os tipos de cabelo.',
+        category: 'cabelo',
+        photo: 'https://images.unsplash.com/photo-1560869713-7d0a29430803?w=400&q=80',
+        cover: 'https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?w=1200&q=80',
+        phone: '(21) 98888-0006',
+        address: 'Av. das Américas, 100 — Barra, Rio de Janeiro/RJ',
+        hours: 'Seg a Qua: 09:30 às 18:00 | Qui e Sex: 09:30 às 18:30 | Sábados: 09:30 às 17:00',
+        rating: '4.8',
+        reviews: 210,
+        products: 80,
+        delivery: '98.5%',
+        followersBase: 950,
+    },
+    perfume_house: {
+        id: 'perfume_house',
+        name: 'Perfume House',
+        tagline: 'Fragrâncias inesquecíveis.',
+        desc: 'Curadoria exclusiva das melhores fragrâncias nacionais e internacionais.',
+        category: 'perfumaria',
+        photo: 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400&q=80',
+        cover: 'https://images.unsplash.com/photo-1547887537-6158d64c35b3?w=1200&q=80',
+        phone: '(11) 97777-0007',
+        address: 'Rua Oscar Freire, 200 — Jardins, São Paulo/SP',
+        hours: 'Seg a Qua: 09:30 às 18:00 | Qui e Sex: 09:30 às 18:30 | Sábados: 09:30 às 17:00',
+        rating: '4.9',
+        reviews: 320,
+        products: 150,
+        delivery: '99.1%',
+        followersBase: 1100,
+    },
+    unhas_studio: {
+        id: 'unhas_studio',
+        name: 'Unhas Studio',
+        tagline: 'Cores e cuidados em cada detalhe.',
+        desc: 'Tudo o que você precisa para unhas fortes, saudáveis e estilosas.',
+        category: 'maquiagem',
+        photo: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&q=80',
+        cover: 'https://images.unsplash.com/photo-1632345031435-8727f6897d53?w=1200&q=80',
+        phone: '(41) 96666-0008',
+        address: 'Rua das Flores, 50 — Centro, Curitiba/PR',
+        hours: 'Seg a Qua: 09:30 às 18:00 | Qui e Sex: 09:30 às 18:30 | Sábados: 09:30 às 17:00',
+        rating: '4.7',
+        reviews: 180,
+        products: 90,
+        delivery: '97.8%',
+        followersBase: 650,
+    }
 };
 
+// ── MAPEAMENTO DE IMAGENS POR KEYWORD DO NOME ──
+const PRODUCT_IMAGE_MAP = [
+    // MAQUIAGEM — base / primer / bb
+    { keys: ['base fluida','base serum','base sérum','bb cream','cc cream','primer','base liquida','base líquida','base matte','base'],
+      img: 'img/base_fluida_1791458954927.jpg' },
+    // MAQUIAGEM — batom
+    { keys: ['batom matte','batom liquido','batom líquido','batom cremoso','batom bala','batom'],
+      img: 'img/batom_matte_1791458925028.jpg' },
+    // MAQUIAGEM — gloss / labial
+    { keys: ['gloss','brilho labial','lip gloss','lip tint','balm labial','hidratante labial','protetor labial','labial'],
+      img: 'https://images.unsplash.com/photo-1631730486572-226d1f595b68?w=500&q=80' },
+    // MAQUIAGEM — paleta / sombra
+    { keys: ['paleta de sombra','paleta de sombras','paleta de olhos','sombra','paleta','eyeshadow'],
+      img: 'img/paleta_sombras_1791458911527.jpg' },
+    // MAQUIAGEM — blush / iluminador / bronzer / pó
+    { keys: ['blush','iluminador','bronzer','po compacto','pó compacto','po translucido','pó translúcido','highlighter','po facial','pó facial'],
+      img: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=500&q=80' },
+    // MAQUIAGEM — máscara de cílios / rímel
+    { keys: ['mascara de cilio','máscara de cílio','mascara para cilio','máscara para cílio','rimel','rímel','cilios','cílios'],
+      img: 'https://images.unsplash.com/photo-1631214501587-02e7d1e7b561?w=500&q=80' },
+    // MAQUIAGEM — delineador / lápis
+    { keys: ['delineador','eyeliner','lapis de olho','lápis de olho','caneta delineadora'],
+      img: 'https://images.unsplash.com/photo-1631214501587-02e7d1e7b561?w=500&q=80' },
+    // MAQUIAGEM — contorno / corretivo
+    { keys: ['contorno em bastao','contorno em bastão','contorno','corretivo liquido','corretivo'],
+      img: 'https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=500&q=80' },
+    // MAQUIAGEM — pincéis / esponja
+    { keys: ['pincel','pinceis','pincéis','kit pincel','kit pinceis','kit pincéis','esponja','beauty blender'],
+      img: 'img/kit_pinceis_1791458940916.jpg' },
+    // SKINCARE — sérum
+    { keys: ['serum facial','sérum facial','serum hidra','serum botanico','sérum botânico','serum pele','serum retinol','serum vitamina','serum hidratante','serum clareador','serum','sérum','vitamina c','niacinamida','acido hialuronico','ácido hialurônico','retinol'],
+      img: 'img/serum_facial_1791458880967.jpg' },
+    // SKINCARE — creme / hidratante facial
+    { keys: ['creme noturno','creme hidratante','creme barrier','creme petalas','creme pétalas','creme para olho','creme facial','hidratante facial','creme anti','creme'],
+      img: 'img/creme_hidratante_1791458893023.jpg' },
+    // SKINCARE — protetor solar
+    { keys: ['protetor solar','protetor','spf','filtro solar','bloqueador solar'],
+      img: 'https://images.unsplash.com/photo-1556228578-dd539282b964?w=500&q=80' },
+    // SKINCARE — sabonete / gel de limpeza
+    { keys: ['sabonete facial','gel de limpeza','espuma de limpeza','cleanser','limpeza facial','sabonete'],
+      img: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500&q=80' },
+    // SKINCARE — água micelar / demaquilante
+    { keys: ['agua micelar','água micelar','micelar','removedor bifasico','removedor bifásico','removedor de maquiagem','demaquilante'],
+      img: 'https://images.unsplash.com/photo-1590156546064-c9aa34fe5b05?w=500&q=80' },
+    // SKINCARE — esfoliante / peeling
+    { keys: ['esfoliante facial','peeling facial','scrub facial','peeling','esfoliante'],
+      img: 'https://images.unsplash.com/photo-1601049676869-702ea24cfd58?w=500&q=80' },
+    // SKINCARE — máscara facial / argila
+    { keys: ['mascara argila','máscara argila','mascara noturna','máscara noturna','mascara facial','máscara facial','argila','sleeping mask','sheet mask'],
+      img: 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=500&q=80' },
+    // SKINCARE — tônico
+    { keys: ['tonico','tônico','toner','agua floral','água floral','agua de rosas','água de rosas'],
+      img: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=500&q=80' },
+    // CORPO — hidratante corporal / loção
+    { keys: ['hidratante corporal nutritivo','hidratante corporal','locao corporal','loção corporal','creme corporal','manteiga corporal','oleo corporal','óleo corporal'],
+      img: 'img/hidratante_corporal.jpg' },
+    // CORPO — esfoliante corporal / banho
+    { keys: ['esfoliante corporal','scrub corporal','gel de banho','sabonete liquido','sabonete líquido','sabonete corporal','sais de banho'],
+      img: 'https://images.unsplash.com/photo-1570194065650-d99fb4cb7b4a?w=500&q=80' },
+    // PERFUMES / FRAGRÂNCIAS
+    { keys: ['perfume','eau de parfum','eau de toilette','colonia','colônia','body splash','deo parfum','fragrancia','fragrância','elixir'],
+      img: 'https://images.unsplash.com/photo-1541643600914-78b084683702?w=500&q=80' },
+    // CABELO — shampoo / condicionador
+    { keys: ['shampoo','condicionador','co-wash','shampoo antirresiduos'],
+      img: 'https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?w=500&q=80' },
+    // CABELO — máscara capilar
+    { keys: ['mascara capilar','máscara capilar','tratamento capilar','hidratacao capilar','hidratação capilar','cronograma capilar'],
+      img: 'https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=500&q=80' },
+    // CABELO — óleo / leave-in / finalizador
+    { keys: ['oleo capilar','óleo capilar','leave-in','finalizador','serum capilar','sérum capilar','protetor termico','protetor térmico','reparador de pontas'],
+      img: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=500&q=80' },
+    // UNHAS
+    { keys: ['esmalte','nail polish','top coat','base para unha','oleo para cuticula','óleo para cutícula','removedor de esmalte','kit nail','unha','unhas'],
+      img: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=500&q=80' },
+];
+
+const CATEGORY_FALLBACK = {
+    'Skincare':      'img/serum_facial_1791458880967.jpg',
+    'Maquiagem':     'img/batom_matte_1791458925028.jpg',
+    'Corpo & Banho': 'img/hidratante_corporal.jpg',
+    'Acessórios':    'img/kit_pinceis_1791458940916.jpg',
+    'Cabelo':        'https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?w=500&q=80',
+    'Perfumes':      'https://images.unsplash.com/photo-1541643600914-78b084683702?w=500&q=80',
+    'Perfumaria':    'https://images.unsplash.com/photo-1541643600914-78b084683702?w=500&q=80',
+    'Unhas':         'https://images.unsplash.com/photo-1604654894610-df63bc536371?w=500&q=80',
+};
+
+/** Retorna a imagem correta para o produto baseando-se no nome e categoria. */
+export function getProductImage(name, cat) {
+    const norm = (s) => (s || '').toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+    const n = norm(name);
+    
+    if (n) {
+        for (const entry of PRODUCT_IMAGE_MAP) {
+            for (const key of entry.keys) {
+                if (n.includes(norm(key))) return entry.img;
+            }
+        }
+    }
+    return CATEGORY_FALLBACK[cat] || 'img/serum_facial_1791458880967.jpg';
+}
+
+if (typeof window !== 'undefined') {
+    window.getProductImage = getProductImage;
+    window.PRODUCT_IMAGE_MAP = PRODUCT_IMAGE_MAP;
+}
+
 const categoryImages = {
-    'Skincare': [
-        'https://picsum.photos/seed/sk1/500/500',
-        'https://picsum.photos/seed/sk2/500/500',
-        'https://picsum.photos/seed/sk3/500/500',
-        'https://picsum.photos/seed/sk4/500/500'
-    ],
-    'Maquiagem': [
-        'https://picsum.photos/seed/mq1/500/500',
-        'https://picsum.photos/seed/mq2/500/500',
-        'https://picsum.photos/seed/mq3/500/500',
-        'https://picsum.photos/seed/mq4/500/500'
-    ],
-    'Corpo & Banho': [
-        'https://picsum.photos/seed/cb1/500/500',
-        'https://picsum.photos/seed/cb2/500/500',
-        'https://picsum.photos/seed/cb3/500/500',
-        'https://picsum.photos/seed/cb4/500/500'
-    ]
+    'Skincare':  ['https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500&q=80','https://images.unsplash.com/photo-1556228720-195a672e8a03?w=500&q=80','https://images.unsplash.com/photo-1617897903246-719242758050?w=500&q=80','https://images.unsplash.com/photo-1590156546064-c9aa34fe5b05?w=500&q=80'],
+    'Maquiagem': ['https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=500&q=80','https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=500&q=80','https://images.unsplash.com/photo-1512496015851-a90fb38ba796?w=500&q=80','https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=500&q=80'],
+    'Corpo & Banho': ['https://images.unsplash.com/photo-1556228578-dd539282b964?w=500&q=80','https://images.unsplash.com/photo-1570194065650-d99fb4cb7b4a?w=500&q=80','https://images.unsplash.com/photo-1612817288484-6f916006741a?w=500&q=80','https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=500&q=80'],
+    'Cabelo':    ['https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?w=500&q=80','https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=500&q=80','https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=500&q=80','https://images.unsplash.com/photo-1487174244970-cd18784bb4a4?w=500&q=80'],
+    'Perfumes':  ['https://images.unsplash.com/photo-1541643600914-78b084683702?w=500&q=80','https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=500&q=80','https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=500&q=80','https://images.unsplash.com/photo-1547887538-047ad8ad49d7?w=500&q=80'],
+    'Unhas':     ['https://images.unsplash.com/photo-1604654894610-df63bc536371?w=500&q=80','https://images.unsplash.com/photo-1604654894610-df63bc536371?w=500&q=80','https://images.unsplash.com/photo-1604654894610-df63bc536371?w=500&q=80','https://images.unsplash.com/photo-1604654894610-df63bc536371?w=500&q=80'],
 };
 
 const videoImages = [
@@ -117,57 +274,96 @@ const videoTitles = [
     'Preparação de Pele', 'Removendo Make', 'Ritual de Spa', 'Favoritos do Mês'
 ];
 
-// Rich per-company product catalog with unique images, descriptions and prices
+// Atalho para criar produto com imagem automática
+const _p = (name, desc, cat, price, badge = '', rating = 4.8, reviews = 124) => ({
+    name, desc, cat, price, badge, rating, reviews,
+    img: getProductImage(name, cat)
+});
+
+// Catálogo completo de produtos por loja
 const storeProducts = {
     ann_beauty: [
-        { name: 'Sérum Facial Vitamina C', desc: 'Fórmula exclusiva com 15% de Vitamina C pura. Clareia manchas e unifica o tom da pele em 2 semanas.', cat: 'Skincare', price: 189.90, img: 'https://loremflickr.com/500/500/vitamin,serum,skincare?lock=101', badge: 'Bestseller' },
-        { name: 'Base Fluida HD', desc: 'Cobertura buildável de média a total com acabamento natural. Disponível em 40 tons inclusivos.', cat: 'Maquiagem', price: 149.00, img: 'https://loremflickr.com/500/500/foundation,makeup?lock=102', badge: 'Novo' },
-        { name: 'Loção Corporal Nutritiva', desc: 'Com manteiga de karité e óleo de argan. Hidratação intensa por 48h para pele seca e sensível.', cat: 'Corpo & Banho', price: 89.90, img: 'https://loremflickr.com/500/500/body,lotion,moisturizer?lock=103', badge: '' },
-        { name: 'Creme Noturno Reparador', desc: 'Retinol 0.3% + peptídeos de cobre. Regenera a pele durante o sono e reduz linhas finas.', cat: 'Skincare', price: 219.00, img: 'https://loremflickr.com/500/500/skincare,cream,jar?lock=104', badge: '' },
-        { name: 'Batom Matte Duradouro', desc: 'Pigmentação intensa com até 12h de duração. Formula com vitamina E para não ressecar.', cat: 'Maquiagem', price: 79.90, img: 'https://loremflickr.com/500/500/lipstick,matte?lock=105', badge: '' },
-        { name: 'Iluminador Glowing', desc: 'Pó prensado com micropartículas reflectoras. Dá aquele glow natural para bochechas e clavícula.', cat: 'Maquiagem', price: 119.00, img: 'https://loremflickr.com/500/500/highlighter,makeup,glow?lock=106', badge: 'Novo' },
-        { name: 'Óleo Facial Niacinamida', desc: 'Soro com 10% de Niacinamida + Ácido Hialurônico. Poros minimizados e pele equilibrada.', cat: 'Skincare', price: 159.00, img: 'https://loremflickr.com/500/500/face,oil,serum?lock=107', badge: '' },
-        { name: 'Esfoliante Facial', desc: 'Grãos ultrafinos de açúcar + ácido glicólico. Renova a pele sem agredir a barreira cutânea.', cat: 'Skincare', price: 99.90, img: 'https://loremflickr.com/500/500/face,scrub,exfoliant?lock=108', badge: '' },
+        _p('Sérum Facial Vitamina C',       'Fórmula exclusiva com 15% de Vitamina C pura. Clareia manchas e unifica o tom da pele em 2 semanas.',      'Skincare',       189.90, 'Novo', 4.8, 124),
+        _p('Batom Matte Duradouro',          'Pigmentação intensa com até 12h de duração. Fórmula com vitamina E para não ressecar.',                   'Maquiagem',       79.90, 'Mais vendido', 4.8, 98),
+        _p('Hidratante Corporal Nutritivo',  'Com manteiga de karité e óleo de argan. Hidratação intensa por 48h para pele seca e sensível.',           'Corpo',           89.90, 'Novo', 4.7, 256),
+        _p('Creme Facial Antissinais',       'Retinol 0.3% + peptídeos de cobre. Regenera a pele durante o sono e reduz linhas finas.',                 'Skincare',       159.90, 'Top', 4.9, 310),
+        _p('Paleta de Sombras Nude',         'Paleta sofisticada com 12 tons neutros clássicos e acabamento matte aveludado.',                            'Maquiagem',      129.90, '', 4.8, 115),
+        _p('Base Fluida HD',                 'Cobertura buildável de média a total com acabamento natural. Disponível em 40 tons inclusivos.',            'Maquiagem',      149.00, 'Novo', 4.7, 142),
+        _p('Iluminador Glowing',             'Pó prensado com micropartículas reflectoras. Glow natural para bochechas e clavícula.',                   'Maquiagem',      119.00, 'Novo', 4.9, 88),
+        _p('Óleo Facial Niacinamida',        'Soro com 10% de Niacinamida + Ácido Hialurônico. Poros minimizados e pele equilibrada.',                 'Skincare',       159.00, '', 4.6, 75),
     ],
     nycoly: [
-        { name: 'Sérum Hidra Boost', desc: 'Sérum com 3 tipos de ácido hialurônico. Preenche instantaneamente e hidrata em profundidade.', cat: 'Skincare', price: 139.90, img: 'https://loremflickr.com/500/500/hyaluronic,serum?lock=201', badge: 'Novo' },
-        { name: 'Batom Líquido Vibrante', desc: 'Cor ultra pigmentada em acabamento cremoso. 20 tons intensos que duram o dia todo.', cat: 'Maquiagem', price: 69.90, img: 'https://loremflickr.com/500/500/liquid,lipstick,red?lock=202', badge: '' },
-        { name: 'Máscara de Cílios Volume', desc: 'Fórmula com fibras naturais que multiplicam o volume dos cílios sem grudar ou pesar.', cat: 'Maquiagem', price: 89.00, img: 'https://loremflickr.com/500/500/mascara,eyelash?lock=203', badge: 'Bestseller' },
-        { name: 'Paleta de Sombras Neon', desc: '12 cores ultravibrantes com alta pigmentação. Tons ousados para looks noturnos e festivais.', cat: 'Maquiagem', price: 179.00, img: 'https://loremflickr.com/500/500/eyeshadow,palette,makeup?lock=204', badge: '' },
-        { name: 'Gloss Labial Iluminado', desc: 'Gloss com espelho d\'água e partículas holográficas. Volume natural e brilho intenso.', cat: 'Maquiagem', price: 59.90, img: 'https://loremflickr.com/500/500/lip,gloss,shine?lock=205', badge: 'Novo' },
-        { name: 'Primer Poros Invisíveis', desc: 'Base de silicone que prepara a pele, cobre poros e prolonga a durabilidade da maquiagem.', cat: 'Maquiagem', price: 109.00, img: 'https://loremflickr.com/500/500/primer,makeup,pores?lock=206', badge: '' },
-        { name: 'Gel de Banho Exotic', desc: 'Fragrância tropical exclusiva com extratos de maracujá e coco. Pele perfumada e suave.', cat: 'Corpo & Banho', price: 55.90, img: 'https://loremflickr.com/500/500/shower,gel,bath?lock=207', badge: '' },
-        { name: 'Contorno em Bastão', desc: 'Textura cremosa que se funde com a pele. Define maçãs do rosto e mandíbula com naturalidade.', cat: 'Maquiagem', price: 79.00, img: 'https://loremflickr.com/500/500/contour,makeup,blush?lock=208', badge: '' },
+        _p('Sérum Hidra Boost',          'Sérum com 3 tipos de ácido hialurônico. Preenche instantaneamente e hidrata em profundidade.',             'Skincare',       139.90, 'Novo'),
+        _p('Batom Líquido Vibrante',     'Cor ultra pigmentada em acabamento cremoso. 20 tons intensos que duram o dia todo.',                      'Maquiagem',       69.90),
+        _p('Máscara de Cílios Volume',   'Fórmula com fibras naturais que multiplicam o volume dos cílios sem grudar ou pesar.',                    'Maquiagem',       89.00, 'Bestseller'),
+        _p('Paleta de Sombras Neon',     '12 cores ultravibrantes com alta pigmentação. Tons ousados para looks noturnos e festivais.',             'Maquiagem',      179.00),
+        _p('Gloss Labial Iluminado',     'Gloss com efeito espelho e partículas holográficas. Volume natural e brilho intenso.',                   'Maquiagem',       59.90, 'Novo'),
+        _p('Primer Poros Invisíveis',    'Base de silicone que prepara a pele, cobre poros e prolonga a durabilidade da maquiagem.',                'Maquiagem',      109.00),
+        _p('Gel de Banho Exotic',        'Fragrância tropical exclusiva com extratos de maracujá e coco. Pele perfumada e suave.',                  'Corpo & Banho',   55.90),
+        _p('Contorno em Bastão',         'Textura cremosa que se funde com a pele. Define maçãs do rosto e mandíbula com naturalidade.',            'Maquiagem',       79.00),
     ],
     glow_co: [
-        { name: 'Sérum Botânico Concentrado', desc: 'Extrato de rosa mosqueta + babosa orgânica. Hidrata, cicatriza e suaviza marcas de acne.', cat: 'Skincare', price: 249.00, img: 'https://loremflickr.com/500/500/botanical,serum,organic?lock=301', badge: 'Bestseller' },
-        { name: 'Óleo de Limpeza Facial', desc: 'Blend de 5 óleos vegetais que dissolve maquiagem, protetor solar e impurezas suavemente.', cat: 'Skincare', price: 169.00, img: 'https://loremflickr.com/500/500/cleansing,oil,skincare?lock=302', badge: '' },
-        { name: 'Tônico Floral Calmante', desc: 'Água de rosas + extrato de camomila. Equilibra o pH, fecha poros e prepara para o sérum.', cat: 'Skincare', price: 119.00, img: 'https://loremflickr.com/500/500/toner,rosewater,floral?lock=303', badge: 'Novo' },
-        { name: 'Máscara Argila Verde', desc: 'Argila verde + carvão ativado + melaleuca. Desobstrui poros e controla a oleosidade da pele.', cat: 'Skincare', price: 89.90, img: 'https://loremflickr.com/500/500/clay,mask,skincare?lock=304', badge: '' },
-        { name: 'Creme Barrier Repair', desc: 'Ceramidas + ácidos graxos essenciais para restaurar a barreira protetora da pele sensível.', cat: 'Skincare', price: 199.00, img: 'https://loremflickr.com/500/500/moisturizer,cream,skincare?lock=305', badge: '' },
-        { name: 'Esfoliante Corporal Natural', desc: 'Sal marinho + café + óleo de coco. Elimina células mortas e deixa a pele lisinha e sedosa.', cat: 'Corpo & Banho', price: 75.90, img: 'https://loremflickr.com/500/500/body,scrub,coffee?lock=306', badge: 'Novo' },
-        { name: 'Sérum Pele de Vidro', desc: 'Ácido hialurônico de baixo peso molecular que penetra nas camadas mais profundas da pele.', cat: 'Skincare', price: 279.00, img: 'https://loremflickr.com/500/500/glass,skin,serum?lock=307', badge: '' },
-        { name: 'Protetor Solar Glow SPF50', desc: 'Proteção total com acabamento brilhante. Fórmula leve que não embranquece e hidrata.', cat: 'Skincare', price: 139.00, img: 'https://loremflickr.com/500/500/sunscreen,spf,sunblock?lock=308', badge: 'Bestseller' },
+        _p('Sérum Botânico Concentrado', 'Extrato de rosa mosqueta + babosa orgânica. Hidrata, cicatriza e suaviza marcas de acne.',                'Skincare',       249.00, 'Bestseller'),
+        _p('Óleo de Limpeza Facial',     'Blend de 5 óleos vegetais que dissolve maquiagem, protetor solar e impurezas suavemente.',                'Skincare',       169.00),
+        _p('Tônico Floral Calmante',     'Água de rosas + extrato de camomila. Equilibra o pH, fecha poros e prepara para o sérum.',                'Skincare',       119.00, 'Novo'),
+        _p('Máscara Argila Verde',       'Argila verde + carvão ativado + melaleuca. Desobstrui poros e controla a oleosidade.',                   'Skincare',        89.90),
+        _p('Creme Barrier Repair',       'Ceramidas + ácidos graxos essenciais para restaurar a barreira protetora da pele sensível.',              'Skincare',       199.00),
+        _p('Esfoliante Corporal Natural','Sal marinho + café + óleo de coco. Elimina células mortas e deixa a pele lisinha.',                     'Corpo & Banho',   75.90, 'Novo'),
+        _p('Sérum Pele de Vidro',        'Ácido hialurônico de baixo peso molecular que penetra nas camadas mais profundas da pele.',               'Skincare',       279.00),
+        _p('Protetor Solar Glow SPF50',  'Proteção total com acabamento luminoso. Fórmula leve que não embranquece e hidrata.',                     'Skincare',       139.00, 'Bestseller'),
     ],
     rose_lab: [
-        { name: 'Sérum Rétinol Luxe', desc: 'Retinol encapsulado 1% de liberação lenta. Antienvelhecimento premium com zero irritação.', cat: 'Skincare', price: 349.00, img: 'https://loremflickr.com/500/500/retinol,antiaging,serum?lock=401', badge: 'Exclusivo' },
-        { name: 'Creme Pétalas de Rosa', desc: 'Extrato concentrado de rosa búlgara + colágeno marinho. Firmeza e luminosidade imediatas.', cat: 'Skincare', price: 289.00, img: 'https://loremflickr.com/500/500/rose,cream,luxury?lock=402', badge: '' },
-        { name: 'Água Micelar Rosé', desc: 'Remove maquiagem e impurezas em um único passo. Com extrato de rosa e pantenol.', cat: 'Skincare', price: 129.00, img: 'https://loremflickr.com/500/500/micellar,water,cleanser?lock=403', badge: 'Novo' },
-        { name: 'Óleo Seco Corporal', desc: 'Blend de 7 óleos nobles: argan, jojoba, amêndoa, rosas, macadâmia, rosa mosqueta e baobá.', cat: 'Corpo & Banho', price: 219.00, img: 'https://loremflickr.com/500/500/dry,oil,body?lock=404', badge: '' },
-        { name: 'Base Serum Luxe', desc: 'Base fluida com ativos de skincare. Cobertura media com cuidado diário. Sem óleo e não comedogênica.', cat: 'Maquiagem', price: 259.00, img: 'https://loremflickr.com/500/500/foundation,serum,luxury?lock=405', badge: 'Bestseller' },
-        { name: 'Blush Cremoso Rosé', desc: 'Textura mousse que se funde perfeitamente com a pele. Tom rosé natural para um look de saúde.', cat: 'Maquiagem', price: 149.00, img: 'https://loremflickr.com/500/500/blush,cheek,makeup?lock=406', badge: '' },
-        { name: 'Máscara Noturna Glow', desc: 'Sleeping mask com ácido glicólico e vitamina C que renova a pele enquanto você dorme.', cat: 'Skincare', price: 199.00, img: 'https://loremflickr.com/500/500/sleeping,mask,overnight?lock=407', badge: 'Novo' },
-        { name: 'Perfume Rosé Elixir', desc: 'Eau de parfum floral com notas de rosa, peônia e musk. Fragrância que dura até 24 horas.', cat: 'Corpo & Banho', price: 389.00, img: 'https://loremflickr.com/500/500/perfume,fragrance,bottle?lock=408', badge: 'Exclusivo' },
+        _p('Sérum Rétinol Luxe',         'Retinol encapsulado 1% de liberação lenta. Antienvelhecimento premium com zero irritação.',               'Skincare',       349.00, 'Exclusivo'),
+        _p('Creme Hidratante Pétalas',   'Extrato concentrado de rosa búlgara + colágeno marinho. Firmeza e luminosidade imediatas.',               'Skincare',       289.00),
+        _p('Água Micelar Rosé',          'Remove maquiagem e impurezas em um único passo. Com extrato de rosa e pantenol.',                         'Skincare',       129.00, 'Novo'),
+        _p('Óleo Seco Corporal',         'Blend de 7 óleos nobles: argan, jojoba, amêndoa, rosas, macadâmia e rosa mosqueta.',                     'Corpo & Banho',  219.00),
+        _p('Base Sérum Luxe',            'Base fluida com ativos de skincare. Cobertura média com cuidado diário. Sem óleo.',                       'Maquiagem',      259.00, 'Bestseller'),
+        _p('Blush Cremoso Rosé',         'Textura mousse que se funde perfeitamente com a pele. Tom rosé natural para um look de saúde.',           'Maquiagem',      149.00),
+        _p('Máscara Noturna Facial',     'Sleeping mask com ácido glicólico e vitamina C que renova a pele enquanto você dorme.',                   'Skincare',       199.00, 'Novo'),
+        _p('Perfume Rosé Elixir',        'Eau de parfum floral com notas de rosa, peônia e musk. Fragrância que dura até 24 horas.',                'Perfumes',       389.00, 'Exclusivo'),
     ],
     lumina: [
-        { name: 'Sérum Hidratante Express', desc: 'Hidratação instantânea e acessível. Ácido hialurônico + glicerina vegetal para todos os tipos de pele.', cat: 'Skincare', price: 69.90, img: 'https://loremflickr.com/500/500/hydrating,serum,skincare?lock=501', badge: 'Oferta' },
-        { name: 'BB Cream 5 em 1', desc: 'Hidrata, protege, corrige, ilumina e cobre. O multitarefa perfeito para o dia a dia corrido.', cat: 'Maquiagem', price: 79.90, img: 'https://loremflickr.com/500/500/bb,cream,makeup?lock=502', badge: '' },
-        { name: 'Kit Pincel Completo', desc: 'Conjunto com 12 pincéis de pelo sintético ultrasuave. Perfeitos para maquiagem profissional em casa.', cat: 'Maquiagem', price: 99.90, img: 'https://loremflickr.com/500/500/makeup,brushes,kit?lock=503', badge: 'Novo' },
-        { name: 'Sabonete Facial Suave', desc: 'Limpa sem ressecar. Com prebióticos que equilibram o microbioma da pele e reduzem vermelhidão.', cat: 'Skincare', price: 45.90, img: 'https://loremflickr.com/500/500/face,wash,cleanser?lock=504', badge: '' },
-        { name: 'Creme Hidratante Rosto', desc: 'Textura leve e não oleosa que hidrata por 24h. Ideal para pele normal a mista.', cat: 'Skincare', price: 59.90, img: 'https://loremflickr.com/500/500/face,moisturizer,cream?lock=505', badge: '' },
-        { name: 'Removedor Bifásico', desc: 'Remove maquiagem à prova d\'água sem esfregar. Com óleo de girassol e água micelar.', cat: 'Skincare', price: 39.90, img: 'https://loremflickr.com/500/500/makeup,remover,cleanser?lock=506', badge: 'Oferta' },
-        { name: 'Loção Pós-Sol', desc: 'Aloe vera + vitamina E que acalma, refresca e recupera a pele após exposição solar.', cat: 'Corpo & Banho', price: 49.90, img: 'https://loremflickr.com/500/500/aftersun,aloe,lotion?lock=507', badge: 'Novo' },
-        { name: 'Corretivo Fluido', desc: 'Cobertura total em 30 tons. Fórmula de longa duração com ácido hialurônico para não caducar.', cat: 'Maquiagem', price: 64.90, img: 'https://loremflickr.com/500/500/concealer,makeup,coverage?lock=508', badge: '' },
+        _p('Sérum Hidratante Express',   'Hidratação instantânea. Ácido hialurônico + glicerina vegetal para todos os tipos de pele.',             'Skincare',        69.90, 'Oferta'),
+        _p('BB Cream 5 em 1',            'Hidrata, protege, corrige, ilumina e cobre. O multitarefa perfeito para o dia a dia.',                   'Maquiagem',       79.90),
+        _p('Kit Pincel Completo',        'Conjunto com 12 pincéis de pelo sintético ultrasuave para maquiagem profissional em casa.',               'Maquiagem',       99.90, 'Novo'),
+        _p('Sabonete Facial Suave',      'Limpa sem ressecar. Com prebióticos que equilibram o microbioma da pele.',                               'Skincare',        45.90),
+        _p('Creme Hidratante Facial',    'Textura leve e não oleosa que hidrata por 24h. Ideal para pele normal a mista.',                         'Skincare',        59.90),
+        _p('Removedor Bifásico',         'Remove maquiagem à prova d\'água sem esfregar. Com óleo de girassol e água micelar.',                     'Skincare',        39.90, 'Oferta'),
+        _p('Loção Corporal Pós-Sol',     'Aloe vera + vitamina E que acalma e recupera a pele após exposição solar.',                               'Corpo & Banho',   49.90, 'Novo'),
+        _p('Corretivo Fluido',           'Cobertura total em 30 tons. Fórmula de longa duração com ácido hialurônico.',                             'Maquiagem',       64.90),
+    ],
+    // ── Cabelo & Tratamentos ──
+    cabelo_house: [
+        _p('Shampoo Reparador Intensivo', 'Queratina hidrolisada + proteínas da seda. Repara fios danificados e devolve o brilho.',                 'Cabelo',          89.90, 'Bestseller'),
+        _p('Condicionador Hidra Liso',    'Óleo de argan + manteiga de karité. Hidrata profundamente e facilita a escovação.',                     'Cabelo',          79.90),
+        _p('Máscara Capilar Nutritiva',   'Tratamento intensivo com 3 tipos de queratina. Fios sedosos com brilho espelhado.',                     'Cabelo',         119.00, 'Novo'),
+        _p('Leave-in Proteção Total',     'Protege contra calor até 230°C, hidrata e controla o frizz sem pesar.',                                 'Cabelo',          69.90),
+        _p('Óleo Capilar Luminoso',       'Blend de argan, macadâmia e abissínia. Finaliza, sela as pontas e dá brilho espelhado.',                'Cabelo',          99.90),
+        _p('Finalizador Anti-Frizz',      'Creme de pentear que define os cachos e controla o volume por até 48h.',                                'Cabelo',          59.90, 'Oferta'),
+        _p('Protetor Térmico Spray',      'Barreira protetora em spray que suporta o calor da chapinha sem ressecamento.',                         'Cabelo',          79.00, 'Novo'),
+        _p('Shampoo Sem Sulfato',         'Fórmula suave que respeita o pH natural dos fios e do couro cabeludo.',                                 'Cabelo',          74.90),
+    ],
+    // ── Perfumes & Fragrâncias ──
+    perfume_house: [
+        _p('Perfume Floral Rosé',         'Eau de parfum com notas de rosa búlgara, jasmim e musk branco. Feminino e elegante.',                   'Perfumes',       299.00, 'Exclusivo'),
+        _p('Eau de Parfum Noir',          'Fragrância oriental com baunilha, âmbar e sândalo. Intensa e envolvente para a noite.',                 'Perfumes',       349.00),
+        _p('Body Splash Tropical',        'Refrescante e leve, com notas de maracujá, coco e baunilha. Perfeito para o dia a dia.',               'Perfumes',        59.90, 'Oferta'),
+        _p('Colônia Fresh & Clean',       'Fragrância aquática e cítrica com bergamota e cedro. Versátil e duradoura.',                            'Perfumes',        99.90),
+        _p('Eau de Toilette Blossom',     'Leveza floral de peônia e frésia com base de almíscar. Feminina e despretensiosa.',                     'Perfumes',       189.00, 'Novo'),
+        _p('Deo Parfum Vanilla Gold',     'Fragrância cremosa e doce com baunilha, caramelo e sândalo. Quente e sofisticada.',                     'Perfumes',       129.00),
+        _p('Perfume Frutal Vibrante',     'Eau de parfum com morango, ameixa e rosa. Jovial, alegre e duradouro.',                                 'Perfumes',       219.00, 'Bestseller'),
+        _p('Eau de Parfum Green Zen',     'Fragrância vegetal com bambu, chá verde e cedro. Calma e minimalista.',                                 'Perfumes',       259.00),
+    ],
+    // ── Unhas & Nail Care ──
+    unhas_studio: [
+        _p('Esmalte Gel Longa Duração',   'Cor ultra intensa com efeito gel. Seca rápido e dura até 10 dias sem lascar.',                          'Unhas',           29.90, 'Bestseller'),
+        _p('Base Fortalecedora de Unhas', 'Trata, fortalece e protege unhas fracas e quebradiças. Fórmula com cálcio e vitaminas.',                'Unhas',           24.90),
+        _p('Top Coat Brilhante',          'Acabamento super brilhante que lacra o esmalte e prolonga a durabilidade.',                             'Unhas',           22.90, 'Novo'),
+        _p('Esmalte Matte',               'Acabamento aveludado e fosco. Estilo moderno e contemporâneo.',                                         'Unhas',           27.90),
+        _p('Óleo para Cutículas',         'Blend de jojoba, amêndoa e vitamina E que nutre e amolece as cutículas.',                              'Unhas',           19.90),
+        _p('Removedor de Esmalte',        'Remove com suavidade qualquer esmalte. Sem acetona, com aloe vera.',                                    'Unhas',           15.90, 'Oferta'),
+        _p('Esmalte Holográfico',         'Partículas holográficas que criam um efeito arco-íris na luz. Único e impactante.',                     'Unhas',           34.90, 'Novo'),
+        _p('Kit Nail Art',                'Base, esmalte de cor, top coat e palito para nail arts profissionais em casa.',                          'Unhas',           69.90),
     ],
 };
 
@@ -187,6 +383,9 @@ export const dataManager = {
         product.id = `custom-${Date.now()}`;
         product.code = `ANN-C${(customs.length + 1).toString().padStart(3, '0')}`;
         product.badge = 'Novo';
+        if (!product.img || product.img.includes('photo-1556228720-195a672e8a03')) {
+            product.img = getProductImage(product.name, product.cat || product.category);
+        }
         customs.push(product);
         localStorage.setItem('ann_custom_products', JSON.stringify(customs));
         return product;
@@ -197,6 +396,9 @@ export const dataManager = {
         const customs = dataManager.getCustomProducts();
         const idx = customs.findIndex(p => p.id === productId);
         if (idx > -1) {
+            if (updates.name && (!updates.img || updates.img.includes('photo-1556228720-195a672e8a03'))) {
+                updates.img = getProductImage(updates.name, updates.cat || updates.category);
+            }
             customs[idx] = { ...customs[idx], ...updates };
             localStorage.setItem('ann_custom_products', JSON.stringify(customs));
             return customs[idx];
@@ -242,7 +444,9 @@ export const dataManager = {
                     company_id: store.id,
                     company_name: store.name,
                     company_photo: store.photo,
-                    badge: template.badge || (globalIndex < 5 ? 'Novo' : ''),
+                    badge: template.badge || '',
+                    rating: template.rating || (4.6 + (localIdx % 4) * 0.1).toFixed(1),
+                    reviews: template.reviews || (80 + localIdx * 25),
                 });
                 globalIndex++;
             });

@@ -41,10 +41,10 @@ export default function adminPage() {
   <div class="min-h-screen bg-[#F8F9FD] flex font-sans antialiased text-slate-800">
     
     <!-- FIX SIDEBAR (Menu Lateral Fixo) -->
-    <aside class="w-64 bg-[#121026] text-white flex flex-col fixed inset-y-0 left-0 z-50 shadow-2xl transition-all">
+    <aside class="w-64 bg-[#000000] text-white flex flex-col fixed inset-y-0 left-0 z-50 shadow-2xl transition-all">
       <!-- Brand Logo Header -->
       <div class="p-6 border-b border-white/10 flex items-center gap-3">
-        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#6C3BFF] to-purple-400 flex items-center justify-center font-bold text-white shadow-lg shadow-[#6C3BFF]/40">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#8B5FBF] to-purple-400 flex items-center justify-center font-bold text-white shadow-lg shadow-[#8B5FBF]/40">
           <span class="material-symbols-outlined text-xl">admin_panel_settings</span>
         </div>
         <div>
@@ -55,7 +55,7 @@ export default function adminPage() {
 
       <!-- Navigation List (13 Items) -->
       <nav class="flex-grow p-4 space-y-1 overflow-y-auto subtle-scroll text-xs font-semibold">
-        <button onclick="window.switchAdminSection('dashboard')" id="side-dashboard" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-[#6C3BFF] text-white font-bold shadow-lg shadow-[#6C3BFF]/30 transition-all">
+        <button onclick="window.switchAdminSection('dashboard')" id="side-dashboard" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-[#8B5FBF] text-white font-bold shadow-lg shadow-[#8B5FBF]/30 transition-all">
           <span class="material-symbols-outlined text-lg">space_dashboard</span> 🏠 Dashboard
         </button>
         <button onclick="window.switchAdminSection('users')" id="side-users" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-300 hover:bg-white/10 hover:text-white transition-all">
@@ -104,7 +104,7 @@ export default function adminPage() {
         <!-- Global Search Bar -->
         <div class="relative w-full max-w-md">
           <span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 text-lg">search</span>
-          <input type="text" id="admin-global-search" oninput="window.handleAdminGlobalSearch(this.value)" placeholder="Pesquisar usuários, lojas, produtos, pedidos..." class="w-full pl-11 pr-4 py-2.5 rounded-full bg-slate-100 border border-slate-200 text-xs font-medium outline-none focus:border-[#6C3BFF] focus:ring-2 focus:ring-[#6C3BFF]/20 transition-all">
+          <input type="text" id="admin-global-search" oninput="window.handleAdminGlobalSearch(this.value)" placeholder="Pesquisar usuários, lojas, produtos, pedidos..." class="w-full pl-11 pr-4 py-2.5 rounded-full bg-slate-100 border border-slate-200 text-xs font-medium outline-none focus:border-[#8B5FBF] focus:ring-2 focus:ring-[#8B5FBF]/20 transition-all">
         </div>
 
         <!-- Right User Actions -->
@@ -117,12 +117,12 @@ export default function adminPage() {
           <div class="h-6 w-[1px] bg-slate-200"></div>
 
           <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-full bg-[#6C3BFF] text-white flex items-center justify-center font-bold text-xs shadow-md">
+            <div class="w-9 h-9 rounded-full bg-[#8B5FBF] text-white flex items-center justify-center font-bold text-xs shadow-md">
               ${user.name.charAt(0)}
             </div>
             <div class="hidden sm:block">
               <p class="text-xs font-bold text-slate-800 leading-tight">${user.name}</p>
-              <p class="text-[10px] text-[#6C3BFF] font-bold">Administrador Geral</p>
+              <p class="text-[10px] text-[#8B5FBF] font-bold">Administrador Geral</p>
             </div>
           </div>
         </div>
@@ -138,7 +138,7 @@ export default function adminPage() {
               <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Visão Geral do Marketplace</h1>
               <p class="text-xs text-slate-500">Métricas em tempo real sobre usuários, lojistas e volume de vendas</p>
             </div>
-            <span class="px-4 py-1.5 rounded-full bg-[#6C3BFF]/10 text-[#6C3BFF] font-bold text-xs border border-[#6C3BFF]/20">Beleza na Web Live System</span>
+            <span class="px-4 py-1.5 rounded-full bg-[#8B5FBF]/10 text-[#8B5FBF] font-bold text-xs border border-[#8B5FBF]/20">Beleza na Web Live System</span>
           </div>
 
           <!-- 9 METRIC CARDS -->
@@ -149,7 +149,7 @@ export default function adminPage() {
                 <h3 class="text-3xl font-extrabold text-slate-900 mt-1">${totalUsers}</h3>
                 <span class="text-[10px] text-emerald-600 font-bold">Clientes e lojistas ativos</span>
               </div>
-              <div class="w-12 h-12 rounded-2xl bg-purple-50 text-[#6C3BFF] flex items-center justify-center"><span class="material-symbols-outlined text-2xl">group</span></div>
+              <div class="w-12 h-12 rounded-2xl bg-purple-50 text-[#8B5FBF] flex items-center justify-center"><span class="material-symbols-outlined text-2xl">group</span></div>
             </div>
 
             <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex items-center justify-between">
@@ -167,7 +167,7 @@ export default function adminPage() {
                 <h3 class="text-3xl font-extrabold text-slate-900 mt-1">${totalStores}</h3>
                 <span class="text-[10px] text-purple-600 font-bold">Lojas parceiras cadastradas</span>
               </div>
-              <div class="w-12 h-12 rounded-2xl bg-purple-50 text-[#6C3BFF] flex items-center justify-center"><span class="material-symbols-outlined text-2xl">storefront</span></div>
+              <div class="w-12 h-12 rounded-2xl bg-purple-50 text-[#8B5FBF] flex items-center justify-center"><span class="material-symbols-outlined text-2xl">storefront</span></div>
             </div>
 
             <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex items-center justify-between">
@@ -191,10 +191,10 @@ export default function adminPage() {
             <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex items-center justify-between">
               <div>
                 <p class="text-[11px] font-bold uppercase text-slate-400">Valor Total Vendido</p>
-                <h3 class="text-3xl font-extrabold text-[#6C3BFF] mt-1">R$ ${totalSoldValue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</h3>
+                <h3 class="text-3xl font-extrabold text-[#8B5FBF] mt-1">R$ ${totalSoldValue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</h3>
                 <span class="text-[10px] text-emerald-600 font-bold">GMV Bruto da plataforma</span>
               </div>
-              <div class="w-12 h-12 rounded-2xl bg-purple-50 text-[#6C3BFF] flex items-center justify-center"><span class="material-symbols-outlined text-2xl">payments</span></div>
+              <div class="w-12 h-12 rounded-2xl bg-purple-50 text-[#8B5FBF] flex items-center justify-center"><span class="material-symbols-outlined text-2xl">payments</span></div>
             </div>
 
             <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex items-center justify-between">
@@ -212,7 +212,7 @@ export default function adminPage() {
                 <h3 class="text-3xl font-extrabold text-slate-900 mt-1">${newRegistrationsCount}</h3>
                 <span class="text-[10px] text-purple-600 font-bold">Em 2026</span>
               </div>
-              <div class="w-12 h-12 rounded-2xl bg-purple-50 text-[#6C3BFF] flex items-center justify-center"><span class="material-symbols-outlined text-2xl">person_add</span></div>
+              <div class="w-12 h-12 rounded-2xl bg-purple-50 text-[#8B5FBF] flex items-center justify-center"><span class="material-symbols-outlined text-2xl">person_add</span></div>
             </div>
 
             <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex items-center justify-between">
@@ -230,37 +230,37 @@ export default function adminPage() {
             <!-- Chart 1: Vendas por Dia -->
             <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
               <h3 class="text-sm font-bold text-slate-900 mb-1 flex items-center gap-2">
-                <span class="material-symbols-outlined text-[#6C3BFF]">show_chart</span> Vendas por Dia (Últimos 7 dias)
+                <span class="material-symbols-outlined text-[#8B5FBF]">show_chart</span> Vendas por Dia (Últimos 7 dias)
               </h3>
               <p class="text-[10px] text-slate-400 mb-6">Volume financeiro acumulado em compras</p>
               
               <div class="flex items-end justify-between h-48 gap-3 px-4 pt-4 border-b border-slate-100">
                 <div class="w-full flex flex-col items-center gap-2">
-                  <div class="w-full bg-purple-200 rounded-t-lg h-[40%] hover:bg-[#6C3BFF] transition-all"></div>
+                  <div class="w-full bg-purple-200 rounded-t-lg h-[40%] hover:bg-[#8B5FBF] transition-all"></div>
                   <span class="text-[9px] text-slate-400 font-bold">Seg</span>
                 </div>
                 <div class="w-full flex flex-col items-center gap-2">
-                  <div class="w-full bg-purple-200 rounded-t-lg h-[65%] hover:bg-[#6C3BFF] transition-all"></div>
+                  <div class="w-full bg-purple-200 rounded-t-lg h-[65%] hover:bg-[#8B5FBF] transition-all"></div>
                   <span class="text-[9px] text-slate-400 font-bold">Ter</span>
                 </div>
                 <div class="w-full flex flex-col items-center gap-2">
-                  <div class="w-full bg-purple-200 rounded-t-lg h-[50%] hover:bg-[#6C3BFF] transition-all"></div>
+                  <div class="w-full bg-purple-200 rounded-t-lg h-[50%] hover:bg-[#8B5FBF] transition-all"></div>
                   <span class="text-[9px] text-slate-400 font-bold">Qua</span>
                 </div>
                 <div class="w-full flex flex-col items-center gap-2">
-                  <div class="w-full bg-purple-300 rounded-t-lg h-[80%] hover:bg-[#6C3BFF] transition-all"></div>
+                  <div class="w-full bg-purple-300 rounded-t-lg h-[80%] hover:bg-[#8B5FBF] transition-all"></div>
                   <span class="text-[9px] text-slate-400 font-bold">Qui</span>
                 </div>
                 <div class="w-full flex flex-col items-center gap-2">
-                  <div class="w-full bg-[#6C3BFF] rounded-t-lg h-[95%] shadow-lg shadow-[#6C3BFF]/30"></div>
-                  <span class="text-[9px] text-[#6C3BFF] font-bold">Sex</span>
+                  <div class="w-full bg-[#8B5FBF] rounded-t-lg h-[95%] shadow-lg shadow-[#8B5FBF]/30"></div>
+                  <span class="text-[9px] text-[#8B5FBF] font-bold">Sex</span>
                 </div>
                 <div class="w-full flex flex-col items-center gap-2">
-                  <div class="w-full bg-purple-200 rounded-t-lg h-[70%] hover:bg-[#6C3BFF] transition-all"></div>
+                  <div class="w-full bg-purple-200 rounded-t-lg h-[70%] hover:bg-[#8B5FBF] transition-all"></div>
                   <span class="text-[9px] text-slate-400 font-bold">Sáb</span>
                 </div>
                 <div class="w-full flex flex-col items-center gap-2">
-                  <div class="w-full bg-purple-200 rounded-t-lg h-[55%] hover:bg-[#6C3BFF] transition-all"></div>
+                  <div class="w-full bg-purple-200 rounded-t-lg h-[55%] hover:bg-[#8B5FBF] transition-all"></div>
                   <span class="text-[9px] text-slate-400 font-bold">Dom</span>
                 </div>
               </div>
@@ -291,15 +291,15 @@ export default function adminPage() {
 
               <div class="space-y-4 text-xs font-semibold">
                 <div>
-                  <div class="flex justify-between mb-1"><span>Pó Facial Velvet Matte</span><span class="font-bold text-[#6C3BFF]">184 unidades</span></div>
-                  <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden"><div class="bg-[#6C3BFF] h-full rounded-full" style="width: 85%"></div></div>
+                  <div class="flex justify-between mb-1"><span>Pó Facial Velvet Matte</span><span class="font-bold text-[#8B5FBF]">184 unidades</span></div>
+                  <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden"><div class="bg-[#8B5FBF] h-full rounded-full" style="width: 85%"></div></div>
                 </div>
                 <div>
-                  <div class="flex justify-between mb-1"><span>Sérum Glow Etéreo Iluminador</span><span class="font-bold text-[#6C3BFF]">142 unidades</span></div>
+                  <div class="flex justify-between mb-1"><span>Sérum Glow Etéreo Iluminador</span><span class="font-bold text-[#8B5FBF]">142 unidades</span></div>
                   <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden"><div class="bg-purple-400 h-full rounded-full" style="width: 70%"></div></div>
                 </div>
                 <div>
-                  <div class="flex justify-between mb-1"><span>Batom Líquido Satin Rose</span><span class="font-bold text-[#6C3BFF]">96 unidades</span></div>
+                  <div class="flex justify-between mb-1"><span>Batom Líquido Satin Rose</span><span class="font-bold text-[#8B5FBF]">96 unidades</span></div>
                   <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden"><div class="bg-purple-300 h-full rounded-full" style="width: 50%"></div></div>
                 </div>
               </div>
@@ -336,7 +336,7 @@ export default function adminPage() {
               <h1 class="text-2xl font-bold text-slate-900">Gestão de Usuários</h1>
               <p class="text-xs text-slate-500">Pesquise, edite permissões, suspenda ou promova usuários</p>
             </div>
-            <button onclick="window.handleAdminCreateUser()" class="px-5 py-2.5 rounded-full bg-[#6C3BFF] text-white font-bold text-xs shadow-md hover:scale-105 transition-all">
+            <button onclick="window.handleAdminCreateUser()" class="px-5 py-2.5 rounded-full bg-[#8B5FBF] text-white font-bold text-xs shadow-md hover:scale-105 transition-all">
               + Cadastrar Usuário
             </button>
           </div>
@@ -358,7 +358,7 @@ export default function adminPage() {
                   ${users.map(u => `
                     <tr class="hover:bg-slate-50 transition-colors">
                       <td class="py-3 font-bold text-slate-900 flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-full bg-[#6C3BFF]/10 text-[#6C3BFF] font-bold flex items-center justify-center">${u.name.charAt(0)}</div>
+                        <div class="w-8 h-8 rounded-full bg-[#8B5FBF]/10 text-[#8B5FBF] font-bold flex items-center justify-center">${u.name.charAt(0)}</div>
                         ${u.name}
                       </td>
                       <td class="py-3 text-slate-600">${u.email}</td>
@@ -457,7 +457,7 @@ export default function adminPage() {
                         ${p.name}
                       </td>
                       <td class="py-3 text-slate-600">${p.cat}</td>
-                      <td class="py-3 font-bold text-[#6C3BFF]">${p.price}</td>
+                      <td class="py-3 font-bold text-[#8B5FBF]">${p.price}</td>
                       <td class="py-3">
                         <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${p.status === 'approved' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}">
                           ${p.status === 'approved' ? 'Aprovado' : 'Pendente'}
@@ -504,13 +504,19 @@ export default function adminPage() {
                 <tbody class="divide-y divide-slate-100">
                   ${orders.map(o => `
                     <tr class="hover:bg-slate-50 transition-colors">
-                      <td class="py-3 font-bold text-[#6C3BFF]">${o.id}</td>
+                      <td class="py-3 font-bold text-[#8B5FBF]">${o.id}</td>
                       <td class="py-3 text-slate-900 font-bold">${o.clientName}</td>
                       <td class="py-3 text-slate-600">${o.storeName}</td>
-                      <td class="py-3 font-bold text-slate-900">R$ ${o.totalValue.toFixed(2)}</td>
+                      <td class="py-3 font-bold text-slate-900">R$ ${parseFloat(o.totalValue || 0).toFixed(2)}</td>
                       <td class="py-3 text-slate-600">${o.paymentMethod}</td>
                       <td class="py-3">
-                        <span class="px-3 py-1 rounded-full text-[10px] font-bold ${o.status === 'ENTREGUE' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}">${o.status}</span>
+                        <select onchange="window.handleAdminUpdateOrderStatus('${o.id}', this.value)" class="bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1 text-[11px] font-bold text-slate-700 outline-none">
+                          <option value="PAGAMENTO CONFIRMADO" ${o.status === 'PAGAMENTO CONFIRMADO' ? 'selected' : ''}>Pagamento Confirmado</option>
+                          <option value="EM PREPARAÇÃO" ${o.status === 'EM PREPARAÇÃO' || o.status === 'PREPARANDO' || o.status === 'EM SEPARAÇÃO' || o.status === 'EM CURADORIA' ? 'selected' : ''}>Em Preparação</option>
+                          <option value="ENVIADO" ${o.status === 'ENVIADO' ? 'selected' : ''}>Enviado</option>
+                          <option value="SAIU PARA ENTREGA" ${o.status === 'SAIU PARA ENTREGA' ? 'selected' : ''}>Saiu para Entrega</option>
+                          <option value="ENTREGUE" ${o.status === 'ENTREGUE' ? 'selected' : ''}>Entregue</option>
+                        </select>
                       </td>
                     </tr>
                   `).join('')}
@@ -527,7 +533,7 @@ export default function adminPage() {
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-2">
               <span class="text-xs font-bold text-slate-400 uppercase">Receita Bruta Acumulada</span>
-              <h3 class="text-3xl font-extrabold text-[#6C3BFF]">R$ ${totalSoldValue.toFixed(2)}</h3>
+              <h3 class="text-3xl font-extrabold text-[#8B5FBF]">R$ ${totalSoldValue.toFixed(2)}</h3>
             </div>
 
             <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-2">
@@ -586,14 +592,14 @@ export default function adminPage() {
         <div id="admin-sec-coupons" class="admin-sec hidden space-y-6">
           <div class="flex justify-between items-center">
             <h1 class="text-2xl font-bold text-slate-900">Gerenciador Master de Cupons</h1>
-            <button onclick="window.handleAdminCreateCoupon()" class="px-5 py-2.5 rounded-full bg-[#6C3BFF] text-white font-bold text-xs shadow-md">+ Criar Cupom</button>
+            <button onclick="window.handleAdminCreateCoupon()" class="px-5 py-2.5 rounded-full bg-[#8B5FBF] text-white font-bold text-xs shadow-md">+ Criar Cupom</button>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             ${coupons.map(c => `
               <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex items-center justify-between">
                 <div>
-                  <span class="font-bold text-[#6C3BFF] text-sm block">${c.code}</span>
+                  <span class="font-bold text-[#8B5FBF] text-sm block">${c.code}</span>
                   <span class="text-xs text-slate-600 font-bold">${c.discountPercent}% OFF</span>
                   <span class="text-[10px] text-slate-400 block mt-1">Usado ${c.usageCount} vezes</span>
                 </div>
@@ -610,7 +616,7 @@ export default function adminPage() {
           <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             ${categories.map(cat => `
               <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex items-center gap-3">
-                <div class="w-10 h-10 rounded-2xl bg-purple-50 text-[#6C3BFF] flex items-center justify-center font-bold">
+                <div class="w-10 h-10 rounded-2xl bg-purple-50 text-[#8B5FBF] flex items-center justify-center font-bold">
                   <span class="material-symbols-outlined text-xl">${cat.icon}</span>
                 </div>
                 <div>
@@ -628,7 +634,7 @@ export default function adminPage() {
 
           <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4">
             <p class="text-xs text-slate-600">Gere relatórios em formato CSV/PDF sobre faturamento, curva de vendas e reputação de vendedores.</p>
-            <button onclick="showToast('Relatório de vendas exportado com sucesso!', 'success')" class="px-6 py-3 rounded-full bg-[#6C3BFF] text-white font-bold text-xs shadow-md">
+            <button onclick="showToast('Relatório de vendas exportado com sucesso!', 'success')" class="px-6 py-3 rounded-full bg-[#8B5FBF] text-white font-bold text-xs shadow-md">
               📥 Exportar Relatório de Vendas (2026)
             </button>
           </div>
@@ -641,26 +647,26 @@ export default function adminPage() {
           <form onsubmit="window.handleAdminSaveSettings(event)" class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6 max-w-3xl">
             <div>
               <label class="block text-xs font-bold text-slate-700 mb-1">Nome da Plataforma</label>
-              <input type="text" id="cfg-platform-name" value="${settings.platformName || 'Beleza na Web Marketplace'}" class="w-full p-3 rounded-2xl border border-slate-200 text-xs font-medium outline-none focus:border-[#6C3BFF]">
+              <input type="text" id="cfg-platform-name" value="${settings.platformName || 'Beleza na Web Marketplace'}" class="w-full p-3 rounded-2xl border border-slate-200 text-xs font-medium outline-none focus:border-[#8B5FBF]">
             </div>
 
             <div class="grid grid-cols-2 gap-4">
               <div>
                 <label class="block text-xs font-bold text-slate-700 mb-1">Taxa de Comissão (%)</label>
-                <input type="number" step="0.5" id="cfg-commission" value="${settings.commissionRate || 15.0}" class="w-full p-3 rounded-2xl border border-slate-200 text-xs font-medium outline-none focus:border-[#6C3BFF]">
+                <input type="number" step="0.5" id="cfg-commission" value="${settings.commissionRate || 15.0}" class="w-full p-3 rounded-2xl border border-slate-200 text-xs font-medium outline-none focus:border-[#8B5FBF]">
               </div>
               <div>
                 <label class="block text-xs font-bold text-slate-700 mb-1">Regra de Frete</label>
-                <input type="text" id="cfg-shipping" value="${settings.shippingFee || 'R$ 12,90'}" class="w-full p-3 rounded-2xl border border-slate-200 text-xs font-medium outline-none focus:border-[#6C3BFF]">
+                <input type="text" id="cfg-shipping" value="${settings.shippingFee || 'R$ 12,90'}" class="w-full p-3 rounded-2xl border border-slate-200 text-xs font-medium outline-none focus:border-[#8B5FBF]">
               </div>
             </div>
 
             <div>
               <label class="block text-xs font-bold text-slate-700 mb-1">Políticas & Termos de Uso</label>
-              <textarea id="cfg-terms" rows="3" class="w-full p-3 rounded-2xl border border-slate-200 text-xs font-medium outline-none focus:border-[#6C3BFF]">${settings.termsOfUse || ''}</textarea>
+              <textarea id="cfg-terms" rows="3" class="w-full p-3 rounded-2xl border border-slate-200 text-xs font-medium outline-none focus:border-[#8B5FBF]">${settings.termsOfUse || ''}</textarea>
             </div>
 
-            <button type="submit" class="px-8 py-3.5 rounded-full bg-[#6C3BFF] text-white font-bold text-xs shadow-lg hover:scale-105 transition-all">
+            <button type="submit" class="px-8 py-3.5 rounded-full bg-[#8B5FBF] text-white font-bold text-xs shadow-lg hover:scale-105 transition-all">
               💾 Salvar Configurações Master
             </button>
           </form>
@@ -686,7 +692,7 @@ export function mount() {
     });
     const activeBtn = document.getElementById(`side-${secId}`);
     if (activeBtn) {
-      activeBtn.className = 'w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-[#6C3BFF] text-white font-bold shadow-lg shadow-[#6C3BFF]/30 transition-all text-xs';
+      activeBtn.className = 'w-full flex items-center gap-3 px-4 py-3 rounded-2xl bg-[#8B5FBF] text-white font-bold shadow-lg shadow-[#8B5FBF]/30 transition-all text-xs';
     }
   };
 
@@ -694,10 +700,52 @@ export function mount() {
     const users = database.getUsers();
     const u = users.find(x => x.id === userId);
     if (u) {
-      u.role = u.role === 'admin' ? 'client' : 'admin';
+      const newRole = (u.role === 'admin' || u.role === 'admin_master') ? 'client' : 'admin';
+      u.role = newRole;
       database.saveUsers(users);
-      showToast(`Permissão de ${u.name} atualizada para ${u.role}!`, 'success');
-      setTimeout(() => location.reload(), 500);
+
+      const emailLower = (u.email || '').toLowerCase().trim();
+
+      // Salva na lista dinâmica de administradores
+      try {
+        const storedAdmins = JSON.parse(localStorage.getItem('ann_admin_emails') || '[]');
+        if (newRole === 'admin') {
+          if (!storedAdmins.includes(emailLower)) storedAdmins.push(emailLower);
+        } else {
+          const idx = storedAdmins.indexOf(emailLower);
+          if (idx !== -1) storedAdmins.splice(idx, 1);
+        }
+        localStorage.setItem('ann_admin_emails', JSON.stringify(storedAdmins));
+      } catch (_) {}
+
+      // Atualiza registro de usuários
+      try {
+        const regUsers = auth.getRegisteredUsers();
+        if (regUsers[emailLower]) {
+          regUsers[emailLower].role = newRole;
+          regUsers[emailLower].accountType = newRole === 'admin' ? 'pessoal' : (newRole === 'seller' ? 'comercial' : 'pessoal');
+          localStorage.setItem('ann_registered_users', JSON.stringify(regUsers));
+        }
+      } catch (_) {}
+
+      // Atualiza perfil salvo
+      try {
+        const savedProfile = localStorage.getItem(`ann_profile_${emailLower}`);
+        const prof = savedProfile ? JSON.parse(savedProfile) : {};
+        prof.role = newRole;
+        localStorage.setItem(`ann_profile_${emailLower}`, JSON.stringify(prof));
+      } catch (_) {}
+
+      // Se for o usuário conectado, atualiza a sessão imediatamente
+      const currentUser = auth.getUser();
+      if (currentUser && currentUser.email.toLowerCase().trim() === emailLower) {
+        currentUser.role = newRole;
+        localStorage.setItem('ann_beauty_user', JSON.stringify(currentUser));
+        window.dispatchEvent(new Event('auth-change'));
+      }
+
+      showToast(`Permissão de ${u.name} atualizada para ${newRole === 'admin' ? 'Administrador' : 'Cliente'}!`, 'success');
+      setTimeout(() => location.reload(), 400);
     }
   };
 
@@ -818,5 +866,33 @@ export function mount() {
 
     database.saveSettings(cfg);
     showToast('Configurações master salvas com sucesso!', 'success');
+  };
+
+  window.handleAdminUpdateOrderStatus = (orderId, newStatus) => {
+    try {
+      const allDbOrders = database.getOrders();
+      const orderIdx = allDbOrders.findIndex(o => o.id === orderId);
+      
+      if (orderIdx > -1) {
+        allDbOrders[orderIdx].status = newStatus;
+        database.saveOrders(allDbOrders);
+
+        // Also update local storage if client tracks it
+        const localOrders = JSON.parse(localStorage.getItem('ann_orders') || '[]');
+        const localOrderIdx = localOrders.findIndex(o => o.id === orderId);
+        if (localOrderIdx > -1) {
+          localOrders[localOrderIdx].status = newStatus;
+          localStorage.setItem('ann_orders', JSON.stringify(localOrders));
+        }
+
+        showToast(`Pedido ${orderId} atualizado para "${newStatus}"!`, 'success');
+        setTimeout(() => location.reload(), 500);
+      } else {
+        showToast('Pedido não encontrado.', 'error');
+      }
+    } catch (e) {
+      showToast('Erro ao atualizar status do pedido.', 'error');
+      console.error(e);
+    }
   };
 }

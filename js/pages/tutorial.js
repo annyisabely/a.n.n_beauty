@@ -101,7 +101,7 @@ export default function tutorialPage() {
                 <h3 class="font-display text-xl text-on-background mb-6 line-clamp-1">Luminous Foundation</h3>
                 <div class="mt-auto flex justify-between items-center">
                     <span class="text-xl font-display font-bold text-primary">R$ 365,00</span>
-                    <span class="w-10 h-10 rounded-2xl bg-secondary/10 text-secondary flex items-center justify-center group-hover:bg-secondary group-hover:text-white transition-all shadow-sm">
+                    <span class="w-10 h-10 rounded-2xl bg-primary/10 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all shadow-sm">
                         <span class="material-symbols-outlined text-[18px]">shopping_bag</span>
                     </span>
                 </div>

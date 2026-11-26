@@ -2,6 +2,7 @@
 node_modules/
 .DS_Store
 *.log
+.env
 
 # Local storage and cache
 .cache/
@@ -10,3 +11,6 @@ node_modules/
 # OS files
 Thumbs.db
 Desktop.ini
+
+# Netlify
+.netlify/

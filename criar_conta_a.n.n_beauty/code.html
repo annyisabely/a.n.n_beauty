@@ -3,53 +3,28 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>A.n.n Beauty - Criar Conta</title>
+    <title>Beleza na Web - Criar Conta</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com" rel="preconnect"/>
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,100..900;1,100..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <script id="tailwind-config">
         tailwind.config = {
-            darkMode: "class",
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#54408c",
-                        "on-primary": "#ffffff",
-                        "primary-container": "#6d58a6",
-                        "on-primary-container": "#e9deff",
-                        "primary-fixed": "#e9ddff",
-                        "primary-fixed-dim": "#cfbdff",
-                        "on-primary-fixed": "#220458",
-                        "on-primary-fixed-variant": "#4e3985",
-                        "secondary": "#6c586d",
-                        "on-secondary": "#ffffff",
-                        "secondary-container": "#f5daf4",
-                        "on-secondary-container": "#725e73",
-                        "secondary-fixed": "#f5daf4",
-                        "secondary-fixed-dim": "#d8bfd8",
-                        "on-secondary-fixed": "#251628",
-                        "on-secondary-fixed-variant": "#534155",
-                        "background": "#f8f9fa",
-                        "on-background": "#191c1d",
-                        "surface": "#f8f9fa",
-                        "on-surface": "#191c1d",
-                        "surface-variant": "#e1e3e4",
-                        "on-surface-variant": "#494550",
-                        "outline": "#7a7581",
-                        "outline-variant": "#cac4d2",
-                        "surface-bright": "#f8f9fa",
-                        "surface-dim": "#d9dadb",
-                        "surface-container-lowest": "#ffffff",
-                        "surface-container-low": "#f3f4f5",
-                        "surface-container": "#edeeef",
-                        "surface-container-high": "#e7e8e9",
-                        "surface-container-highest": "#e1e3e4",
+                        "primary": "#6D4C7D",
+                        "primary-hover": "#5A3D68",
+                        "accent-pink": "#D88CB5",
+                        "bg-light": "#F6EAEF",
+                        "text-dark": "#29232B",
+                        "text-muted": "#756B76",
+                        "border-subtle": "#E8DFE7",
                     },
                     fontFamily: {
-                        "body": ["Plus Jakarta Sans"],
-                        "display": ["Noto Serif"]
+                        "sans": ["Inter", "sans-serif"],
+                        "heading": ["Poppins", "sans-serif"]
                     }
                 }
             }
@@ -57,146 +32,310 @@
     </script>
     <style>
         .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+            vertical-align: middle;
         }
-        .matte-card {
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
+        .signup-card {
+            background: #FFFFFF;
+            border: 1px solid #E8DFE7;
+            box-shadow: 0 12px 40px -10px rgba(109, 76, 125, 0.12);
         }
     </style>
 </head>
-<body class="bg-[#121212] font-body text-on-background antialiased min-h-screen flex">
+<body class="bg-[#F6EAEF] font-sans text-text-dark antialiased min-h-screen flex m-0 p-0">
     <div class="flex w-full min-h-screen">
-        <!-- Left Side: Imagery & Brand -->
-        <div class="hidden lg:flex lg:w-1/2 relative bg-black overflow-hidden">
-            <img alt="Maquiagem premium" class="absolute inset-0 w-full h-full object-cover opacity-60" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQIrHNpD7xvPiQ4rJfvmtLWju0jcJD3LsqS7AW-RQBlNmMQ35BqepgdiZXIHb0lr7mhVP0NZ_ykCXjFDNIx8kQ0W6K1ovzh9KCUvXJfLFAyjT7c_9NoWxMBI8YH9M_EJ9g5BXdM97RTDCXqAZNx6PpduSLKp_qKbhT34m5Qmjhnu9_jwlRTbdDtYiuCKAqFGryI9pI31UOTzZujusotpCpq2683xr2cMEBxvQsVQA57oHIjCVUjyXiBH_-vy7QNzgYAWC88vPT8dOP"/>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
-            <div class="relative z-10 flex flex-col justify-end p-10 h-full w-full">
-                <h1 class="font-display text-5xl text-white drop-shadow-lg mb-2">A.n.n Beauty</h1>
-                <p class="font-display text-xl text-primary-fixed-dim italic opacity-90 drop-shadow-sm">
-                    "A.n.n beauty não vende apenas 'maquiagem', mas sim autoestima."
-                </p>
-            </div>
+        
+        <!-- Left Side: Banner da Beleza na Web -->
+        <div class="hidden lg:block lg:w-1/2 relative overflow-hidden bg-[#F2E8EE]">
+            <img alt="Beleza na Web" class="absolute inset-0 w-full h-full object-cover" src="../img/banner_login.png"/>
         </div>
 
         <!-- Right Side: Sign Up Form -->
-        <div class="w-full lg:w-1/2 flex items-center justify-center bg-[#121212] px-6 sm:px-12 py-12">
-            <div class="w-full max-w-[460px] matte-card p-8 sm:p-10 rounded-3xl shadow-2xl">
-                <div class="text-center mb-8">
-                    <h2 class="font-display text-3xl text-primary-fixed mb-2">Criar Conta</h2>
-                    <p class="text-white/60 text-sm">Junte-se à nossa comunidade exclusiva</p>
+        <div class="w-full lg:w-1/2 flex items-center justify-center px-4 sm:px-8 py-8 min-h-screen relative overflow-hidden" style="background: radial-gradient(circle at 100% 100%, rgba(216, 140, 181, 0.28) 0%, rgba(246, 234, 239, 0) 55%), #F6EAEF;">
+            
+            <!-- Soft ambient background decor -->
+            <div class="absolute -bottom-10 -right-10 w-96 h-96 bg-[#D88CB5]/20 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <div class="w-full max-w-[430px] signup-card p-8 sm:p-10 rounded-[36px] relative z-10 my-auto max-h-[95vh] overflow-y-auto subtle-scroll">
+                
+                <!-- Title & Subtitle -->
+                <div class="text-center mb-6">
+                    <img src="../img/logo.png" alt="Beleza na Web" class="w-14 h-14 rounded-full object-cover mx-auto mb-3 border-2 border-primary/20 shadow-md">
+                    <h1 class="font-heading text-3xl sm:text-[34px] font-bold text-[#563964] mb-1">Criar Conta</h1>
+                    <p class="text-text-muted text-xs sm:text-[13px] italic">Sua beleza, seu cuidado, em cada clique.</p>
                 </div>
 
                 <!-- Tabs (Email / Phone) -->
-                <div class="flex border-b border-white/10 mb-8" id="auth-tabs">
-                    <button class="flex-1 pb-3 text-sm font-medium text-primary border-b-2 border-primary" onclick="switchTab('email')">E-mail</button>
-                    <button class="flex-1 pb-3 text-sm font-medium text-white/40 border-b-2 border-transparent" onclick="switchTab('phone')">Telefone</button>
+                <div class="flex border-b border-border-subtle mb-6" id="auth-tabs">
+                    <button type="button" class="flex-1 pb-3 text-xs sm:text-sm font-semibold text-primary border-b-2 border-primary transition-all cursor-pointer" id="tab-email" onclick="switchTab('email')">E-mail</button>
+                    <button type="button" class="flex-1 pb-3 text-xs sm:text-sm font-medium text-text-muted border-b-2 border-transparent transition-all hover:text-primary cursor-pointer" id="tab-phone" onclick="switchTab('phone')">Telefone</button>
                 </div>
 
-                <form id="signupForm" class="space-y-4">
+                <form id="signupForm" class="space-y-4" onsubmit="handleSignupSubmit(event)">
+                    
+                    <!-- Full Name Field -->
                     <div class="relative">
-                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-primary-fixed-dim material-symbols-outlined">person</span>
-                        <input id="nome" class="w-full pl-12 pr-6 py-4 rounded-full bg-white/5 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-white placeholder:text-white/30" placeholder="Nome completo" type="text" required/>
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[#8E8391] material-symbols-outlined text-[19px]">person</span>
+                        <input id="signup-nome" class="w-full pl-12 pr-5 py-3.5 rounded-full bg-[#FAF7F9] border border-border-subtle focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all text-text-dark text-xs sm:text-[13px] placeholder:text-[#A89FA9]" placeholder="Nome completo" type="text" required/>
                     </div>
 
                     <!-- Email Reg -->
                     <div id="email-reg" class="space-y-4">
                         <div class="relative">
-                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-primary-fixed-dim material-symbols-outlined">mail</span>
-                            <input id="email" class="w-full pl-12 pr-6 py-4 rounded-full bg-white/5 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-white placeholder:text-white/30" placeholder="seu@email.com" type="email"/>
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[#8E8391] material-symbols-outlined text-[19px]">mail</span>
+                            <input id="signup-email" class="w-full pl-12 pr-5 py-3.5 rounded-full bg-[#FAF7F9] border border-border-subtle focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all text-text-dark text-xs sm:text-[13px] placeholder:text-[#A89FA9]" placeholder="seu@email.com" type="email" required/>
                         </div>
                     </div>
 
                     <!-- Phone Reg (Hidden by default) -->
                     <div id="phone-reg" class="hidden space-y-4">
                         <div class="relative">
-                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-primary-fixed-dim material-symbols-outlined">call</span>
-                            <input id="phone" class="w-full pl-12 pr-6 py-4 rounded-full bg-white/5 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-white placeholder:text-white/30" placeholder="(00) 00000-0000" type="tel"/>
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[#8E8391] material-symbols-outlined text-[19px]">call</span>
+                            <input id="signup-phone" class="w-full pl-12 pr-5 py-3.5 rounded-full bg-[#FAF7F9] border border-border-subtle focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all text-text-dark text-xs sm:text-[13px] placeholder:text-[#A89FA9]" placeholder="(00) 00000-0000" type="tel"/>
                         </div>
                     </div>
 
+                    <!-- Password Field with eye toggle -->
                     <div class="relative">
-                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-primary-fixed-dim material-symbols-outlined">lock</span>
-                        <input class="w-full pl-12 pr-6 py-4 rounded-full bg-white/5 border border-white/10 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-white placeholder:text-white/30" placeholder="Criar senha" type="password" required/>
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[#8E8391] material-symbols-outlined text-[19px]">lock</span>
+                        <input id="signup-password" class="w-full pl-12 pr-12 py-3.5 rounded-full bg-[#FAF7F9] border border-border-subtle focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all text-text-dark text-xs sm:text-[13px] placeholder:text-[#A89FA9]" placeholder="Criar senha (mín. 4 caracteres)" type="password" required/>
+                        <button type="button" onclick="togglePass('signup-password', 'eye-pass1')" class="absolute right-4 top-1/2 -translate-y-1/2 text-[#8E8391] hover:text-primary transition-colors cursor-pointer p-1">
+                            <span id="eye-pass1" class="material-symbols-outlined text-[19px]">visibility</span>
+                        </button>
                     </div>
 
-                    <p class="text-[10px] text-white/40 px-4 text-center leading-relaxed">
-                        Ao se cadastrar, você concorda com nossos <a href="#" class="underline">Termos de Uso</a> e <a href="#" class="underline">Política de Privacidade</a>.
-                    </p>
+                    <!-- Confirm Password Field -->
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[#8E8391] material-symbols-outlined text-[19px]">lock_clock</span>
+                        <input id="signup-password-confirm" class="w-full pl-12 pr-12 py-3.5 rounded-full bg-[#FAF7F9] border border-border-subtle focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all text-text-dark text-xs sm:text-[13px] placeholder:text-[#A89FA9]" placeholder="Confirmar senha" type="password" required/>
+                        <button type="button" onclick="togglePass('signup-password-confirm', 'eye-pass2')" class="absolute right-4 top-1/2 -translate-y-1/2 text-[#8E8391] hover:text-primary transition-colors cursor-pointer p-1">
+                            <span id="eye-pass2" class="material-symbols-outlined text-[19px]">visibility</span>
+                        </button>
+                    </div>
 
-                    <button class="w-full py-4 mt-2 rounded-full bg-primary text-white font-bold shadow-lg shadow-primary/20 hover:bg-primary-container hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2" type="submit">
-                        Cadastrar <span class="material-symbols-outlined text-sm">person_add</span>
-                    </button>
+                    <!-- Submit Button -->
+                    <div class="pt-2">
+                        <button type="submit" id="btn-signup" class="w-full py-3.5 rounded-full bg-primary hover:bg-primary-hover text-white font-heading font-semibold text-xs sm:text-sm shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/30 transition-all flex items-center justify-center gap-2 cursor-pointer">
+                            Criar Conta <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                        </button>
+                    </div>
                 </form>
 
-                <div class="relative flex items-center my-8">
-                    <div class="flex-grow border-t border-white/10"></div>
-                    <span class="px-4 text-xs text-white/30 uppercase tracking-widest">ou use social</span>
-                    <div class="flex-grow border-t border-white/10"></div>
+                <!-- Divider -->
+                <div class="relative flex items-center my-6">
+                    <div class="flex-grow border-t border-border-subtle"></div>
+                    <span class="px-4 text-[10px] sm:text-[11px] text-[#A295A4] font-semibold uppercase tracking-wider">OU REDE SOCIAL</span>
+                    <div class="flex-grow border-t border-border-subtle"></div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-4">
-                    <button onclick="handleSocialLogin('Google')" class="flex items-center justify-center gap-2 py-3 px-4 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
-                        <img src="https://www.google.com/favicon.ico" class="w-4 h-4" alt="Google"/>
-                        <span class="text-xs text-white font-medium">Google</span>
+                <!-- Social Signup Buttons -->
+                <div class="grid grid-cols-2 gap-3.5">
+                    <button type="button" onclick="handleSocialSignup('Google')" class="flex items-center justify-center gap-2 py-3 px-4 rounded-full bg-white border border-border-subtle hover:bg-[#FAF7F9] hover:border-primary/30 transition-all shadow-sm cursor-pointer group">
+                        <svg class="w-4 h-4 transition-transform group-hover:scale-110" viewBox="0 0 24 24">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                        </svg>
+                        <span class="text-xs sm:text-[13px] text-text-dark font-medium">Google</span>
                     </button>
-                    <button onclick="handleSocialLogin('Facebook')" class="flex items-center justify-center gap-2 py-3 px-4 rounded-full bg-[#1877F2] hover:bg-[#166fe5] transition-all">
-                        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                        <span class="text-xs text-white font-medium">Facebook</span>
+                    
+                    <button type="button" onclick="handleSocialSignup('Facebook')" class="flex items-center justify-center gap-2 py-3 px-4 rounded-full bg-[#1877F2] hover:bg-[#166fe5] text-white shadow-sm transition-all cursor-pointer group">
+                        <svg class="w-4 h-4 text-white transition-transform group-hover:scale-110" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        </svg>
+                        <span class="text-xs sm:text-[13px] text-white font-medium">Facebook</span>
                     </button>
                 </div>
 
-                <p class="mt-8 text-center text-sm text-white/60">
-                    Já tem uma conta? <a href="../login_a.n.n_beauty/code.html" class="text-primary-fixed-dim hover:text-primary underline underline-offset-4">Faça login</a>
-                </p>
+                <!-- Footer Sign In Link -->
+                <div class="mt-8 text-center">
+                    <p class="text-text-muted text-xs sm:text-[13px]">
+                        Já tem uma conta? 
+                        <a href="../login_a.n.n_beauty/code.html" class="text-accent-pink hover:text-[#c4759f] font-semibold underline underline-offset-2 ml-1">Fazer login</a>
+                    </p>
+                </div>
+
             </div>
         </div>
     </div>
 
     <script>
+        const API_BASE = window.location.port === '5500' ? '' : 'http://localhost:5500';
+
+        function togglePass(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (!input || !icon) return;
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.textContent = 'visibility_off';
+            } else {
+                input.type = 'password';
+                icon.textContent = 'visibility';
+            }
+        }
+
+        function showToast(msg, type) {
+            const existing = document.getElementById('toast-msg');
+            if (existing) existing.remove();
+            const colors = { success: 'bg-green-600', error: 'bg-red-600', info: 'bg-[#6D4C7D]' };
+            const toast = document.createElement('div');
+            toast.id = 'toast-msg';
+            toast.className = `fixed top-6 left-1/2 -translate-x-1/2 ${colors[type] || colors.info} text-white px-6 py-3 rounded-full shadow-lg text-xs sm:text-sm font-medium z-50`;
+            toast.textContent = msg;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 4000);
+        }
+
         function switchTab(type) {
             const emailReg = document.getElementById('email-reg');
             const phoneReg = document.getElementById('phone-reg');
-            const buttons = document.querySelectorAll('#auth-tabs button');
+            const tabEmail = document.getElementById('tab-email');
+            const tabPhone = document.getElementById('tab-phone');
+            const emailInput = document.getElementById('signup-email');
+            const phoneInput = document.getElementById('signup-phone');
             
             if (type === 'email') {
                 emailReg.classList.remove('hidden');
                 phoneReg.classList.add('hidden');
-                buttons[0].classList.add('text-primary', 'border-primary');
-                buttons[0].classList.remove('text-white/40', 'border-transparent');
-                buttons[1].classList.remove('text-primary', 'border-primary');
-                buttons[1].classList.add('text-white/40', 'border-transparent');
+                tabEmail.classList.add('text-primary', 'border-primary', 'font-semibold');
+                tabEmail.classList.remove('text-text-muted', 'border-transparent', 'font-medium');
+                tabPhone.classList.remove('text-primary', 'border-primary', 'font-semibold');
+                tabPhone.classList.add('text-text-muted', 'border-transparent', 'font-medium');
+                if (emailInput) emailInput.required = true;
+                if (phoneInput) phoneInput.required = false;
             } else {
                 emailReg.classList.add('hidden');
                 phoneReg.classList.remove('hidden');
-                buttons[1].classList.add('text-primary', 'border-primary');
-                buttons[1].classList.remove('text-white/40', 'border-transparent');
-                buttons[0].classList.remove('text-primary', 'border-primary');
-                buttons[0].classList.add('text-white/40', 'border-transparent');
+                tabPhone.classList.add('text-primary', 'border-primary', 'font-semibold');
+                tabPhone.classList.remove('text-text-muted', 'border-transparent', 'font-medium');
+                tabEmail.classList.remove('text-primary', 'border-primary', 'font-semibold');
+                tabEmail.classList.add('text-text-muted', 'border-transparent', 'font-medium');
+                if (emailInput) emailInput.required = false;
+                if (phoneInput) phoneInput.required = true;
             }
         }
 
-        document.getElementById('signupForm').addEventListener('submit', function(e) {
+        async function handleSignupSubmit(e) {
             e.preventDefault();
-            const nome = document.getElementById('nome').value;
+            const nome = document.getElementById('signup-nome').value.trim();
+            const isEmail = !document.getElementById('email-reg').classList.contains('hidden');
+            const email = document.getElementById('signup-email') ? document.getElementById('signup-email').value.trim().toLowerCase() : '';
+            const phone = document.getElementById('signup-phone') ? document.getElementById('signup-phone').value.trim() : '';
+            const password = document.getElementById('signup-password').value;
+            const confirmPassword = document.getElementById('signup-password-confirm').value;
+            const identifier = isEmail ? email : phone;
+
+            if (!nome) {
+                showToast('Por favor, informe seu nome.', 'error');
+                return;
+            }
+            if (!identifier) {
+                showToast('Por favor, informe seu e-mail ou telefone.', 'error');
+                return;
+            }
+            if (!password || password.length < 4) {
+                showToast('A senha precisa ter pelo menos 4 caracteres.', 'error');
+                return;
+            }
+            if (password !== confirmPassword) {
+                showToast('As senhas não conferem.', 'error');
+                return;
+            }
+
+            const signupBtn = document.getElementById('btn-signup');
+            if (signupBtn) {
+                signupBtn.disabled = true;
+                signupBtn.innerHTML = '<span class="material-symbols-outlined text-sm" style="animation: spin 1s linear infinite">refresh</span> Criando conta...';
+            }
+
+            // Try backend registration first
+            try {
+                const resp = await fetch(API_BASE + '/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: nome, email: identifier, password })
+                });
+                const data = await resp.json();
+
+                if (resp.ok && data.success) {
+                    // Also save to localStorage for compatibility
+                    const users = JSON.parse(localStorage.getItem('ann_registered_users') || '{}');
+                    users[identifier.toLowerCase()] = {
+                        name: nome,
+                        emailOrPhone: identifier,
+                        password: password,
+                        accountType: 'pessoal',
+                        joined: new Date().toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })
+                    };
+                    localStorage.setItem('ann_registered_users', JSON.stringify(users));
+
+                    localStorage.setItem('ann_beauty_user', JSON.stringify({
+                        name: nome,
+                        email: identifier,
+                        role: 'user',
+                        accountType: 'pessoal'
+                    }));
+
+                    showToast('Conta criada com sucesso! Bem-vinda! ✨', 'success');
+                    setTimeout(() => {
+                        window.location.href = '../index.html#/home';
+                    }, 800);
+                    return;
+                } else if (resp.status === 409) {
+                    showToast(data.message || 'Este e-mail já está cadastrado.', 'error');
+                    if (signupBtn) {
+                        signupBtn.disabled = false;
+                        signupBtn.innerHTML = 'Criar Conta <span class="material-symbols-outlined text-sm">arrow_forward</span>';
+                    }
+                    return;
+                }
+            } catch (err) {
+                console.warn('Backend register fallback:', err);
+            }
+
+            // Fallback
+            const users = JSON.parse(localStorage.getItem('ann_registered_users') || '{}');
+            if (users[identifier.toLowerCase()]) {
+                showToast('Este e-mail já está cadastrado. Faça login.', 'error');
+                if (signupBtn) {
+                    signupBtn.disabled = false;
+                    signupBtn.innerHTML = 'Criar Conta <span class="material-symbols-outlined text-sm">arrow_forward</span>';
+                }
+                return;
+            }
+
+            users[identifier.toLowerCase()] = {
+                name: nome,
+                emailOrPhone: identifier,
+                password: password,
+                accountType: 'pessoal',
+                joined: new Date().toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })
+            };
+            localStorage.setItem('ann_registered_users', JSON.stringify(users));
+
             localStorage.setItem('ann_beauty_user', JSON.stringify({
                 name: nome,
-                email: 'user@example.com'
+                email: identifier,
+                role: 'user',
+                accountType: 'pessoal'
+            }));
+
+            showToast('Conta criada com sucesso! ✨', 'success');
+            setTimeout(() => {
+                window.location.href = '../index.html#/home';
+            }, 800);
+        }
+
+        function handleSocialSignup(provider) {
+            localStorage.setItem('ann_beauty_user', JSON.stringify({
+                name: `Usuária ${provider}`,
+                email: `user_${provider.toLowerCase()}@belezanaweb.com`,
+                role: 'user',
+                accountType: 'pessoal'
             }));
             window.location.href = '../index.html#/home';
-        });
-
-        function handleSocialLogin(provider) {
-            alert(`Conectando ao ${provider}...`);
-            setTimeout(() => {
-                localStorage.setItem('ann_beauty_user', JSON.stringify({
-                    name: `User ${provider}`,
-                    email: `user@${provider.toLowerCase()}.com`
-                }));
-                window.location.href = '../index.html#/home';
-            }, 1000);
         }
     </script>
 </body>

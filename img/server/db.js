@@ -1,20 +1,70 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
+
+// ── Funções de Criptografia e Hash Seguro de Senha ─────────────────────────────
+function hashPassword(password) {
+    if (!password) return '';
+    const salt = crypto.randomBytes(16).toString('hex');
+    const hash = crypto.scryptSync(password, salt, 64).toString('hex');
+    return `${salt}:${hash}`;
+}
+
+function verifyPassword(password, storedPassword) {
+    if (!password || !storedPassword) return false;
+    // Se estiver no formato salt:hash seguro
+    if (storedPassword.includes(':')) {
+        const [salt, key] = storedPassword.split(':');
+        const keyBuffer = Buffer.from(key, 'hex');
+        const derivedKey = crypto.scryptSync(password, salt, 64);
+        return crypto.timingSafeEqual(keyBuffer, derivedKey);
+    }
+    // Compatibilidade com senhas legadas de demonstração (ex: '123', 'admin', 'any1234')
+    return password === storedPassword || password.toLowerCase().trim() === storedPassword.toLowerCase().trim();
+}
 
 const dbPath = path.join(__dirname, 'database.sqlite');
 const db = new sqlite3.Database(dbPath);
 
 const initDB = () => {
     db.serialize(() => {
-        // Users Table
+        // Users Table com suporte a password
         db.run(`CREATE TABLE IF NOT EXISTS users (
             id TEXT PRIMARY KEY,
             name TEXT,
             email TEXT,
             role TEXT,
             status TEXT,
-            joined TEXT
+            joined TEXT,
+            password TEXT
+        )`);
+
+        // Garantir que a coluna password existe se a tabela já existia antes
+        db.all("PRAGMA table_info(users)", (err, columns) => {
+            if (columns && !columns.some(c => c.name === 'password')) {
+                db.run("ALTER TABLE users ADD COLUMN password TEXT");
+            }
+        });
+
+        // Tabela de Recuperação de Senhas (com validade, tentativas e status de uso)
+        db.run(`CREATE TABLE IF NOT EXISTS password_resets (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            email TEXT NOT NULL,
+            code TEXT NOT NULL,
+            expires_at INTEGER NOT NULL,
+            attempts INTEGER DEFAULT 0,
+            used INTEGER DEFAULT 0,
+            created_at INTEGER NOT NULL
+        )`);
+
+        // Tabela de Rate Limiting para Segurança de Autenticação
+        db.run(`CREATE TABLE IF NOT EXISTS auth_rate_limits (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            ip TEXT,
+            email TEXT,
+            action TEXT,
+            created_at INTEGER NOT NULL
         )`);
 
         // Stores Table
@@ -45,7 +95,10 @@ const initDB = () => {
             salesCount INTEGER
         )`);
 
-        // Orders Table
+        // Drop old table to avoid schema mismatches and recreate with new columns
+        db.run(`DROP TABLE IF EXISTS orders`);
+
+        // Orders Table with items and address columns
         db.run(`CREATE TABLE IF NOT EXISTS orders (
             id TEXT PRIMARY KEY,
             clientId TEXT,
@@ -55,7 +108,9 @@ const initDB = () => {
             commissionValue REAL,
             paymentMethod TEXT,
             status TEXT,
-            date TEXT
+            date TEXT,
+            items TEXT,
+            address TEXT
         )`);
 
         // Reports Table
@@ -94,21 +149,37 @@ const initDB = () => {
             value TEXT
         )`);
 
-        // Seed Users if empty
-        db.get("SELECT COUNT(*) AS count FROM users", (err, row) => {
-            if (row && row.count === 0) {
-                const stmt = db.prepare("INSERT INTO users VALUES (?, ?, ?, ?, ?, ?)");
-                const initialUsers = [
-                    { id: 'usr_admin_anny', name: 'Anny Coradassi', email: 'anny.coradassi@gmail.com', role: 'admin', status: 'active', joined: '01/01/2026' },
-                    { id: 'usr_admin', name: 'Admin Master', email: 'admin@annbeauty.com', role: 'admin', status: 'active', joined: '01/01/2026' },
-                    { id: 'usr_seller_1', name: 'Glow & Co. Vendedor', email: 'vendedor@annbeauty.com', role: 'seller', status: 'active', joined: '10/01/2026' },
-                    { id: 'usr_client_1', name: 'Mariana Lima', email: 'cliente@annbeauty.com', role: 'client', status: 'active', joined: '15/02/2026' },
-                    { id: 'usr_client_2', name: 'Carla Amorim', email: 'carla@gmail.com', role: 'client', status: 'active', joined: '20/02/2026' },
-                    { id: 'usr_client_3', name: 'Juliana Costa', email: 'ju@gmail.com', role: 'client', status: 'suspended', joined: '01/03/2026' }
-                ];
-                initialUsers.forEach(u => stmt.run(u.id, u.name, u.email, u.role, u.status, u.joined));
-                stmt.finalize();
-            }
+        // Seed / Sync Initial Users with Secure Hashed Passwords
+        const initialUsers = [
+            { id: 'usr_admin_anny', name: 'Anny Coradassi', email: 'anny.coradassi@gmail.com', role: 'admin', status: 'active', joined: '01/01/2026', pass: 'any1234' },
+            { id: 'usr_admin', name: 'Admin Master', email: 'admin@annbeauty.com', role: 'admin', status: 'active', joined: '01/01/2026', pass: 'admin' },
+            { id: 'usr_seller_1', name: 'Glow & Co. Vendedor', email: 'vendedor@annbeauty.com', role: 'seller', status: 'active', joined: '10/01/2026', pass: '123' },
+            { id: 'usr_seller_demo', name: 'Vendedor A.n.n', email: 'vendedor@email.com', role: 'seller', status: 'active', joined: '01/06/2026', pass: '123' },
+            { id: 'usr_client_1', name: 'Mariana Lima', email: 'cliente@annbeauty.com', role: 'client', status: 'active', joined: '15/02/2026', pass: '123' },
+            { id: 'usr_client_demo', name: 'Cliente A.n.n', email: 'cliente@email.com', role: 'client', status: 'active', joined: '01/06/2026', pass: '123' },
+            { id: 'usr_client_2', name: 'Carla Amorim', email: 'carla@gmail.com', role: 'client', status: 'active', joined: '20/02/2026', pass: '123' },
+            { id: 'usr_client_3', name: 'Juliana Costa', email: 'ju@gmail.com', role: 'client', status: 'suspended', joined: '01/03/2026', pass: '123' },
+            { id: 'usr_annyisabely', name: 'Anny Isabely', email: 'annyisabely@gmail.com', role: 'admin', status: 'active', joined: '01/06/2026', pass: 'admin' },
+            { id: 'usr_belezanaweb', name: 'Beleza na Web Admin', email: 'belezanaweb@gmail.com', role: 'admin', status: 'active', joined: '01/07/2026', pass: 'beleza2026' },
+            { id: 'usr_belezaweb', name: 'Beleza na Web Admin', email: 'belezaweb@gmail.com', role: 'admin', status: 'active', joined: '01/07/2026', pass: 'webbeleza123' },
+            { id: 'usr_elvertoni', name: 'Elvertoni', email: 'elvertoni@gmail.com', role: 'admin', status: 'active', joined: '01/11/2026', pass: '123456' }
+        ];
+
+        initialUsers.forEach(u => {
+            db.get("SELECT id, role, password FROM users WHERE LOWER(email) = ?", [u.email.toLowerCase()], (err, row) => {
+                const hashedPassword = hashPassword(u.pass);
+                if (!row) {
+                    db.run("INSERT INTO users (id, name, email, role, status, joined, password) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                        [u.id, u.name, u.email.toLowerCase(), u.role, u.status, u.joined, hashedPassword]);
+                } else {
+                    if (u.role === 'admin' && row.role !== 'admin') {
+                        db.run("UPDATE users SET role = 'admin' WHERE id = ?", [row.id]);
+                    }
+                    if (!row.password) {
+                        db.run("UPDATE users SET password = ? WHERE id = ?", [hashedPassword, row.id]);
+                    }
+                }
+            });
         });
 
         // Seed Stores if empty
@@ -143,13 +214,13 @@ const initDB = () => {
         // Seed Orders if empty
         db.get("SELECT COUNT(*) AS count FROM orders", (err, row) => {
             if (row && row.count === 0) {
-                const stmt = db.prepare("INSERT INTO orders VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                const stmt = db.prepare("INSERT INTO orders (id, clientId, clientName, storeName, totalValue, commissionValue, paymentMethod, status, date, items, address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 const initialOrders = [
-                    { id: 'ORD-9842', clientId: 'usr_client_1', clientName: 'Mariana Lima', storeName: 'Glow & Co. Official', totalValue: 45.90, commissionValue: 6.88, paymentMethod: 'PIX', status: 'ENTREGUE', date: 'Hoje às 10:14' },
-                    { id: 'ORD-9841', clientId: 'usr_client_2', clientName: 'Carla Amorim', storeName: 'Botanica Luxe Skincare', totalValue: 89.00, commissionValue: 13.35, paymentMethod: 'Cartão de Crédito', status: 'EM SEPARAÇÃO', date: 'Ontem às 18:30' },
-                    { id: 'ORD-9840', clientId: 'usr_client_3', clientName: 'Juliana Costa', storeName: 'Glow & Co. Official', totalValue: 127.00, commissionValue: 19.05, paymentMethod: 'Boleto', status: 'PENDENTE', date: 'Há 2 dias' }
+                    { id: 'ORD-9842', clientId: 'usr_client_1', clientName: 'Mariana Lima', storeName: 'Glow & Co. Official', totalValue: 45.90, commissionValue: 6.88, paymentMethod: 'PIX', status: 'ENTREGUE', date: 'Hoje às 10:14', items: '[]', address: '{}' },
+                    { id: 'ORD-9841', clientId: 'usr_client_2', clientName: 'Carla Amorim', storeName: 'Botanica Luxe Skincare', totalValue: 89.00, commissionValue: 13.35, paymentMethod: 'Cartão de Crédito', status: 'EM SEPARAÇÃO', date: 'Ontem às 18:30', items: '[]', address: '{}' },
+                    { id: 'ORD-9840', clientId: 'usr_client_3', clientName: 'Juliana Costa', storeName: 'Glow & Co. Official', totalValue: 127.00, commissionValue: 19.05, paymentMethod: 'Boleto', status: 'PENDENTE', date: 'Há 2 dias', items: '[]', address: '{}' }
                 ];
-                initialOrders.forEach(o => stmt.run(o.id, o.clientId, o.clientName, o.storeName, o.totalValue, o.commissionValue, o.paymentMethod, o.status, o.date));
+                initialOrders.forEach(o => stmt.run(o.id, o.clientId, o.clientName, o.storeName, o.totalValue, o.commissionValue, o.paymentMethod, o.status, o.date, o.items, o.address));
                 stmt.finalize();
             }
         });
@@ -214,9 +285,29 @@ const initDB = () => {
                 stmt.finalize();
             }
         });
+        // Seed default passwords for existing users if NULL
+        setTimeout(() => {
+            db.all("SELECT id, email, password FROM users", [], (err, rows) => {
+                if (!err && rows) {
+                    rows.forEach(u => {
+                        if (!u.password) {
+                            let defaultPass = '123';
+                            if (u.email === 'admin@annbeauty.com') defaultPass = 'admin';
+                            if (u.email === 'anny.coradassi@gmail.com') defaultPass = 'any1234';
+                            if (u.email === 'belezanaweb@gmail.com') defaultPass = 'beleza2026';
+                            if (u.email === 'belezaweb@gmail.com') defaultPass = 'webbeleza123';
+                            db.run("UPDATE users SET password = ? WHERE id = ?", [hashPassword(defaultPass), u.id]);
+                        }
+                    });
+                }
+            });
+        }, 300);
     });
 };
 
 initDB();
+
+db.hashPassword = hashPassword;
+db.verifyPassword = verifyPassword;
 
 module.exports = db;

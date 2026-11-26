@@ -11,7 +11,9 @@
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.6",
+    "dotenv": "^18.0.10",
     "express": "^5.2.1",
+    "nodemailer": "^10.5.0",
     "sqlite3": "^6.0.1"
   }
 }

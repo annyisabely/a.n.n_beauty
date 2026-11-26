@@ -77,7 +77,7 @@ export default function signupPage() {
     const overlay = document.createElement('div');
     overlay.className = 'fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-center justify-center';
     overlay.innerHTML = `
-      <div class="bg-[#121212] p-8 rounded-3xl border border-white/10 flex flex-col items-center gap-4 animate-in zoom-in duration-300">
+      <div class="bg-[#000000] p-8 rounded-3xl border border-white/10 flex flex-col items-center gap-4 animate-in zoom-in duration-300">
         <div class="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
         <p class="text-white font-medium">Autenticando com ${provider}...</p>
       </div>
@@ -92,15 +92,29 @@ export default function signupPage() {
     }, 2000);
   };
 
+  window.toggleSignupPasswordVisibility = (inputId, iconId) => {
+    const input = document.getElementById(inputId);
+    const icon = document.getElementById(iconId);
+    if (!input || !icon) return;
+    if (input.type === 'password') {
+      input.type = 'text';
+      icon.textContent = 'visibility_off';
+    } else {
+      input.type = 'password';
+      icon.textContent = 'visibility';
+    }
+  };
+
   window.signupData = {};
 
-  window.handleSignupStep1 = (event) => {
+  window.handleSignupStep1 = async (event) => {
     event.preventDefault();
     const nome = document.getElementById('signup-nome').value.trim();
     const isEmail = !document.getElementById('email-reg').classList.contains('hidden');
     const email = document.getElementById('signup-email') ? document.getElementById('signup-email').value.trim() : '';
     const phone = document.getElementById('signup-phone') ? document.getElementById('signup-phone').value.trim() : '';
     const password = document.getElementById('signup-password').value;
+    const passwordConfirm = document.getElementById('signup-password-confirm').value;
 
     // Ler tipo de conta selecionado pelos radio buttons
     const accountTypeRadios = document.getElementsByName('signup-account-type');
@@ -113,15 +127,19 @@ export default function signupPage() {
       showToast('Por favor, insira seu nome.', 'error');
       return;
     }
-    if (!password) {
-      showToast('Por favor, crie uma senha.', 'error');
+    if (!password || password.length < 4) {
+      showToast('A senha deve ter no mínimo 4 caracteres.', 'error');
+      return;
+    }
+    if (password !== passwordConfirm) {
+      showToast('A confirmação de senha não confere com a senha.', 'error');
       return;
     }
 
     let loginId = '';
     if (isEmail) {
-      if (!email) {
-        showToast('Por favor, insira seu e-mail.', 'error');
+      if (!email || !email.includes('@')) {
+        showToast('Por favor, insira um e-mail válido.', 'error');
         return;
       }
       loginId = email;
@@ -133,11 +151,43 @@ export default function signupPage() {
       loginId = phone;
     }
 
-    // Criar conta usando o registro unificado
+    // 1. Tentar cadastro no backend SQLite com hash seguro
+    try {
+      const resp = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: nome, email: loginId, password, accountType })
+      });
+      const data = await resp.json();
+      if (!resp.ok && data.message) {
+        showToast(data.message, 'error');
+        return;
+      }
+    } catch (e) {
+      console.warn('Backend register error, proceeding with local sync:', e);
+    }
+
+    // 2. Registro no sistema unificado de autenticação local
     const res = auth.register(nome, loginId, password, accountType);
     if (!res.success) {
       showToast(res.message, 'error');
       return;
+    }
+
+    // Trigger Notifications
+    if (window.notificationsManager) {
+      // 1. Notify Admins
+      window.notificationsManager.addNotification('admin', {
+        title: 'Novo Usuário Cadastrado',
+        message: `O usuário "${nome}" (${loginId}) realizou o cadastro na plataforma como "${accountType === 'pessoal' ? 'Cliente' : 'Vendedor'}".`,
+        icon: 'person_add',
+        color: 'text-indigo-500'
+      });
+
+      // 2. Seed welcome notifications for client
+      if (accountType === 'pessoal') {
+        window.notificationsManager.seedDefaultClientNotifications(loginId);
+      }
     }
 
     showToast(`Conta criada com sucesso, ${nome.split(' ')[0]}!`, 'success');
@@ -145,84 +195,86 @@ export default function signupPage() {
   };
 
   return `
-  <div class="flex w-full min-h-screen bg-background">
-    <div class="hidden lg:flex lg:w-1/2 relative bg-primary-container overflow-hidden">
-      <img alt="Beauty imagery" class="absolute inset-0 w-full h-full object-cover opacity-70 mix-blend-soft-light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQIrHNpD7xvPiQ4rJfvmtLWju0jcJD3LsqS7AW-RQBlNmMQ35BqepgdiZXIHb0lr7mhVP0NZ_ykCXjFDNIx8kQ0W6K1ovzh9KCUvXJfLFAyjT7c_9NoWxMBI8YH9M_EJ9g5BXdM97RTDCXqAZNx6PpduSLKp_qKbhT34m5Qmjhnu9_jwlRTbdDtYiuCKAqFGryI9pI31UOTzZujusotpCpq2683xr2cMEBxvQsVQA57oHIjCVUjyXiBH_-vy7QNzgYAWC88vPT8dOP"/>
-      <div class="absolute inset-0 bg-gradient-to-t from-primary/40 via-transparent to-transparent"></div>
-      <div class="relative z-10 flex flex-col justify-end p-10 h-full w-full">
-        <h1 class="font-display text-5xl text-on-primary-container drop-shadow-sm mb-2">Beleza na Web</h1>
-        <p class="font-display text-xl text-primary italic opacity-90 drop-shadow-sm">"Beleza na Web não vende apenas 'maquiagem', mas sim autoestima."</p>
-      </div>
+  <div class="flex w-full min-h-screen">
+    <!-- Lado Esquerdo: Imagem -->
+    <div class="hidden lg:block lg:w-1/2 relative overflow-hidden bg-surface-dim">
+      <img alt="Beleza na Web" class="absolute inset-0 w-full h-full object-cover opacity-90" src="img/banner_login.png"/>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
     </div>
-    <div class="w-full lg:w-1/2 flex items-center justify-center bg-background px-4 sm:px-8 py-6 sm:py-10 min-h-screen">
-      <div class="w-full max-w-[480px] bg-white/85 backdrop-blur-xl p-6 sm:p-8 rounded-[36px] shadow-2xl border border-primary/15 relative ambient-shadow my-auto max-h-[95vh] overflow-y-auto subtle-scroll">
+
+    <!-- Lado Direito: Formulário -->
+    <div class="w-full lg:w-1/2 flex items-center justify-center px-4 sm:px-8 py-8 min-h-screen bg-background relative overflow-hidden">
+      
+      <div class="w-full max-w-[430px] bg-surface p-8 sm:p-10 rounded-[24px] max-h-[95vh] overflow-y-auto subtle-scroll relative z-10 shadow-sm border border-outline-variant">
         
-        <!-- STEP 1: SIGNUP FIELDS -->
         <div id="signup-step-1" class="transition-all duration-500">
-          <div class="text-center mb-5">
-            <h2 class="font-display text-2xl sm:text-3xl text-primary mb-1">Criar Conta</h2>
-            <p class="text-on-surface-variant text-xs sm:text-sm">Junte-se à nossa comunidade exclusiva.</p>
+          <div class="text-center mb-6">
+            <img src="img/logo.png" alt="Beleza na Web" class="w-16 h-16 rounded-full object-cover mx-auto mb-3 border-2 border-primary/20 shadow-md">
+            <h2 class="font-display text-xl font-bold tracking-tight text-primary mb-0.5">BELEZA NA WEB</h2>
+            <p class="text-xs text-[#8B5FBF] font-medium italic mb-5">Sua beleza, seu cuidado, em cada clique.</p>
+            <h1 class="font-display text-3xl font-bold text-on-background mb-2">Criar sua conta</h1>
+            <p class="font-body text-sm text-on-surface-variant">Junte-se ao nosso universo de beleza e bem-estar.</p>
           </div>
 
-          <div class="flex border-b border-primary/10 mb-5">
-            <button id="signup-email-tab" onclick="window.switchSignupTab('email')" class="flex-1 pb-2.5 text-xs sm:text-sm font-bold text-primary border-b-2 border-primary transition-all">E-mail</button>
-            <button id="signup-phone-tab" onclick="window.switchSignupTab('phone')" class="flex-1 pb-2.5 text-xs sm:text-sm font-bold text-on-surface-variant border-b-2 border-transparent transition-all">Telefone</button>
-          </div>
-
-          <form class="space-y-3" onsubmit="window.handleSignupStep1(event)">
+          <form class="space-y-4" onsubmit="window.handleSignupStep1(event)">
+            
             <div class="relative">
-              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-primary material-symbols-outlined text-[20px]">person</span>
-              <input class="w-full pl-11 pr-5 py-3 rounded-full bg-primary-container/30 border border-primary/20 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all text-on-background placeholder:text-primary/40 font-medium text-xs sm:text-sm" id="signup-nome" placeholder="Nome completo" type="text" required/>
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-on-surface-variant text-[18px]">person</span>
+              <input class="w-full pl-11 pr-4 py-3.5 rounded-xl outline-none transition-all font-medium text-sm bg-surface border border-outline-variant text-on-background focus:border-primary focus:ring-1 focus:ring-primary" id="signup-nome" placeholder="Nome completo" type="text" required/>
             </div>
 
-            <div id="email-reg" class="space-y-3">
+            <!-- Email Reg -->
+            <div id="email-reg" class="space-y-4">
               <div class="relative">
-                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-primary material-symbols-outlined text-[20px]">mail</span>
-                <input class="w-full pl-11 pr-5 py-3 rounded-full bg-primary-container/30 border border-primary/20 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all text-on-background placeholder:text-primary/40 font-medium text-xs sm:text-sm" id="signup-email" placeholder="seu@email.com" type="email"/>
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-on-surface-variant text-[18px]">mail</span>
+                <input class="w-full pl-11 pr-4 py-3.5 rounded-xl outline-none transition-all font-medium text-sm bg-surface border border-outline-variant text-on-background focus:border-primary focus:ring-1 focus:ring-primary" id="signup-email" placeholder="E-mail" type="email" required/>
               </div>
             </div>
 
-            <div id="phone-reg" class="hidden space-y-3">
-              <div class="relative">
-                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-primary material-symbols-outlined text-[20px]">call</span>
-                <input class="w-full pl-11 pr-5 py-3 rounded-full bg-primary-container/30 border border-primary/20 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all text-on-background placeholder:text-primary/40 font-medium text-xs sm:text-sm" id="signup-phone" placeholder="(00) 00000-0000" type="tel"/>
-              </div>
-            </div>
-
+            <!-- Password -->
             <div class="relative">
-              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-primary material-symbols-outlined text-[20px]">lock</span>
-              <input id="signup-password" class="w-full pl-11 pr-5 py-3 rounded-full bg-primary-container/30 border border-primary/20 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all text-on-background placeholder:text-primary/40 font-medium text-xs sm:text-sm" placeholder="Criar senha" type="password" required/>
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-on-surface-variant text-[18px]">lock</span>
+              <input id="signup-password" class="w-full pl-11 pr-11 py-3.5 rounded-xl outline-none transition-all font-medium text-sm bg-surface border border-outline-variant text-on-background focus:border-primary focus:ring-1 focus:ring-primary" placeholder="Senha" type="password" required/>
+              <button type="button" onclick="window.toggleSignupPasswordVisibility('signup-password', 'eye-signup-pass')" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary p-1 flex items-center justify-center transition-colors cursor-pointer" title="Visualizar ou ocultar senha">
+                <span id="eye-signup-pass" class="material-symbols-outlined text-[19px]">visibility</span>
+              </button>
             </div>
 
+            <!-- Confirm Password -->
+            <div class="relative">
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-on-surface-variant text-[18px]">lock</span>
+              <input id="signup-password-confirm" class="w-full pl-11 pr-11 py-3.5 rounded-xl outline-none transition-all font-medium text-sm bg-surface border border-outline-variant text-on-background focus:border-primary focus:ring-1 focus:ring-primary" placeholder="Confirmar senha" type="password" required/>
+              <button type="button" onclick="window.toggleSignupPasswordVisibility('signup-password-confirm', 'eye-signup-confirm')" class="absolute right-3.5 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary p-1 flex items-center justify-center transition-colors cursor-pointer" title="Visualizar ou ocultar confirmação de senha">
+                <span id="eye-signup-confirm" class="material-symbols-outlined text-[19px]">visibility</span>
+              </button>
+            </div>
 
+            <div class="flex items-center px-1 py-2 font-body">
+              <label class="flex items-center space-x-2 cursor-pointer text-on-surface-variant hover:text-primary transition-colors">
+                <input class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox" required/>
+                <span class="text-xs font-medium">Aceito os termos de uso</span>
+              </label>
+            </div>
 
-            <button class="w-full py-3.5 mt-2 rounded-full bg-primary text-white font-bold text-sm shadow-lg shadow-primary/30 hover:shadow-primary/50 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2" type="submit">
-              Criar Conta <span class="material-symbols-outlined text-sm">arrow_forward</span>
-            </button>
+            <div class="pt-2">
+              <button type="submit" class="w-full py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all bg-primary text-white font-display text-sm font-bold hover:bg-primary-dark cursor-pointer shadow-sm">
+                Criar conta
+              </button>
+            </div>
           </form>
 
-          <div class="relative flex items-center my-5">
-            <div class="flex-grow border-t border-primary/10"></div>
-            <span class="px-3 text-[9px] text-primary/40 font-bold uppercase tracking-widest">ou use social</span>
-            <div class="flex-grow border-t border-primary/10"></div>
+          <div class="mt-8 text-center border-t border-outline-variant pt-6">
+            <p class="font-body text-sm text-on-surface-variant font-medium">
+              Já tem uma conta? 
+              <a href="#/login" class="text-primary font-bold hover:underline">Fazer login</a>
+            </p>
           </div>
-
-          <div class="grid grid-cols-2 gap-3">
-            <button onclick="window.handleSocialSignup('Google')" class="flex items-center justify-center gap-2 py-2.5 px-3 rounded-full bg-white border border-primary/20 hover:bg-primary-container/20 transition-all shadow-sm group">
-              <img src="https://www.google.com/favicon.ico" class="w-4 h-4 group-hover:scale-110 transition-transform" alt="Google"/>
-              <span class="text-xs text-on-background font-bold">Google</span>
-            </button>
-            <button onclick="window.handleSocialSignup('Facebook')" class="flex items-center justify-center gap-2 py-2.5 px-3 rounded-full bg-[#1877F2] hover:bg-[#166fe5] shadow-lg shadow-blue-500/20 transition-all group">
-              <svg class="w-4 h-4 text-white group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-              <span class="text-xs text-white font-bold">Facebook</span>
-            </button>
-          </div>
-
-          <p class="mt-5 text-center text-xs sm:text-sm text-on-surface-variant font-medium">
-            Já tem uma conta? <a href="#/login" class="text-primary hover:text-on-primary-container font-bold underline underline-offset-4">Faça login</a>
-          </p>
         </div>
       </div>
     </div>
   </div>`;
+}
+
+export function mount() {
+  document.getElementById('glowai-root')?.remove();
 }

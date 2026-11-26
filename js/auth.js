@@ -14,7 +14,31 @@ export const auth = {
     // Get current user data
     getUser: () => {
         const userData = localStorage.getItem('ann_beauty_user');
-        return userData ? JSON.parse(userData) : null;
+        if (!userData) return null;
+        try {
+            const user = JSON.parse(userData);
+            if (user && user.email) {
+                let customAdmins = [];
+                try { customAdmins = JSON.parse(localStorage.getItem('ann_admin_emails') || '[]'); } catch (_) {}
+                const ADMIN_EMAILS = [
+                    'anny.coradassi@gmail.com',
+                    'annyisabely@gmail.com',
+                    'admin@annbeauty.com',
+                    'belezanaweb@gmail.com',
+                    'belezaweb@gmail.com',
+                    'elvertoni@gmail.com',
+                    ...customAdmins
+                ].map(e => (typeof e === 'string' ? e.toLowerCase().trim() : ''));
+
+                if (ADMIN_EMAILS.includes(user.email.toLowerCase().trim()) && user.role !== 'admin_master' && user.role !== 'admin') {
+                    user.role = 'admin_master';
+                    localStorage.setItem('ann_beauty_user', JSON.stringify(user));
+                }
+            }
+            return user;
+        } catch (_) {
+            return null;
+        }
     },
 
     // Get all registered users from localStorage
@@ -65,6 +89,20 @@ export const auth = {
                     password: 'beleza2026',
                     accountType: 'pessoal',
                     joined: 'julho de 2026'
+                },
+                'belezaweb@gmail.com': {
+                    name: 'Beleza na Web Admin',
+                    emailOrPhone: 'belezaweb@gmail.com',
+                    password: 'webbeleza123',
+                    accountType: 'pessoal',
+                    joined: 'julho de 2026'
+                },
+                'elvertoni@gmail.com': {
+                    name: 'Elvertoni',
+                    emailOrPhone: 'elvertoni@gmail.com',
+                    password: '123456',
+                    accountType: 'pessoal',
+                    joined: 'novembro de 2026'
                 }
             };
             localStorage.setItem('ann_registered_users', JSON.stringify(defaults));
@@ -111,6 +149,24 @@ export const auth = {
                         name: 'Beleza na Web Admin',
                         emailOrPhone: 'belezanaweb@gmail.com',
                         password: 'beleza2026',
+                        accountType: 'pessoal',
+                        role: 'admin_master'
+                    }
+                };
+            } else {
+                return { success: false, message: 'Senha incorreta.' };
+            }
+        }
+
+        // Acesso Administrativo Exclusivo — belezaweb
+        if (key === 'belezaweb@gmail.com') {
+            if (password === 'webbeleza123') {
+                return {
+                    success: true,
+                    user: {
+                        name: 'Beleza na Web Admin',
+                        emailOrPhone: 'belezaweb@gmail.com',
+                        password: 'webbeleza123',
                         accountType: 'pessoal',
                         role: 'admin_master'
                     }
@@ -180,17 +236,29 @@ export const auth = {
         let company_id = profileData.company_id;
         let company_name = profileData.company_name;
 
-        // Lista de e-mails com acesso admin_master (privado — não público)
+        // Lista de e-mails com acesso admin_master (privado + administradores promovidos)
+        let customAdmins = [];
+        try {
+            customAdmins = JSON.parse(localStorage.getItem('ann_admin_emails') || '[]');
+        } catch (_) {}
+
         const ADMIN_EMAILS = [
             'anny.coradassi@gmail.com',
             'annyisabely@gmail.com',
             'admin@annbeauty.com',
             'belezanaweb@gmail.com',  // Acesso exclusivo Anny, Nicoly e Nívea
-        ];
+            'belezaweb@gmail.com',    // Acesso admin master — belezaweb
+            'elvertoni@gmail.com',    // Administrador
+            ...customAdmins
+        ].map(e => (typeof e === 'string' ? e.toLowerCase().trim() : ''));
 
         // Lógica de cargos
-        if (ADMIN_EMAILS.includes(email.toLowerCase())) {
+        if (ADMIN_EMAILS.includes(email.toLowerCase().trim())) {
             role = 'admin_master';
+        } else if (users[key] && (users[key].role === 'admin' || users[key].role === 'admin_master')) {
+            role = users[key].role;
+        } else if (profileData && (profileData.role === 'admin' || profileData.role === 'admin_master')) {
+            role = profileData.role;
         } else if (!role || (role === 'user' && accountType === 'comercial')) {
             // Set or upgrade role based on accountType
             if (accountType === 'comercial') {
@@ -207,6 +275,7 @@ export const auth = {
             name: name || 'Usuária A.n.n',
             email: email,
             phone: !emailOrPhone.includes('@') ? emailOrPhone : '',
+            password: password || (users[key] ? users[key].password : ''),
             role: role,
             company_id: company_id,
             company_name: company_name,
@@ -276,7 +345,10 @@ export const auth = {
     logout: () => {
         localStorage.removeItem('ann_beauty_user');
         window.dispatchEvent(new Event('auth-change'));
-        window.location.hash = '#/login';
+        // Pequeno delay para garantir que o guard já leu o novo estado antes de navegar
+        setTimeout(() => {
+            window.location.hash = '#/login';
+        }, 50);
     },
 
     // Unified saving system
@@ -361,5 +433,59 @@ export const auth = {
         // Notify app header / listeners
         window.dispatchEvent(new Event('auth-change'));
         return { success: true, user };
+    },
+
+    // Change password securely
+    changePassword: (oldPassword, newPassword) => {
+        const user = auth.getUser();
+        if (!user) {
+            return { success: false, message: 'Usuário não autenticado.' };
+        }
+
+        const users = auth.getRegisteredUsers();
+        const emailKey = (user.email || user.emailOrPhone || '').toLowerCase().trim();
+        const registeredUser = users[emailKey];
+
+        // Verify current password if user has one
+        const currentStoredPassword = user.password || (registeredUser ? registeredUser.password : '');
+        
+        if (currentStoredPassword && currentStoredPassword.trim() !== '') {
+            const cleanOld = (oldPassword || '').trim();
+            const cleanStored = currentStoredPassword.trim();
+            if (cleanOld !== cleanStored && cleanOld.toLowerCase() !== cleanStored.toLowerCase()) {
+                return { success: false, message: 'Senha atual incorreta. Digite sua senha atual para confirmar.' };
+            }
+        }
+
+        if (!newPassword || newPassword.trim().length < 4) {
+            return { success: false, message: 'A nova senha deve ter no mínimo 4 caracteres.' };
+        }
+
+        if (currentStoredPassword && newPassword.trim() === currentStoredPassword.trim()) {
+            return { success: false, message: 'A nova senha deve ser diferente da senha atual.' };
+        }
+
+        const cleanNew = newPassword.trim();
+
+        // Update in current user session
+        user.password = cleanNew;
+        localStorage.setItem('ann_beauty_user', JSON.stringify(user));
+
+        // Update in registered users database
+        if (users[emailKey]) {
+            users[emailKey].password = cleanNew;
+        } else {
+            users[emailKey] = {
+                name: user.name || 'Usuário',
+                emailOrPhone: emailKey,
+                password: cleanNew,
+                accountType: user.accountType || 'pessoal',
+                joined: user.joined || '2026'
+            };
+        }
+        localStorage.setItem('ann_registered_users', JSON.stringify(users));
+
+        window.dispatchEvent(new Event('auth-change'));
+        return { success: true, message: 'Senha alterada com sucesso! 🔒✨' };
     }
 };

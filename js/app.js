@@ -3,52 +3,66 @@
 // ============================================
 
 import { renderHeader, renderBottomNav, renderFooter, FULLSCREEN_PAGES } from './components.js';
-import { initGlowAI } from './glowai.js';
+import { initGlowAI } from './glowai.js?v=13';
 import { auth } from './auth.js';
 import './social_manager.js'; // Registers window.socialManager globally
 
 // Lazy-load page modules
 const pageModules = {
-    home:     () => import('./pages/home.js'),
-    search:   () => import('./pages/search.js'),
-    login:    () => import('./pages/login.js'),
-    signup:   () => import('./pages/signup.js'),
-    recover:  () => import('./pages/recover.js'),
-    profile:  () => import('./pages/profile.js'),
-    product:  () => import('./pages/product.js'),
-    cart:     () => import('./pages/cart.js'),
-    checkout: () => import('./pages/checkout.js'),
-    favorites:() => import('./pages/favorites.js'),
-    tracking: () => import('./pages/tracking.js'),
-    videos:   () => import('./pages/videos.js'),
-    tutorial: () => import('./pages/tutorial.js'),
-    rituals:  () => import('./pages/rituals.js'),
-    about:    () => import('./pages/about.js'),
-    notifications: () => import('./pages/notifications.js'),
-    settings: () => import('./pages/settings.js'),
-    admin:    () => import('./pages/admin.js'),
-    store:    () => import('./pages/store.js'),
+    home:     () => import('./pages/home.js?t=' + Date.now()),
+    search:   () => import('./pages/search.js?t=' + Date.now()),
+    login:    () => import('./pages/login.js?t=' + Date.now()),
+    signup:   () => import('./pages/signup.js?t=' + Date.now()),
+    recover:  () => import('./pages/recover.js?t=' + Date.now()),
+    profile:  () => import('./pages/profile.js?t=' + Date.now()),
+    product:  () => import('./pages/product.js?t=' + Date.now()),
+    cart:     () => import('./pages/cart.js?t=' + Date.now()),
+    checkout: () => import('./pages/checkout.js?t=' + Date.now()),
+    favorites:() => import('./pages/favorites.js?t=' + Date.now()),
+    tracking: () => import('./pages/tracking.js?t=' + Date.now()),
+    videos:   () => import('./pages/videos.js?t=' + Date.now()),
+    tutorial: () => import('./pages/tutorial.js?t=' + Date.now()),
+    rituals:  () => import('./pages/rituals.js?t=' + Date.now()),
+    about:    () => import('./pages/about.js?t=' + Date.now()),
+    notifications: () => import('./pages/notifications.js?t=' + Date.now()),
+    settings: () => import('./pages/settings.js?t=' + Date.now()),
+    admin:    () => import('./pages/admin.js?t=' + Date.now()),
+    store:    () => import('./pages/store.js?t=' + Date.now()),
+    stores:   () => import('./pages/stores.js?t=' + Date.now()),
 };
 
 // Get current page from hash
 function getCurrentPage() {
-    const hash = window.location.hash || '#/home';
-    const cleanHash = hash.replace('#/', '').split('?')[0].split('/')[0] || 'home';
-    return pageModules[cleanHash] ? cleanHash : 'home';
+    const defaultPage = auth.isLoggedIn() ? 'home' : 'login';
+    const hash = window.location.hash || '';
+    if (!hash || hash === '#' || hash === '#/') {
+        return defaultPage;
+    }
+    const cleanHash = hash.replace('#/', '').split('?')[0].split('/')[0] || defaultPage;
+    return pageModules[cleanHash] ? cleanHash : defaultPage;
 }
 
 // Main render function
 async function renderPage() {
     const page = getCurrentPage();
-    
-    // Auth route guard
-    const publicPages = ['login', 'signup', 'recover'];
     const isLoggedIn = auth.isLoggedIn();
-    if (!isLoggedIn && !publicPages.includes(page)) {
+    
+    // Se não estiver logado e a rota inicial for vazia ou home padrão, direciona para o Login
+    if (!isLoggedIn && (page === 'home' || !window.location.hash || window.location.hash === '#/' || window.location.hash === '#/home')) {
         window.location.hash = '#/login';
         return;
     }
-    if (isLoggedIn && publicPages.includes(page)) {
+
+    // Auth route guard para páginas protegidas
+    const protectedPages = ['profile', 'checkout', 'notifications', 'settings', 'admin'];
+    if (!isLoggedIn && protectedPages.includes(page)) {
+        window.location.hash = '#/login';
+        setTimeout(() => {
+            import('./components.js').then(m => m.showToast('Por favor, faça login para acessar esta página.', 'info'));
+        }, 100);
+        return;
+    }
+    if (isLoggedIn && (page === 'login' || page === 'signup' || page === 'recover')) {
         window.location.hash = '#/home';
         return;
     }
@@ -81,7 +95,7 @@ async function renderPage() {
         mod = await pageModules[page]();
     } catch (err) {
         console.error(`Failed to load module for page: ${page}`, err);
-        app.innerHTML = `<div class="p-10 text-center"><h2 class="text-2xl font-serif text-error">Erro ao carregar página</h2><p class="text-on-surface-variant mt-2">Por favor, tente recarregar.</p><a href="#/home" class="text-primary underline mt-4 block">Voltar ao início</a></div>`;
+        app.innerHTML = `<div class="p-10 text-center"><h2 class="text-2xl font-serif text-error">Erro ao carregar página</h2><p class="text-on-surface-variant mt-2">Por favor, tente recarregar.</p><div class="mt-4 p-4 bg-red-100 text-red-800 text-left text-xs font-mono whitespace-pre-wrap">${err.message}\n${err.stack}</div><a href="#/home" class="text-primary underline mt-4 block">Voltar ao início</a></div>`;
         return;
     }
 
@@ -99,7 +113,7 @@ async function renderPage() {
         app.innerHTML = `
             ${renderHeader(page)}
             ${renderBottomNav(page)}
-            <div id="page-content" class="fade-out pt-0 md:pt-[73px] pb-24 md:pb-0">
+            <div id="page-content" class="fade-out pt-0 pb-24 md:pb-0">
                 ${pageHTML}
             </div>
             ${renderFooter()}
@@ -149,6 +163,7 @@ async function renderPage() {
         rituals: 'Beleza na Web - Ritual Guide',
         about: 'About Us - Beleza na Web',
         notifications: 'Notificações - Beleza na Web',
+        stores: 'Lojas Oficiais - Beleza na Web',
     };
     document.title = titles[page] || 'Beleza na Web';
 }
@@ -228,8 +243,8 @@ window.startVoiceSearch = () => {
 
 // Initial render
 window.addEventListener('DOMContentLoaded', () => {
-    if (!window.location.hash) {
-        window.location.hash = '#/home';
+    if (!window.location.hash || window.location.hash === '#/' || window.location.hash === '#/home') {
+        window.location.hash = auth.isLoggedIn() ? '#/home' : '#/login';
     } else {
         renderPage();
     }

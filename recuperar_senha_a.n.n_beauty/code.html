@@ -1,194 +1,376 @@
 <!DOCTYPE html>
-
-<html class="light" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>A.n.n Beauty - Password Recovery</title>
-<!-- Google Fonts -->
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<!-- Material Symbols -->
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
-        }
-    </style>
-<!-- Tailwind CSS -->
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<!-- Tailwind Configuration -->
-<script id="tailwind-config">
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Beleza na Web - Recuperar Senha</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
         tailwind.config = {
-            darkMode: "class",
             theme: {
                 extend: {
-                    "colors": {
-                        "primary-fixed-dim": "#cfbdff",
-                        "on-primary": "#ffffff",
-                        "on-primary-container": "#e9deff",
-                        "tertiary": "#5e474a",
-                        "primary-container": "#6d58a6",
-                        "on-primary-fixed-variant": "#4e3985",
-                        "surface-bright": "#f8f9fa",
-                        "surface": "#f8f9fa",
-                        "secondary-fixed-dim": "#d8bfd8",
-                        "on-secondary-fixed-variant": "#534155",
-                        "tertiary-container": "#775f62",
-                        "surface-variant": "#e1e3e4",
-                        "inverse-surface": "#2e3132",
-                        "outline-variant": "#cac4d2",
-                        "tertiary-fixed": "#fbdbde",
-                        "surface-dim": "#d9dadb",
-                        "surface-container-highest": "#e1e3e4",
-                        "on-secondary-container": "#725e73",
-                        "on-background": "#191c1d",
-                        "on-primary-fixed": "#220458",
-                        "on-tertiary": "#ffffff",
-                        "surface-container-lowest": "#ffffff",
-                        "outline": "#7a7581",
-                        "secondary-fixed": "#f5daf4",
-                        "primary-fixed": "#e9ddff",
-                        "inverse-primary": "#cfbdff",
-                        "background": "#f8f9fa",
-                        "on-secondary-fixed": "#251628",
-                        "secondary-container": "#f5daf4",
-                        "primary": "#54408c",
-                        "on-surface": "#191c1d",
-                        "on-surface-variant": "#494550",
-                        "on-tertiary-fixed-variant": "#574144",
-                        "error-container": "#ffdad6",
-                        "surface-container-high": "#e7e8e9",
-                        "tertiary-fixed-dim": "#debfc2",
-                        "surface-container": "#edeeef",
-                        "on-tertiary-fixed": "#281719",
-                        "on-secondary": "#ffffff",
-                        "surface-container-low": "#f3f4f5",
-                        "inverse-on-surface": "#f0f1f2",
-                        "on-tertiary-container": "#fcdbde",
-                        "on-error": "#ffffff",
-                        "error": "#ba1a1a",
-                        "surface-tint": "#66519f",
-                        "secondary": "#6c586d",
-                        "on-error-container": "#93000a"
+                    colors: {
+                        "primary": "#6D4C7D",
+                        "primary-hover": "#5A3D68",
+                        "accent-pink": "#D88CB5",
+                        "bg-light": "#F6EAEF",
+                        "text-dark": "#29232B",
+                        "text-muted": "#756B76",
+                        "border-subtle": "#E8DFE7",
                     },
-                    "borderRadius": {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "full": "9999px"
-                    },
-                    "spacing": {
-                        "container-max": "1280px",
-                        "base": "8px",
-                        "margin-mobile": "16px",
-                        "gutter": "24px",
-                        "stack-sm": "12px",
-                        "margin-desktop": "40px",
-                        "stack-lg": "48px",
-                        "stack-md": "24px"
-                    },
-                    "fontFamily": {
-                        "body-lg": ["Plus Jakarta Sans"],
-                        "label-sm": ["Plus Jakarta Sans"],
-                        "headline-xl": ["Noto Serif"],
-                        "headline-md": ["Noto Serif"],
-                        "display-lg": ["Noto Serif"],
-                        "body-md": ["Plus Jakarta Sans"],
-                        "body-sm": ["Plus Jakarta Sans"],
-                        "label-md": ["Plus Jakarta Sans"]
-                    },
-                    "fontSize": {
-                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
-                        "label-sm": ["12px", { "lineHeight": "1.2", "letterSpacing": "0.08em", "fontWeight": "700" }],
-                        "headline-xl": ["36px", { "lineHeight": "1.3", "fontWeight": "500" }],
-                        "headline-md": ["24px", { "lineHeight": "1.4", "fontWeight": "500" }],
-                        "display-lg": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600" }],
-                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
-                        "body-sm": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
-                        "label-md": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    fontFamily: {
+                        "sans": ["Inter", "sans-serif"],
+                        "heading": ["Poppins", "sans-serif"]
                     }
                 }
             }
         }
     </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+            vertical-align: middle;
+        }
+        .recover-card {
+            background: #FFFFFF;
+            border: 1px solid #E8DFE7;
+            box-shadow: 0 12px 40px -10px rgba(109, 76, 125, 0.12);
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .animate-spin { animation: spin 1s linear infinite; }
+    </style>
 </head>
-<body class="bg-surface text-on-surface antialiased min-h-screen flex selection:bg-primary-fixed selection:text-on-primary-fixed">
-<!-- Split Screen Layout -->
-<main class="flex flex-col md:flex-row w-full min-h-screen">
-<!-- Left Side: Visual Ethereal Imagery -->
-<div class="hidden md:flex md:w-1/2 lg:w-[55%] relative overflow-hidden bg-primary-fixed-dim items-center justify-center">
-<img alt="Soft ethereal macro photography of translucent luxury skincare serum drops on a frosted glass surface, bathed in gentle diffused morning light with pale lavender and pearl undertones." class="absolute inset-0 w-full h-full object-cover opacity-90 mix-blend-multiply" data-alt="Soft ethereal macro photography of translucent luxury skincare serum drops on a frosted glass surface, bathed in gentle diffused morning light with pale lavender and pearl undertones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2cChqBTVCbwZ6gGYgCU-5Tb42DxiWZuZAa_p7gur5STpTOW6lp0zaTi9SFpS6hYc29tzEwmXDt4kn_fS56mq2OPQNUsFyzQMPf8YteKi2KOfeWXRalTBtkvwjoN38wqYBpkLuX6f8LptOYzTbX3EJ8bFil0Y9NGElEUyhiwVSioiHaFH7EXIq_HRO7gGBeqHN9EdYH2fQ48GQeP43m1_MHomxBq_1VlflTZJOy3bEJe-JgktNlsxuAilr_T6uhOYMEThI__kJl-uG"/>
-<!-- Glassmorphic Overlay for Depth -->
-<div class="absolute inset-0 bg-gradient-to-br from-white/20 to-primary-container/10 backdrop-blur-[2px]"></div>
-<!-- Brand Mark Floating on Image -->
-<div class="absolute top-12 left-12 z-10">
-<span class="font-display-lg text-display-lg text-primary-fixed drop-shadow-md tracking-tighter">A.n.n Beauty</span>
-</div>
-</div>
-<!-- Right Side: Form Container -->
-<div class="w-full md:w-1/2 lg:w-[45%] flex items-center justify-center p-8 lg:p-16 bg-surface-container-lowest relative shadow-[-10px_0_30px_rgba(109,88,166,0.03)] z-10">
-<!-- Mobile Brand Mark -->
-<div class="absolute top-8 left-8 md:hidden">
-<span class="font-headline-md text-headline-md text-primary tracking-tighter">A.n.n Beauty</span>
-</div>
-<div class="w-full max-w-md flex flex-col pt-12 md:pt-0">
-<!-- Header Texts -->
-<div class="flex flex-col gap-2 mb-10">
-<h1 class="font-headline-xl text-headline-xl text-primary tracking-tight">
-                        esqueceu da senha?
-                    </h1>
-<p class="font-body-lg text-body-lg text-on-surface-variant">
-                        recuperar senha
-                    </p>
-</div>
-<!-- Form -->
-<form class="flex flex-col gap-6" onsubmit="event.preventDefault();">
-<!-- Email Field -->
-<div class="flex flex-col gap-2">
-<label class="font-label-md text-label-md text-on-surface-variant ml-4" for="emailInput">
-                            email:
-                        </label>
-<div class="relative">
-<input class="w-full bg-surface-container-low border border-outline-variant/50 rounded-full px-6 py-4 font-body-md text-body-md text-on-surface placeholder:text-outline focus:border-primary focus:bg-surface-container-lowest focus:ring-1 focus:ring-primary focus:outline-none transition-all shadow-[0_2px_10px_rgba(109,88,166,0.02)]" id="emailInput" placeholder="seu endereço de email" required="" type="email"/>
-</div>
-</div>
-<!-- Code Field -->
-<div class="flex flex-col gap-2">
-<label class="font-label-md text-label-md text-on-surface-variant ml-4" for="codeInput">
-                            código:
-                        </label>
-<div class="relative">
-<input class="w-full bg-surface-container-low border border-outline-variant/50 rounded-full px-6 py-4 font-body-md text-body-md text-on-surface placeholder:text-outline focus:border-primary focus:bg-surface-container-lowest focus:ring-1 focus:ring-primary focus:outline-none transition-all shadow-[0_2px_10px_rgba(109,88,166,0.02)]" id="codeInput" placeholder="código de 6 dígitos" required="" type="text"/>
-</div>
-</div>
-<!-- New Password Field -->
-<div class="flex flex-col gap-2">
-<label class="font-label-md text-label-md text-on-surface-variant ml-4" for="passwordInput">
-                            nova senha:
-                        </label>
-<div class="relative group">
-<input class="w-full bg-surface-container-low border border-outline-variant/50 rounded-full pl-6 pr-14 py-4 font-body-md text-body-md text-on-surface placeholder:text-outline focus:border-primary focus:bg-surface-container-lowest focus:ring-1 focus:ring-primary focus:outline-none transition-all shadow-[0_2px_10px_rgba(109,88,166,0.02)]" id="passwordInput" placeholder="digite a nova senha" required="" type="password"/>
-<button class="absolute right-4 top-1/2 -translate-y-1/2 text-outline hover:text-primary transition-colors flex items-center justify-center p-2 rounded-full" type="button">
-<span class="material-symbols-outlined text-[20px]">visibility_off</span>
-</button>
-</div>
-</div>
-<!-- Submit Button -->
-<button class="w-full mt-4 bg-primary text-on-primary rounded-full px-8 py-4 font-label-md text-label-md shadow-[0_4px_16px_rgba(109,88,166,0.15)] hover:bg-on-primary-fixed-variant hover:shadow-[0_6px_20px_rgba(109,88,166,0.25)] active:scale-[0.98] transition-all flex items-center justify-center gap-2" type="submit">
-<span>Confirmar</span>
-<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
-</button>
-</form>
-<!-- Back to Login -->
-<div class="mt-10 text-center">
-<a class="inline-flex items-center gap-2 font-label-md text-label-md text-secondary hover:text-primary transition-colors border-b border-transparent hover:border-primary pb-0.5" href="#">
-<span class="material-symbols-outlined text-[16px]">arrow_back</span>
-                        voltar para o login
+<body class="bg-[#F6EAEF] font-sans text-text-dark antialiased min-h-screen flex m-0 p-0">
+    <div class="flex w-full min-h-screen">
+        
+        <!-- Left Side: Banner -->
+        <div class="hidden lg:block lg:w-1/2 relative overflow-hidden bg-[#F2E8EE]">
+            <img alt="Beleza na Web" class="absolute inset-0 w-full h-full object-cover" src="../img/banner_login.png"/>
+        </div>
+
+        <!-- Right Side: Recovery Form -->
+        <div class="w-full lg:w-1/2 flex items-center justify-center px-4 sm:px-8 py-8 min-h-screen relative overflow-hidden" style="background: radial-gradient(circle at 100% 100%, rgba(216, 140, 181, 0.28) 0%, rgba(246, 234, 239, 0) 55%), #F6EAEF;">
+            
+            <div class="absolute -bottom-10 -right-10 w-96 h-96 bg-[#D88CB5]/20 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <div class="w-full max-w-[430px] recover-card p-8 sm:p-10 rounded-[36px] relative z-10 my-auto max-h-[95vh] overflow-y-auto">
+                
+                <!-- Title & Subtitle -->
+                <div class="text-center mb-6">
+                    <div class="w-14 h-14 rounded-2xl bg-[#6D4C7D]/10 flex items-center justify-center text-[#6D4C7D] mb-4 mx-auto">
+                        <span class="material-symbols-outlined text-[28px]">lock_reset</span>
+                    </div>
+                    <h1 class="font-heading text-3xl sm:text-[34px] font-bold text-[#563964] mb-2">Esqueceu sua senha?</h1>
+                    <p class="text-text-muted text-xs sm:text-[13px]">Não se preocupe, vamos ajudar você a recuperar o acesso ao seu ritual de beleza.</p>
+                </div>
+
+                <form id="recoverForm" class="space-y-4" onsubmit="handleRecoverSubmit(event)">
+                    
+                    <!-- Email Field with Send Code Button -->
+                    <div class="space-y-1">
+                        <label class="text-[11px] font-semibold text-text-muted uppercase tracking-wider ml-4">E-mail de Cadastro</label>
+                        <div class="relative">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[#8E8391] material-symbols-outlined text-[19px]">mail</span>
+                            <input id="recover-email" class="w-full pl-12 pr-36 py-3.5 rounded-full bg-[#FAF7F9] border border-border-subtle focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all text-text-dark text-xs sm:text-[13px] placeholder:text-[#A89FA9]" placeholder="seu@email.com" type="email" required/>
+                            <button 
+                                type="button" 
+                                id="btn-send-code"
+                                onclick="handleSendCode()" 
+                                class="absolute right-2 top-1/2 -translate-y-1/2 px-3.5 py-1.5 rounded-full bg-[#6D4C7D] hover:bg-[#5A3D68] text-white font-semibold text-[11px] transition-all shadow-sm flex items-center gap-1.5 cursor-pointer"
+                            >
+                                <span class="material-symbols-outlined text-[14px]">send</span>
+                                <span>Enviar Código</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Code Sent Banner -->
+                    <div id="code-sent-banner" class="hidden p-3.5 rounded-2xl bg-[#F3EDF7] border border-[#6D4C7D]/20 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-1.5 text-xs font-bold text-[#6D4C7D]">
+                                <span class="material-symbols-outlined text-[16px]">mark_email_read</span>
+                                <span>Código enviado por e-mail!</span>
+                            </div>
+                            <a href="https://mail.google.com" target="_blank" rel="noopener noreferrer" class="text-[10px] font-bold text-[#6D4C7D] hover:underline inline-flex items-center gap-0.5 bg-white px-2 py-0.5 rounded-lg border border-[#6D4C7D]/15 shadow-sm">
+                                <span>Abrir Gmail</span>
+                                <span class="material-symbols-outlined text-[11px]">open_in_new</span>
+                            </a>
+                        </div>
+                        <p class="text-[11px] text-text-muted leading-snug">
+                            Enviamos um código de 6 dígitos para <strong id="banner-email-text" class="text-text-dark">seu e-mail</strong>. Verifique sua caixa de entrada e spam.
+                        </p>
+                        <a id="banner-ethereal-link" href="#" target="_blank" rel="noopener noreferrer" class="hidden text-[11px] font-bold text-[#6D4C7D] hover:text-[#5A3D68] bg-white px-3 py-1.5 rounded-xl border border-[#6D4C7D]/15 shadow-sm inline-flex items-center justify-center gap-1">
+                            <span class="material-symbols-outlined text-[14px]">visibility</span>
+                            <span>Ver e-mail de teste no Ethereal ↗</span>
+                        </a>
+                    </div>
+
+                    <!-- Code Field -->
+                    <div class="space-y-1">
+                        <div class="flex items-center justify-between">
+                            <label class="text-[11px] font-semibold text-text-muted uppercase tracking-wider ml-4">Código de Verificação</label>
+                            <span class="text-[10px] text-text-muted mr-2">6 dígitos recebidos por e-mail</span>
+                        </div>
+                        <div class="relative">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[#8E8391] material-symbols-outlined text-[19px]">pin</span>
+                            <input id="recover-code" class="w-full pl-12 pr-5 py-3.5 rounded-full bg-[#FAF7F9] border border-border-subtle focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all text-text-dark text-xs sm:text-[13px] font-mono tracking-widest font-semibold placeholder:text-[#A89FA9] placeholder:font-sans placeholder:tracking-normal placeholder:font-normal" placeholder="Ex: 482910" type="text" maxlength="6" required/>
+                        </div>
+                    </div>
+
+                    <!-- New Password Field -->
+                    <div class="space-y-1">
+                        <label class="text-[11px] font-semibold text-text-muted uppercase tracking-wider ml-4">Nova Senha</label>
+                        <div class="relative">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[#8E8391] material-symbols-outlined text-[19px]">lock</span>
+                            <input id="recover-password" class="w-full pl-12 pr-12 py-3.5 rounded-full bg-[#FAF7F9] border border-border-subtle focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all text-text-dark text-xs sm:text-[13px] placeholder:text-[#A89FA9]" placeholder="No mínimo 4 caracteres" type="password" required/>
+                            <button type="button" onclick="togglePass('recover-password', 'eye-pass1')" class="absolute right-4 top-1/2 -translate-y-1/2 text-[#8E8391] hover:text-primary transition-colors cursor-pointer p-1">
+                                <span id="eye-pass1" class="material-symbols-outlined text-[19px]">visibility</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Confirm Password Field -->
+                    <div class="space-y-1">
+                        <label class="text-[11px] font-semibold text-text-muted uppercase tracking-wider ml-4">Confirmar Nova Senha</label>
+                        <div class="relative">
+                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[#8E8391] material-symbols-outlined text-[19px]">lock_clock</span>
+                            <input id="recover-password-confirm" class="w-full pl-12 pr-12 py-3.5 rounded-full bg-[#FAF7F9] border border-border-subtle focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all text-text-dark text-xs sm:text-[13px] placeholder:text-[#A89FA9]" placeholder="Repita a nova senha" type="password" required/>
+                            <button type="button" onclick="togglePass('recover-password-confirm', 'eye-pass2')" class="absolute right-4 top-1/2 -translate-y-1/2 text-[#8E8391] hover:text-primary transition-colors cursor-pointer p-1">
+                                <span id="eye-pass2" class="material-symbols-outlined text-[19px]">visibility</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="pt-2">
+                        <button type="submit" id="btn-submit-recovery" class="w-full py-3.5 rounded-full bg-primary hover:bg-primary-hover text-white font-heading font-semibold text-xs sm:text-sm shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/30 transition-all flex items-center justify-center gap-2 cursor-pointer">
+                            Recuperar Acesso <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Back to Login -->
+                <div class="mt-8 text-center">
+                    <a href="../login_a.n.n_beauty/code.html" class="inline-flex items-center gap-2 text-text-muted hover:text-primary text-xs sm:text-[13px] font-semibold transition-colors">
+                        <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+                        Voltar para o Login
                     </a>
-</div>
-</div>
-</div>
-</main>
-</body></html>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Determine the API base URL (works with both proxy server and direct access)
+        const API_BASE = window.location.port === '5500' ? '' : 'http://localhost:5500';
+
+        let countdownTimer = null;
+
+        function togglePass(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (!input || !icon) return;
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.textContent = 'visibility_off';
+            } else {
+                input.type = 'password';
+                icon.textContent = 'visibility';
+            }
+        }
+
+        function showToast(msg, type) {
+            const existing = document.getElementById('toast-msg');
+            if (existing) existing.remove();
+
+            const colors = {
+                success: 'bg-green-600',
+                error: 'bg-red-600',
+                info: 'bg-[#6D4C7D]'
+            };
+
+            const toast = document.createElement('div');
+            toast.id = 'toast-msg';
+            toast.className = `fixed top-6 left-1/2 -translate-x-1/2 ${colors[type] || colors.info} text-white px-6 py-3 rounded-full shadow-lg text-xs sm:text-sm font-medium z-50 transition-all`;
+            toast.textContent = msg;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 4000);
+        }
+
+        async function handleSendCode() {
+            const emailInput = document.getElementById('recover-email');
+            const email = (emailInput?.value || '').trim().toLowerCase();
+
+            if (!email || !email.includes('@')) {
+                showToast('Por favor, digite um e-mail válido.', 'error');
+                if (emailInput) emailInput.focus();
+                return;
+            }
+
+            const sendBtn = document.getElementById('btn-send-code');
+            if (sendBtn) {
+                sendBtn.disabled = true;
+                sendBtn.innerHTML = '<span class="material-symbols-outlined text-[14px] animate-spin">refresh</span> <span>Enviando...</span>';
+            }
+
+            try {
+                const resp = await fetch(API_BASE + '/api/auth/forgot-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+                const data = await resp.json();
+
+                if (!resp.ok && !data.success) {
+                    showToast(data.message || 'Erro ao enviar e-mail de recuperação.', 'error');
+                    if (sendBtn) {
+                        sendBtn.disabled = false;
+                        sendBtn.innerHTML = '<span class="material-symbols-outlined text-[14px]">send</span> <span>Enviar Código</span>';
+                    }
+                    return;
+                }
+
+                // Show banner
+                const banner = document.getElementById('code-sent-banner');
+                const emailDisplay = document.getElementById('banner-email-text');
+                const etherealBox = document.getElementById('banner-ethereal-link');
+
+                if (banner && emailDisplay) {
+                    emailDisplay.textContent = email;
+                    banner.classList.remove('hidden');
+
+                    if (data.previewUrl && etherealBox) {
+                        etherealBox.href = data.previewUrl;
+                        etherealBox.classList.remove('hidden');
+                    } else if (etherealBox) {
+                        etherealBox.classList.add('hidden');
+                    }
+                }
+
+                showToast('Código de verificação enviado para seu e-mail! 📩', 'success');
+
+                // Cooldown 60s
+                let secondsLeft = 60;
+                if (sendBtn) {
+                    sendBtn.disabled = true;
+                    sendBtn.innerHTML = `<span class="material-symbols-outlined text-[14px]">timer</span> <span>${secondsLeft}s</span>`;
+                    sendBtn.className = 'absolute right-2 top-1/2 -translate-y-1/2 px-3.5 py-1.5 rounded-full bg-gray-300 text-gray-500 font-semibold text-[11px] cursor-not-allowed flex items-center gap-1.5';
+
+                    if (countdownTimer) clearInterval(countdownTimer);
+                    countdownTimer = setInterval(() => {
+                        secondsLeft--;
+                        if (secondsLeft <= 0) {
+                            clearInterval(countdownTimer);
+                            sendBtn.disabled = false;
+                            sendBtn.innerHTML = '<span class="material-symbols-outlined text-[14px]">send</span> <span>Reenviar</span>';
+                            sendBtn.className = 'absolute right-2 top-1/2 -translate-y-1/2 px-3.5 py-1.5 rounded-full bg-[#6D4C7D] hover:bg-[#5A3D68] text-white font-semibold text-[11px] transition-all shadow-sm flex items-center gap-1.5 cursor-pointer';
+                        } else {
+                            sendBtn.innerHTML = `<span class="material-symbols-outlined text-[14px]">timer</span> <span>${secondsLeft}s</span>`;
+                        }
+                    }, 1000);
+                }
+
+                // Focus code input
+                const codeInput = document.getElementById('recover-code');
+                if (codeInput) setTimeout(() => codeInput.focus(), 300);
+
+            } catch (err) {
+                console.error('Send code error:', err);
+                showToast('Erro ao comunicar com o servidor. Verifique se o servidor está ativo na porta 5500.', 'error');
+                if (sendBtn) {
+                    sendBtn.disabled = false;
+                    sendBtn.innerHTML = '<span class="material-symbols-outlined text-[14px]">send</span> <span>Enviar Código</span>';
+                }
+            }
+        }
+
+        async function handleRecoverSubmit(e) {
+            e.preventDefault();
+
+            const email = (document.getElementById('recover-email')?.value || '').trim().toLowerCase();
+            const code = (document.getElementById('recover-code')?.value || '').trim();
+            const newPassword = (document.getElementById('recover-password')?.value || '').trim();
+            const confirmPassword = (document.getElementById('recover-password-confirm')?.value || '').trim();
+
+            if (!email || !email.includes('@')) {
+                showToast('Informe seu e-mail de cadastro.', 'error');
+                return;
+            }
+            if (!code || code.length !== 6) {
+                showToast('Digite o código de 6 dígitos recebido por e-mail.', 'error');
+                return;
+            }
+            if (!newPassword || newPassword.length < 4) {
+                showToast('A nova senha precisa ter pelo menos 4 caracteres.', 'error');
+                return;
+            }
+            if (newPassword !== confirmPassword) {
+                showToast('A confirmação da senha não confere.', 'error');
+                return;
+            }
+
+            const submitBtn = document.getElementById('btn-submit-recovery');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="material-symbols-outlined text-sm animate-spin">refresh</span> Processando...';
+            }
+
+            try {
+                const resp = await fetch(API_BASE + '/api/auth/reset-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, code, newPassword })
+                });
+                const data = await resp.json();
+
+                if (!resp.ok || !data.success) {
+                    showToast(data.message || 'Código incorreto ou expirado.', 'error');
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = 'Recuperar Acesso <span class="material-symbols-outlined text-sm">arrow_forward</span>';
+                    }
+                    return;
+                }
+
+                // Also sync to localStorage for consistency
+                try {
+                    const usersRaw = localStorage.getItem('ann_registered_users');
+                    if (usersRaw) {
+                        const users = JSON.parse(usersRaw);
+                        if (users[email]) {
+                            users[email].password = newPassword;
+                        } else {
+                            users[email] = {
+                                name: email.split('@')[0],
+                                emailOrPhone: email,
+                                password: newPassword,
+                                accountType: 'pessoal',
+                                joined: new Date().toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })
+                            };
+                        }
+                        localStorage.setItem('ann_registered_users', JSON.stringify(users));
+                    }
+                } catch (_) {}
+
+                showToast('Senha alterada com sucesso! Redirecionando para o login... ✨', 'success');
+                setTimeout(() => {
+                    window.location.href = '../login_a.n.n_beauty/code.html';
+                }, 1500);
+
+            } catch (err) {
+                console.error('Reset password error:', err);
+                showToast('Erro ao redefinir a senha. Verifique sua conexão.', 'error');
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = 'Recuperar Acesso <span class="material-symbols-outlined text-sm">arrow_forward</span>';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

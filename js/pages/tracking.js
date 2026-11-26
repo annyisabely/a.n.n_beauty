@@ -1,117 +1,330 @@
+import { auth } from '../auth.js';
+import { database } from '../database.js';
+
 export default function trackingPage() {
-  const currentDate = new Date();
+  const user = auth.getUser();
   
-  // Helper to format date like "22 Jun"
-  const formatDate = (date) => {
-      const parts = date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' }).split(' ');
-      // Handle different formats on different browsers/os (some use 'de', some add dots)
-      let month = parts.length > 1 ? parts[parts.length - 1] : parts[0];
-      month = month.replace('.', '');
-      return `${date.getDate().toString().padStart(2, '0')} ${month.charAt(0).toUpperCase() + month.slice(1)}`;
+  // Read order ID from URL query parameters (e.g. #/tracking?id=ANN-123456)
+  const hashQuery = window.location.hash.split('?')[1] || '';
+  const urlParams = new URLSearchParams(hashQuery);
+  const urlOrderId = urlParams.get('id') || '';
+
+  // Get orders: fetch from SQLite database and merge/fallback to client localStorage
+  let allOrders = [];
+  try {
+    allOrders = database.getOrders();
+  } catch (e) {
+    console.error('Error loading orders from SQLite:', e);
+  }
+
+  // Also read from localStorage to ensure we have the absolute latest user orders
+  const localOrdersStr = localStorage.getItem('ann_orders') || '[]';
+  const localOrders = JSON.parse(localOrdersStr);
+
+  // Merge SQLite orders and localStorage orders, preferring SQLite if ID matches
+  const mergedOrders = [...localOrders];
+  allOrders.forEach(dbOrder => {
+    // If order has JSON strings, parse them
+    let parsedItems = [];
+    let parsedAddress = {};
+    try {
+      parsedItems = typeof dbOrder.items === 'string' ? JSON.parse(dbOrder.items) : dbOrder.items;
+      parsedAddress = typeof dbOrder.address === 'string' ? JSON.parse(dbOrder.address) : dbOrder.address;
+    } catch (err) {
+      console.warn('Failed to parse items or address for order', dbOrder.id, err);
+    }
+
+    const cleanedOrder = {
+      ...dbOrder,
+      items: parsedItems,
+      address: parsedAddress
+    };
+
+    const existingIdx = mergedOrders.findIndex(o => o.id === dbOrder.id);
+    if (existingIdx > -1) {
+      mergedOrders[existingIdx] = cleanedOrder;
+    } else {
+      mergedOrders.push(cleanedOrder);
+    }
+  });
+
+  // Filter orders belonging to current client
+  const clientEmail = user ? user.email.toLowerCase() : 'anonimo';
+  const clientOrders = mergedOrders.filter(o => 
+    o.clientId === clientEmail || 
+    (o.email && o.email.toLowerCase() === clientEmail) ||
+    o.clientId === 'anonimo'
+  );
+
+  if (clientOrders.length === 0) {
+    return `
+    <main class="flex-grow max-w-[1280px] mx-auto w-full px-4 md:px-10 py-20 text-center">
+      <div class="w-20 h-20 bg-purple-50 rounded-full flex items-center justify-center mx-auto mb-6">
+        <span class="material-symbols-outlined text-4xl text-purple-300">receipt_long</span>
+      </div>
+      <h1 class="font-display text-3xl text-on-background mb-4">Nenhum Pedido Encontrado</h1>
+      <p class="text-sm text-on-surface-variant max-w-sm mx-auto mb-8 opacity-75">Você ainda não realizou nenhuma compra ou não há registros de pedidos nesta conta.</p>
+      <a href="#/home" class="bg-primary text-white px-8 py-3.5 rounded-full font-bold text-sm shadow-lg shadow-primary/20 hover:scale-105 transition-all">
+        Voltar à Loja
+      </a>
+    </main>`;
+  }
+
+  // Find the selected/active order
+  let activeOrder = null;
+  let relatedSubOrders = [];
+
+  if (urlOrderId) {
+    // If order ID is exact or prefix (e.g. parent ID was ANN-123456 and sub-orders are ANN-123456-GLW)
+    relatedSubOrders = clientOrders.filter(o => o.id.startsWith(urlOrderId));
+    if (relatedSubOrders.length > 0) {
+      // Default to the first sub-order
+      activeOrder = relatedSubOrders[0];
+    } else {
+      activeOrder = clientOrders.find(o => o.id === urlOrderId);
+    }
+  }
+
+  // Fallback to most recent order if not found or no ID in URL
+  if (!activeOrder) {
+    activeOrder = clientOrders[0];
+    relatedSubOrders = clientOrders.filter(o => o.id.substring(0, 10) === activeOrder.id.substring(0, 10));
+  }
+
+  // Render tracking steps based on status
+  const currentStatus = activeOrder.status ? activeOrder.status.toUpperCase() : 'PENDENTE';
+  
+  // Status check helper
+  const isStepDone = (stepName) => {
+    const statuses = ['PAGAMENTO CONFIRMADO', 'PREPARANDO', 'EM PREPARAÇÃO', 'ENVIADO', 'SAIU PARA ENTREGA', 'ENTREGUE'];
+    const activeIdx = statuses.indexOf(currentStatus);
+    
+    if (stepName === 'PAGAMENTO') {
+      return activeIdx >= 0; // step 0 is payment confirmed
+    }
+    if (stepName === 'PREPARACAO') {
+      return activeIdx >= 1; // step 1/2 is preparing or further
+    }
+    if (stepName === 'ENVIADO') {
+      return activeIdx >= 3; // step 3 is shipped or further
+    }
+    if (stepName === 'ENTREGA') {
+      return activeIdx >= 4; // step 4 is out for delivery or further
+    }
+    if (stepName === 'ENTREGUE') {
+      return activeIdx >= 5; // step 5 is delivered
+    }
+    return false;
   };
 
-  const dateConfirmed = new Date(currentDate);
-  dateConfirmed.setDate(currentDate.getDate() - 2);
+  // Render list of items
+  const items = activeOrder.items || [];
+  const itemsHTML = items.map(item => {
+    const imgSrc = item.img && item.img.startsWith('http') ? item.img : 'https://lh3.googleusercontent.com/aida-public/' + (item.img || '');
+    return `
+    <div class="flex gap-4 items-center p-4 bg-white/70 rounded-3xl border border-purple-100/50 hover:shadow-sm transition-all duration-300">
+      <div class="w-16 h-16 rounded-xl overflow-hidden shrink-0 bg-gradient-to-br from-purple-50 to-pink-50 p-2 border border-purple-100/40">
+        <img alt="${item.name}" class="w-full h-full object-contain mix-blend-multiply" src="${imgSrc}"/>
+      </div>
+      <div class="flex-grow min-w-0">
+        <h3 class="font-bold text-sm text-on-background truncate leading-tight">${item.name}</h3>
+        <p class="text-[10px] text-on-surface-variant font-medium mt-1 uppercase tracking-wider">${activeOrder.storeName || 'Loja Parceira'}</p>
+        <div class="flex justify-between items-center mt-2.5">
+          <span class="text-xs text-primary font-bold">${item.price}</span>
+          <span class="text-[10px] bg-purple-50 text-primary border border-purple-100 font-bold px-2 py-0.5 rounded-md">Qtd: ${item.quantity}</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
 
-  const datePrep = new Date(currentDate);
-  datePrep.setDate(currentDate.getDate() - 1);
-  
-  const dateDelivery = new Date(currentDate);
-  dateDelivery.setDate(currentDate.getDate() + 3);
-
-  const orderNum = Math.floor(Math.random() * 900000) + 100000;
+  // Delivery Address parsing
+  const addr = activeOrder.address || {};
+  const addressString = addr.rua ? `${addr.rua}, Nº ${addr.numero} ${addr.complemento ? ' - ' + addr.complemento : ''}<br>${addr.bairro} - ${addr.cidade}<br>CEP: ${addr.cep}` : 'Endereço não disponível';
 
   return `
   <main class="flex-grow max-w-[1280px] mx-auto w-full px-4 md:px-10 py-12 relative">
     <div class="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] rounded-full bg-primary/10 opacity-20 blur-[120px] pointer-events-none z-0"></div>
-    <div class="text-center mb-12 relative z-10">
-      <h1 class="font-display text-4xl text-primary mb-3">Acompanhe seu Ritual</h1>
-      <p class="font-body-lg text-on-surface-variant">Pedido <span class="font-label-md text-on-surface ml-1 px-4 py-1.5 bg-primary/5 text-primary rounded-full border border-primary/10 shadow-sm font-bold uppercase tracking-widest">#ANB-${orderNum}</span></p>
+    
+    <div class="text-center mb-10 relative z-10">
+      <h1 class="font-display text-3xl md:text-4xl text-primary font-bold mb-3">Acompanhe seu Pedido</h1>
+      <p class="font-body-lg text-on-surface-variant">Pedido principal <span class="font-label-md text-on-surface ml-1 px-4 py-1.5 bg-primary/5 text-primary rounded-full border border-primary/10 shadow-sm font-bold uppercase tracking-widest">#${activeOrder.id.split('-')[0]}</span></p>
     </div>
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10">
-      <div class="lg:col-span-5 bg-white/40 backdrop-blur-xl rounded-[48px] p-10 md:p-12 border border-primary/5 shadow-ethereal flex flex-col gap-8">
-        <h2 class="font-display text-2xl text-on-background border-b border-primary/10 pb-6">Detalhes do Ritual</h2>
-        <div class="flex gap-6 items-center p-6 bg-primary-container/10 rounded-[32px] border border-primary/5 group hover:shadow-ethereal-hover transition-all duration-500">
-          <div class="w-24 h-24 rounded-2xl overflow-hidden shrink-0 bg-white shadow-sm p-4">
-            <img alt="Serum" class="w-full h-full object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-nZbQxAEQakkIEXySpx5bHYjFw8eAb0Bl9o3OX3nXdr3RLcyX8F17enZsgWd4znKk8f7lbhykqJ_ahRLY0PcuVUUoCd3jaRZ1U6WqZqJFiwdoMi62PUqeuzfSXYeZRSmPFc198A9v9-fvKkgsbGguoBzyppIkDP__9mtXQbBDfl0mbZFNPOtpkf4IInS4E5DQ9NKHnh38HWItD3oCoy0PN7np0D9lcobgJEvmuEvjowwQrDVC2tYwbo8qB2qUQwCRuf7_Kpsu_n6q"/>
+
+    <!-- Múltiplos Vendedores Tab Selector -->
+    ${relatedSubOrders.length > 1 ? `
+    <div class="mb-10 p-5 bg-white/70 backdrop-blur-md rounded-3xl border border-primary/10 shadow-sm max-w-3xl mx-auto z-10 relative">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="material-symbols-outlined text-primary text-[20px]" style="font-variation-settings: 'FILL' 1">storefront</span>
+        <span class="text-xs font-bold text-on-surface">Este pedido contém produtos de ${relatedSubOrders.length} lojas parceiras:</span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        ${relatedSubOrders.map(subOrder => {
+          const isSelected = subOrder.id === activeOrder.id;
+          return `
+          <button onclick="window.checkoutSwitchSubOrder('${subOrder.id}')" 
+            class="flex items-center justify-between p-3.5 rounded-2xl border-2 transition-all text-left ${isSelected ? 'border-primary bg-primary-container/20 shadow-sm' : 'border-purple-100/50 bg-white hover:border-primary/20'}">
+            <div class="min-w-0">
+              <span class="text-xs font-bold text-on-surface block truncate">${subOrder.storeName}</span>
+              <span class="text-[10px] text-primary font-bold uppercase tracking-wider block mt-0.5">${subOrder.status}</span>
+            </div>
+            <span class="material-symbols-outlined text-[18px] text-primary">
+              ${isSelected ? 'radio_button_checked' : 'radio_button_unchecked'}
+            </span>
+          </button>`;
+        }).join('')}
+      </div>
+    </div>
+    ` : ''}
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 relative z-10 max-w-6xl mx-auto">
+      
+      <!-- Detalhes do Sub-Pedido -->
+      <div class="lg:col-span-5 bg-white/40 backdrop-blur-xl rounded-[40px] p-8 border border-primary/5 shadow-md flex flex-col gap-6 self-start">
+        <div class="border-b border-primary/10 pb-4 flex items-center justify-between">
+          <div>
+            <h2 class="font-display text-xl text-on-background font-bold">Resumo da Entrega</h2>
+            <span class="text-[10px] font-bold text-primary uppercase tracking-widest mt-1 block">${activeOrder.storeName}</span>
           </div>
-          <div class="space-y-1">
-            <h3 class="font-display text-xl text-on-background">Ethereal Glow Serum</h3>
-            <p class="text-[10px] font-black text-on-surface-variant opacity-40 uppercase tracking-widest">30ml • Frasco de Vidro</p>
-            <p class="font-display text-primary mt-3 font-bold text-lg">R$ 185,00 <span class="text-[10px] text-on-surface-variant ml-2 font-black opacity-30 uppercase tracking-widest">QTD: 1</span></p>
+          <button onclick="window.openSellerChatModal('${activeOrder.storeId || 'ann_official'}', '${(activeOrder.storeName || 'Loja Parceira').replace(/'/g, "\\'")}', 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=100', { type: 'order', orderId: '${activeOrder.id || 'PED-2026'}', storeName: '${(activeOrder.storeName || 'Loja Parceira').replace(/'/g, "\\'")}' })" class="px-3 py-1.5 rounded-full bg-primary/10 hover:bg-primary hover:text-white text-primary text-[11px] font-bold flex items-center gap-1 transition-all cursor-pointer shadow-xs" title="Falar com o vendedor sobre esta entrega">
+            <span class="material-symbols-outlined text-[15px]">chat</span>
+            <span class="hidden sm:inline">Falar com Vendedor</span>
+          </button>
+        </div>
+
+        <div class="flex flex-col gap-3">
+          ${itemsHTML}
+        </div>
+
+        <!-- Endereço de Entrega -->
+        <div class="p-5 bg-white/70 rounded-3xl border border-purple-100/40 space-y-2 mt-2">
+          <h4 class="text-xs font-bold text-on-surface flex items-center gap-1.5 uppercase tracking-wider">
+            <span class="material-symbols-outlined text-[16px] text-primary">location_on</span>
+            Endereço de Entrega
+          </h4>
+          <p class="text-xs text-on-surface-variant leading-relaxed font-medium">
+            ${addressString}
+          </p>
+        </div>
+
+        <!-- Forma de Envio e Pagamento -->
+        <div class="grid grid-cols-2 gap-4">
+          <div class="p-4 bg-white/70 rounded-3xl border border-purple-100/40">
+            <span class="text-[10px] font-bold text-on-surface-variant block uppercase tracking-wider mb-1">Método</span>
+            <span class="text-xs font-bold text-on-surface block">${activeOrder.paymentMethod || 'PIX'}</span>
+          </div>
+          <div class="p-4 bg-white/70 rounded-3xl border border-purple-100/40">
+            <span class="text-[10px] font-bold text-on-surface-variant block uppercase tracking-wider mb-1">Envio</span>
+            <span class="text-xs font-bold text-on-surface block truncate" title="Entrega rápida garantida">Expedição Parceira</span>
           </div>
         </div>
-        <div class="mt-auto pt-8 border-t border-primary/10 flex justify-between items-center px-4">
-            <span class="text-[10px] font-black text-on-surface-variant uppercase tracking-widest opacity-40">Valor de Investimento</span>
-            <span class="font-display text-3xl text-primary font-bold">R$ 185,00</span>
+
+        <div class="pt-6 border-t border-primary/10 flex justify-between items-center px-2">
+            <span class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Total Deste Vendedor</span>
+            <span class="font-display text-2xl text-primary font-bold">R$ ${parseFloat(activeOrder.totalValue || 0).toFixed(2).replace('.', ',')}</span>
         </div>
       </div>
-      <div class="lg:col-span-7 bg-white/40 backdrop-blur-xl rounded-[48px] p-10 md:p-14 border border-primary/5 shadow-ethereal">
-        <h2 class="font-display text-3xl text-on-background mb-12">Logística de <span class="italic text-primary font-medium">Belo Prazer</span></h2>
+
+      <!-- Linha do Tempo Logística -->
+      <div class="lg:col-span-7 bg-white/40 backdrop-blur-xl rounded-[40px] p-8 md:p-12 border border-primary/5 shadow-md">
+        <h2 class="font-display text-2xl text-on-background font-bold mb-10">Histórico de Rastreamento</h2>
+        
         <div class="relative">
-          <div class="absolute left-[31px] top-6 bottom-6 w-[4px] bg-primary/5 rounded-full z-0"></div>
-          <div class="absolute left-[31px] top-6 h-[60%] w-[4px] bg-gradient-to-b from-primary to-secondary rounded-full z-0 shadow-lg shadow-primary/20"></div>
+          <!-- Linha vertical de progresso -->
+          <div class="absolute left-[27px] top-6 bottom-6 w-[4px] bg-slate-200 rounded-full z-0"></div>
           
-          <div class="flex flex-col gap-12 relative z-10">
-            <div class="flex items-start gap-8 group">
-                <div class="w-16 h-16 rounded-3xl bg-primary flex items-center justify-center shrink-0 shadow-lg shadow-primary/30 group-hover:scale-110 transition-transform duration-500">
-                    <span class="material-symbols-outlined text-white text-3xl" style="font-variation-settings:'FILL' 1;">inventory_2</span>
-                </div>
-                <div class="pt-1">
-                    <h3 class="font-display text-xl text-on-background group-hover:text-primary transition-colors">Manifesto Confirmado</h3>
-                    <p class="text-sm text-on-surface-variant font-medium opacity-70">Sua seleção foi processada em nosso ecossistema.</p>
-                    <p class="text-[10px] font-black text-primary/40 uppercase tracking-[0.2em] mt-3 bg-primary/5 inline-block px-3 py-1 rounded-full">${formatDate(dateConfirmed)} • 09:41</p>
-                </div>
+          <!-- Linha vertical preenchida dependendo do status -->
+          <div class="absolute left-[27px] top-6 w-[4px] bg-gradient-to-b from-primary to-purple-500 rounded-full z-0 transition-all duration-1000 shadow-md shadow-primary/20"
+            style="height: ${
+              isStepDone('ENTREGUE') ? '100%' :
+              isStepDone('ENTREGA') ? '75%' :
+              isStepDone('ENVIADO') ? '50%' :
+              isStepDone('PREPARACAO') ? '25%' : '0%'
+            };"
+          ></div>
+          
+          <div class="flex flex-col gap-10 relative z-10">
+            
+            <!-- Etapa 1: Pagamento Confirmado -->
+            <div class="flex items-start gap-6 group transition-all duration-300">
+              <div class="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 transition-all duration-500 shadow-md ${
+                isStepDone('PAGAMENTO') ? 'bg-primary text-white shadow-primary/30 scale-105' : 'bg-slate-100 text-slate-400 border border-slate-200'
+              }">
+                <span class="material-symbols-outlined text-2xl" style="font-variation-settings:'FILL' 1;">payments</span>
+              </div>
+              <div class="pt-1">
+                <h3 class="text-base font-bold transition-colors ${isStepDone('PAGAMENTO') ? 'text-on-background' : 'text-slate-400'}">Pagamento Confirmado</h3>
+                <p class="text-xs text-on-surface-variant font-medium mt-0.5 opacity-70">O pagamento foi aprovado no sistema e o pedido gerado.</p>
+                ${isStepDone('PAGAMENTO') ? `<span class="text-[9px] font-bold text-primary bg-primary/5 border border-primary/10 uppercase tracking-widest mt-2 inline-block px-2.5 py-0.5 rounded-full">${activeOrder.date}</span>` : ''}
+              </div>
             </div>
             
-            <div class="flex items-start gap-8 group">
-                <div class="w-16 h-16 rounded-3xl bg-primary flex items-center justify-center shrink-0 shadow-lg shadow-primary/30 group-hover:scale-110 transition-transform duration-500">
-                    <span class="material-symbols-outlined text-white text-3xl" style="font-variation-settings:'FILL' 1;">auto_fix_high</span>
-                </div>
-                <div class="pt-1">
-                    <h3 class="font-display text-xl text-on-background group-hover:text-primary transition-colors">Em Curadoria</h3>
-                    <p class="text-sm text-on-surface-variant font-medium opacity-70">O ritual de embalagem sensorial está em curso.</p>
-                    <p class="text-[10px] font-black text-primary/40 uppercase tracking-[0.2em] mt-3 bg-primary/5 inline-block px-3 py-1 rounded-full">${formatDate(datePrep)} • 14:15</p>
-                </div>
+            <!-- Etapa 2: Preparaçao -->
+            <div class="flex items-start gap-6 group transition-all duration-300">
+              <div class="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 transition-all duration-500 shadow-md ${
+                isStepDone('PREPARACAO') ? 'bg-primary text-white shadow-primary/30 scale-105' : 'bg-slate-100 text-slate-400 border border-slate-200'
+              }">
+                <span class="material-symbols-outlined text-2xl" style="font-variation-settings:'FILL' 1;">inventory</span>
+              </div>
+              <div class="pt-1">
+                <h3 class="text-base font-bold transition-colors ${isStepDone('PREPARACAO') ? 'text-on-background' : 'text-slate-400'}">Preparando o Pedido</h3>
+                <p class="text-xs text-on-surface-variant font-medium mt-0.5 opacity-70">O vendedor está separando os produtos e preparando a embalagem.</p>
+                ${isStepDone('PREPARACAO') ? `<span class="text-[9px] font-bold text-primary bg-primary/5 border border-primary/10 uppercase tracking-widest mt-2 inline-block px-2.5 py-0.5 rounded-full">Atualizado</span>` : ''}
+              </div>
             </div>
             
-            <div class="flex items-start gap-8 group">
-                <div class="w-16 h-16 rounded-3xl bg-white border-2 border-primary flex items-center justify-center shrink-0 shadow-ethereal-hover ring-8 ring-primary/5 group-hover:scale-110 transition-all duration-500">
-                    <span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings:'FILL' 1;">local_shipping</span>
-                </div>
-                <div class="pt-1">
-                    <h3 class="font-display text-xl text-primary font-bold">Expedição a Caminho</h3>
-                    <p class="text-sm text-on-surface-variant font-medium opacity-80">Sua essência está em rota de encontro com você.</p>
-                    
-                    <div class="mt-6 bg-white/40 backdrop-blur-xl rounded-[28px] p-6 border border-primary/10 shadow-sm relative overflow-hidden group/card hover:shadow-ethereal transition-all duration-500">
-                        <div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-2xl"></div>
-                        <p class="text-[9px] font-black text-primary uppercase tracking-[0.3em] mb-3">Geolocalização Clinical</p>
-                        <div class="flex items-center gap-4">
-                            <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary animate-pulse shrink-0">
-                                <span class="material-symbols-outlined text-[20px]">location_on</span>
-                            </div>
-                            <div>
-                                <span class="text-sm font-bold text-on-background block">Curitiba, PR</span>
-                                <span class="text-xs text-on-surface-variant font-medium mt-0.5 opacity-80">Rota principal de expedição</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <!-- Etapa 3: Enviado -->
+            <div class="flex items-start gap-6 group transition-all duration-300">
+              <div class="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 transition-all duration-500 shadow-md ${
+                isStepDone('ENVIADO') ? 'bg-primary text-white shadow-primary/30 scale-105' : 'bg-slate-100 text-slate-400 border border-slate-200'
+              }">
+                <span class="material-symbols-outlined text-2xl" style="font-variation-settings:'FILL' 1;">local_shipping</span>
+              </div>
+              <div class="pt-1">
+                <h3 class="text-base font-bold transition-colors ${isStepDone('ENVIADO') ? 'text-on-background' : 'text-slate-400'}">Pedido Enviado</h3>
+                <p class="text-xs text-on-surface-variant font-medium mt-0.5 opacity-70">O pacote foi despachado e está em posse da transportadora.</p>
+                ${isStepDone('ENVIADO') ? `<span class="text-[9px] font-bold text-primary bg-primary/5 border border-primary/10 uppercase tracking-widest mt-2 inline-block px-2.5 py-0.5 rounded-full">Em Rota</span>` : ''}
+              </div>
+            </div>
+
+            <!-- Etapa 4: Saiu para Entrega -->
+            <div class="flex items-start gap-6 group transition-all duration-300">
+              <div class="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 transition-all duration-500 shadow-md ${
+                isStepDone('ENTREGA') ? 'bg-primary text-white shadow-primary/30 scale-105' : 'bg-slate-100 text-slate-400 border border-slate-200'
+              }">
+                <span class="material-symbols-outlined text-2xl" style="font-variation-settings:'FILL' 1;">home_pin</span>
+              </div>
+              <div class="pt-1">
+                <h3 class="text-base font-bold transition-colors ${isStepDone('ENTREGA') ? 'text-on-background' : 'text-slate-400'}">Saiu para Entrega</h3>
+                <p class="text-xs text-on-surface-variant font-medium mt-0.5 opacity-70">O entregador está a caminho do seu endereço de entrega.</p>
+                ${isStepDone('ENTREGA') ? `<span class="text-[9px] font-bold text-primary bg-primary/5 border border-primary/10 uppercase tracking-widest mt-2 inline-block px-2.5 py-0.5 rounded-full">Hoje</span>` : ''}
+              </div>
             </div>
             
-            <div class="flex items-start gap-8 opacity-30 grayscale group">
-                <div class="w-16 h-16 rounded-3xl bg-primary-container/20 flex items-center justify-center shrink-0 border border-primary/10">
-                    <span class="material-symbols-outlined text-primary/40 text-3xl">verified</span>
-                </div>
-                <div class="pt-1">
-                    <h3 class="font-display text-xl text-on-background">Experiência Entregue</h3>
-                    <p class="text-sm text-on-surface-variant font-medium">Prepare seu ritual para o unboxing sensorial.</p>
-                    <p class="text-[10px] font-black text-on-surface-variant uppercase tracking-[0.2em] mt-3 border border-primary/10 inline-block px-3 py-1 rounded-full italic">Previsão: ${formatDate(dateDelivery)}</p>
-                </div>
+            <!-- Etapa 5: Entregue -->
+            <div class="flex items-start gap-6 group transition-all duration-300">
+              <div class="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 transition-all duration-500 shadow-md ${
+                isStepDone('ENTREGUE') ? 'bg-emerald-500 text-white shadow-emerald-500/30 scale-105' : 'bg-slate-100 text-slate-400 border border-slate-200'
+              }">
+                <span class="material-symbols-outlined text-2xl" style="font-variation-settings:'FILL' 1;">verified</span>
+              </div>
+              <div class="pt-1">
+                <h3 class="text-base font-bold transition-colors ${isStepDone('ENTREGUE') ? 'text-emerald-600' : 'text-slate-400'}">Experiência Entregue</h3>
+                <p class="text-xs text-on-surface-variant font-medium mt-0.5 opacity-70">O pedido foi entregue no endereço e está pronto para o unboxing sensorial.</p>
+                ${isStepDone('ENTREGUE') ? `<span class="text-[9px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-100 uppercase tracking-widest mt-2 inline-block px-2.5 py-0.5 rounded-full">Concluído</span>` : ''}
+              </div>
             </div>
+
           </div>
         </div>
       </div>
+
     </div>
   </main>`;
+}
+
+export function mount() {
+  // Allow switching suborders
+  window.checkoutSwitchSubOrder = (subOrderId) => {
+    window.location.hash = `#/tracking?id=${subOrderId}`;
+  };
 }
